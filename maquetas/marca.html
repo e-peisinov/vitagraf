@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vitagraf · Maqueta C · Tu marca</title>
+<link rel="icon" href="../assets/img/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root {
+    --crema: #f6f1e7;
+    --crema-2: #ece4d3;
+    --kraft: #c9a678;
+    --tinta: #1d1a17;
+    --tinta-2: #57504a;
+    --naranja: #ff7300;
+    --naranja-hondo: #a94a00;
+    --wa: #25d366;
+    --ancho: 80rem;
+    --serif: "Instrument Serif", Georgia, serif;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { overflow-x: clip; }
+body { font-family: "Bricolage Grotesque", system-ui, sans-serif; background: var(--crema); color: var(--tinta); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.envase { width: min(var(--ancho), 100% - 2.5rem); margin-inline: auto; }
+.ico { width: 1.2em; height: 1.2em; flex: none; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -.035em; line-height: .98; }
+em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -.01em; }
+.rotulo { display: inline-flex; align-items: center; gap: .5rem; font-weight: 600; font-size: .85rem; color: var(--naranja-hondo); }
+.rotulo::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: var(--naranja); }
+
+.boton { display: inline-flex; align-items: center; gap: .6rem; padding: .95rem 1.4rem; border-radius: 999px; font-weight: 700; transition: transform .25s, background .25s, color .25s; }
+.boton:hover { transform: translateY(-2px) rotate(-1deg); }
+.boton-naranja { background: var(--naranja); color: var(--tinta); }
+.boton-tinta { background: var(--tinta); color: var(--crema); }
+.boton-linea { box-shadow: inset 0 0 0 2px var(--tinta); }
+.boton-wa { background: var(--wa); color: #06321a; }
+
+/* ---------- cabecera ---------- */
+.cabecera { position: fixed; inset: 1rem 0 auto; z-index: 50; }
+.cabecera .envase { display: flex; align-items: center; gap: 1.5rem; padding: .55rem .6rem .55rem 1.2rem; border-radius: 999px; background: rgba(246,241,231,.82); backdrop-filter: blur(14px); box-shadow: 0 0 0 1px rgba(29,26,23,.08), 0 12px 30px -20px rgba(29,26,23,.4); }
+.marca img { height: 2.2rem; width: auto; }
+.cabecera nav { display: flex; gap: 1.4rem; margin-left: auto; font-weight: 500; }
+.cabecera nav a:hover { color: var(--naranja-hondo); }
+.cabecera .boton { padding: .65rem 1.1rem; font-size: .9rem; }
+@media (max-width: 900px) { .cabecera nav { display: none; } .cabecera .boton { margin-left: auto; } }
+
+/* ---------- portada: la marca en el centro y los trabajos alrededor ---------- */
+.portada { position: relative; height: 220vh; }
+.portada-fijo { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+.portada-texto { position: relative; z-index: 3; text-align: center; padding: 0 1rem; }
+.portada h1 { font-size: clamp(3rem, 9vw, 8.6rem); }
+.portada h1 em { color: var(--naranja-hondo); }
+.portada p { font-size: clamp(1.05rem, 1.5vw, 1.25rem); color: var(--tinta-2); max-width: 44ch; margin: 1.4rem auto 2rem; }
+.portada .acciones { display: flex; gap: .7rem; justify-content: center; flex-wrap: wrap; }
+.collage { position: absolute; inset: 0; z-index: 1; }
+.collage figure { position: absolute; width: clamp(7rem, 15vw, 15rem); aspect-ratio: 4/5; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 50px -25px rgba(29,26,23,.55); border: 5px solid #fff; }
+.collage img { width: 100%; height: 100%; object-fit: cover; }
+.collage figure:nth-child(1) { left: 4%; top: 14%; rotate: -8deg; }
+.collage figure:nth-child(2) { left: 16%; bottom: 6%; rotate: 5deg; }
+.collage figure:nth-child(3) { right: 5%; top: 12%; rotate: 7deg; }
+.collage figure:nth-child(4) { right: 15%; bottom: 5%; rotate: -5deg; }
+.collage figure:nth-child(5) { left: 40%; top: -9%; rotate: 3deg; width: clamp(6rem, 11vw, 11rem); }
+.collage figure:nth-child(6) { left: 46%; bottom: -12%; rotate: -4deg; width: clamp(6rem, 11vw, 11rem); }
+.portada-texto::before { content: ""; position: absolute; inset: -4rem -6rem; background: radial-gradient(closest-side, var(--crema) 55%, transparent); z-index: -1; }
+@media (max-width: 760px) {
+    .collage figure { width: 7.5rem; }
+    .collage figure:nth-child(1) { left: -1rem; top: 9%; } .collage figure:nth-child(3) { right: -1rem; top: 8%; }
+    .collage figure:nth-child(2) { left: -.5rem; bottom: 4%; } .collage figure:nth-child(4) { right: -.5rem; bottom: 3%; }
+    .collage figure:nth-child(5), .collage figure:nth-child(6) { display: none; }
+}
+
+/* ---------- escena: el sello se aplica en cada objeto ---------- */
+.aplicaciones { position: relative; height: 700vh; background: var(--tinta); color: var(--crema); }
+.aplicaciones-fijo { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; grid-template-columns: 1fr 1.15fr; align-items: center; gap: 2rem; width: min(var(--ancho), 100% - 2.5rem); margin-inline: auto; }
+.aplicaciones-intro { position: absolute; top: 7.5rem; left: 0; }
+.aplicaciones-intro h2 { font-size: clamp(1.8rem, 3.4vw, 3rem); }
+.aplicaciones-intro h2 em { color: var(--naranja); }
+.textos { position: relative; height: 26rem; }
+.texto { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 1rem; opacity: 0; visibility: hidden; }
+.texto.activo { opacity: 1; visibility: visible; }
+.texto .num { font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--c); }
+.texto h3 { font-size: clamp(2.2rem, 4.4vw, 4rem); }
+.texto p { color: #cdc5b8; max-width: 36ch; }
+.texto ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; max-width: 34rem; }
+.texto li { padding: .35rem .8rem; border-radius: 999px; font-size: .85rem; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--c) 60%, transparent); }
+.texto .acciones { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .4rem; }
+.texto .consultar { background: var(--c); color: var(--tinta); }
+.texto .boton-linea { box-shadow: inset 0 0 0 2px var(--crema); }
+.escenario { position: relative; aspect-ratio: 1; width: 100%; max-height: 78svh; justify-self: center; }
+.objeto { position: absolute; inset: 0; opacity: 0; }
+.objeto svg { width: 100%; height: 100%; overflow: visible; }
+.sello-grande { position: absolute; left: 50%; top: 50%; width: 30%; translate: -50% -50%; z-index: 5; pointer-events: none; }
+.puntos { position: absolute; right: 0; top: 50%; translate: 0 -50%; display: grid; gap: .6rem; }
+.puntos i { width: .6rem; height: .6rem; border-radius: 50%; background: rgba(246,241,231,.25); transition: background .3s, transform .3s; }
+.puntos i.activo { background: var(--c); transform: scale(1.5); }
+@media (max-width: 860px) {
+    .aplicaciones-fijo { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; align-content: center; gap: 0; padding-top: 5rem; }
+    .aplicaciones-intro { position: static; text-align: center; }
+    .aplicaciones-intro h2 { font-size: 1.5rem; }
+    .escenario { order: -1; width: min(78vw, 42svh); grid-row: 2; }
+    .textos { height: 19rem; grid-row: 3; }
+    .texto { justify-content: flex-start; gap: .6rem; }
+    .texto h3 { font-size: 1.9rem; } .texto p { display: none; }
+    .texto li { font-size: .75rem; }
+    .puntos { display: none; }
+}
+
+/* ---------- reels ---------- */
+.seccion { padding: clamp(5rem, 10vw, 8rem) 0; }
+.encabezado { display: grid; gap: .9rem; max-width: 46rem; margin-bottom: 3rem; }
+.encabezado h2 { font-size: clamp(2.3rem, 5.2vw, 4.4rem); }
+.encabezado h2 em { color: var(--naranja-hondo); }
+.encabezado p { color: var(--tinta-2); font-size: 1.1rem; }
+.reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+.reel { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 9/16; background: var(--tinta); }
+.reel video { width: 100%; height: 100%; object-fit: cover; }
+.reel figcaption { position: absolute; left: 1rem; right: 1rem; bottom: 1rem; color: #fff; font-weight: 700; font-size: 1.1rem; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+.reel:nth-child(2) { translate: 0 3rem; }
+@media (max-width: 760px) { .reels { grid-template-columns: repeat(3, 70vw); overflow-x: auto; scroll-snap-type: x mandatory; margin-right: -1.25rem; padding-right: 1.25rem; } .reel { scroll-snap-align: start; } .reel:nth-child(2) { translate: none; } }
+
+/* ---------- proceso ---------- */
+.pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; list-style: none; padding: 0; }
+.paso { background: #fff; border-radius: 22px; padding: 1.6rem; display: grid; gap: .7rem; align-content: start; box-shadow: 0 1px 0 rgba(29,26,23,.06); position: relative; }
+.paso b { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 3.2rem; line-height: 1; color: var(--naranja-hondo); }
+.paso h3 { font-size: 1.25rem; letter-spacing: -.02em; line-height: 1.15; }
+.paso p { color: var(--tinta-2); font-size: .95rem; }
+@media (max-width: 860px) { .pasos { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .pasos { grid-template-columns: 1fr; } }
+
+/* ---------- historia: banda con la fachada ---------- */
+.historia { position: relative; min-height: 90svh; display: grid; align-items: end; overflow: hidden; color: #fff; margin: 0 1rem; border-radius: 32px; }
+.historia > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.historia::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(29,26,23,0) 30%, rgba(29,26,23,.85)); }
+.historia .envase { position: relative; z-index: 1; padding: 3rem 0; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+.historia h2 { font-size: clamp(2.4rem, 6vw, 5.6rem); }
+.historia h2 em { color: var(--naranja); }
+.historia p { max-width: 40ch; color: #eae4d9; margin-top: 1rem; }
+.historia .viejo { width: clamp(9rem, 18vw, 15rem); aspect-ratio: 4/3; object-fit: cover; border: 5px solid #fff; border-radius: 10px; rotate: 4deg; box-shadow: 0 20px 40px -10px rgba(0,0,0,.6); }
+@media (max-width: 760px) { .historia .envase { grid-template-columns: 1fr; } }
+
+/* ---------- clientes ---------- */
+.logos { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; list-style: none; padding: 0; }
+.logos li { width: 8.5rem; height: 6rem; border-radius: 50% / 40%; background: #fff; display: grid; place-items: center; padding: .8rem 1.4rem; transition: transform .3s; }
+.logos li:nth-child(odd) { rotate: -2deg; } .logos li:nth-child(even) { rotate: 2deg; }
+.logos li:hover { transform: scale(1.08) rotate(0); }
+.logos img { max-height: 100%; width: auto; }
+
+/* ---------- consulta ---------- */
+.consulta { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+.consulta-form { background: #fff; border-radius: 28px; padding: clamp(1.4rem, 3vw, 2.4rem); display: grid; gap: 1.4rem; box-shadow: 0 30px 60px -40px rgba(29,26,23,.5); }
+fieldset { border: 0; padding: 0; min-width: 0; }
+legend, label > span { font-weight: 700; display: block; margin-bottom: .55rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+.chip { display: inline-flex; align-items: center; gap: .45rem; padding: .55rem .95rem; border-radius: 999px; border: 0; background: var(--crema); font-weight: 600; font-size: .88rem; transition: background .2s, transform .2s; }
+.chip .ico { color: var(--c); }
+.chip:hover { transform: translateY(-1px); }
+.chip[aria-pressed="true"] { background: var(--c); color: var(--tinta); }
+.chip[aria-pressed="true"] .ico { color: var(--tinta); }
+.chip-chico { font-size: .8rem; padding: .45rem .8rem; font-weight: 500; }
+.fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+input, select, textarea { width: 100%; font: inherit; padding: .8rem 1rem; border-radius: 14px; border: 0; background: var(--crema); }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--naranja); }
+.globo { background: #dcf8c6; border-radius: 20px 20px 4px 20px; padding: 1rem 1.2rem; white-space: pre-line; font-size: .92rem; min-height: 6rem; position: relative; }
+.consulta-lado { position: sticky; top: 7rem; }
+.consulta-lado h2 { font-size: clamp(2.3rem, 5vw, 4.2rem); }
+.consulta-lado h2 em { color: var(--naranja-hondo); }
+.consulta-lado p { color: var(--tinta-2); margin: 1rem 0 1.6rem; }
+.contacto-lista { display: grid; gap: .5rem; list-style: none; padding: 0; margin-top: 2rem; }
+.contacto-lista a, .contacto-lista div { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 0; border-bottom: 1.5px solid var(--crema-2); flex-wrap: wrap; }
+.contacto-lista span { color: var(--tinta-2); }
+.contacto-lista strong { text-align: right; }
+@media (max-width: 860px) { .consulta, .fila2 { grid-template-columns: 1fr; } .consulta-lado { position: static; } }
+
+.mapa { width: 100%; height: 22rem; border: 0; border-radius: 28px; margin-top: 3rem; filter: sepia(.35) saturate(.6); }
+.pie { padding: 2.5rem 0 6rem; color: var(--tinta-2); font-size: .9rem; }
+.pie .envase { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.wa-flotante { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 60; width: 3.8rem; height: 3.8rem; border-radius: 50%; background: var(--wa); color: #fff; display: grid; place-items: center; box-shadow: 0 12px 30px -8px rgba(37,211,102,.7); }
+.wa-flotante .ico { width: 1.8rem; height: 1.8rem; }
+
+.quieto .portada, .quieto .aplicaciones { height: auto; }
+.quieto .portada-fijo { position: relative; min-height: 100svh; }
+.quieto .aplicaciones-fijo { position: relative; height: auto; display: block; padding: 6rem 0; }
+.quieto .aplicaciones-intro { position: static; margin-bottom: 2rem; }
+.quieto .textos { height: auto; display: grid; gap: 3rem; }
+.quieto .texto { position: static; opacity: 1; visibility: visible; }
+.quieto .escenario, .quieto .puntos { display: none; }
+</style>
+</head>
+<body>
+
+<!-- el sello de ejemplo que se imprime en cada objeto -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+        <g id="sello">
+            <circle r="50" fill="var(--sello, #ff7300)"/>
+            <circle r="42" fill="none" stroke="#1d1a17" stroke-width="1.6" stroke-dasharray="2 3.2"/>
+            <path id="arco" d="M -34 0 A 34 34 0 1 1 34 0" fill="none"/>
+            <text font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="10" letter-spacing="1.6" fill="#1d1a17"><textPath href="#arco" startOffset="50%" text-anchor="middle">TU MARCA ACÁ</textPath></text>
+            <path d="M-13 -6 h10 v20 l-10 -4 z M3 -6 h10 v16 l-10 4 z" fill="#1d1a17"/>
+            <text y="27" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="12" fill="#1d1a17">desde hoy</text>
+        </g>
+    </defs>
+</svg>
+
+<header class="cabecera">
+    <div class="envase">
+        <a href="#" class="marca" aria-label="Vitagraf, inicio"><img src="../assets/img/logo-oscuro.webp" alt="Vitagraf"></a>
+        <nav aria-label="Principal">
+            <a href="#aplicaciones">Servicios</a>
+            <a href="#taller">El taller</a>
+            <a href="#historia">Historia</a>
+            <a href="#consulta">Contacto</a>
+        </nav>
+        <a class="boton boton-naranja" href="#consulta">Pedí presupuesto</a>
+    </div>
+</header>
+
+<main>
+    <section class="portada">
+        <div class="portada-fijo">
+            <div class="collage" aria-hidden="true">
+                <figure><img src="../assets/img/trabajo-tarjeta.webp" alt=""></figure>
+                <figure><img src="../assets/img/trabajo-planilla.webp" alt=""></figure>
+                <figure><img src="../assets/img/trabajo-bolsa.webp" alt=""></figure>
+                <figure><img src="../assets/img/fachada.webp" alt=""></figure>
+                <figure><img src="../assets/img/trabajo-etiquetas.webp" alt=""></figure>
+                <figure><img src="../assets/img/trabajo-pliegos.webp" alt=""></figure>
+            </div>
+            <div class="portada-texto">
+                <span class="rotulo">Imprenta en Mercedes desde 1924</span>
+                <h1>Tu marca,<br><em>en todas partes.</em></h1>
+                <p>En el cartel, en la etiqueta, en la bolsa, en la tarjeta. Diseñamos e imprimimos todo lo que tu empresa necesita para que la reconozcan.</p>
+                <div class="acciones">
+                    <a class="boton boton-tinta" href="#aplicaciones">Ver qué hacemos</a>
+                    <a class="boton boton-wa" data-wa="">Consultar por WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="aplicaciones" id="aplicaciones" aria-label="Servicios">
+        <div class="aplicaciones-fijo">
+            <div class="aplicaciones-intro"><h2>¿Dónde querés <em>ver tu marca?</em></h2></div>
+            <div class="textos" data-servicios>
+                <template>
+                    <article class="texto" style="--c: {{color}}">
+                        <span class="num">{{i}} / 06</span>
+                        <h3>{{titulo}}</h3>
+                        <p>{{resumen}}</p>
+                        <ul>{{lista}}</ul>
+                        <div class="acciones">
+                            <a class="boton consultar" href="{{waUrl}}" target="_blank" rel="noopener">Consultar</a>
+                            <a class="boton boton-linea" href="#consulta" data-elegir="{{clave}}">Armar consulta</a>
+                        </div>
+                    </article>
+                </template>
+            </div>
+            <div class="escenario" aria-hidden="true">
+                <!-- 1 · cartelería: frente de local -->
+                <div class="objeto" style="--sello: #f15a24">
+                    <svg viewBox="0 0 400 400">
+                        <rect x="40" y="70" width="320" height="300" fill="#e9dcc6"/>
+                        <rect x="40" y="70" width="320" height="300" fill="none" stroke="#2c2722" stroke-width="3"/>
+                        <rect x="60" y="92" width="280" height="78" rx="6" fill="#1d1a17"/>
+                        <text x="230" y="140" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="30" fill="#f6f1e7" letter-spacing="-1">TU NEGOCIO</text>
+                        <rect x="66" y="196" width="150" height="150" fill="#a8d0dc" stroke="#2c2722" stroke-width="3"/>
+                        <path d="M66 196 L216 346" stroke="#fff" stroke-width="10" opacity=".35"/>
+                        <rect x="236" y="196" width="98" height="174" fill="#7b5a3c" stroke="#2c2722" stroke-width="3"/>
+                        <circle cx="318" cy="285" r="5" fill="#f6c453"/>
+                        <rect x="20" y="370" width="360" height="12" fill="#2c2722"/>
+                        <rect x="66" y="270" width="150" height="20" fill="#f15a24"/>
+                        <text x="141" y="285" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="700" font-size="12" fill="#1d1a17">PLOTEO DE VIDRIERA</text>
+                        <use href="#sello" class="estampa" transform="translate(98 131) scale(.62)"/>
+                    </svg>
+                </div>
+                <!-- 2 · etiquetas: frasco -->
+                <div class="objeto" style="--sello: #e4007c">
+                    <svg viewBox="0 0 400 400">
+                        <rect x="140" y="40" width="120" height="46" rx="8" fill="#2c2722"/>
+                        <rect x="150" y="80" width="100" height="20" fill="#cfc6b6"/>
+                        <path d="M120 120 Q120 100 150 100 H250 Q280 100 280 120 V350 Q280 372 258 372 H142 Q120 372 120 350 Z" fill="#f3b54a" stroke="#2c2722" stroke-width="3"/>
+                        <path d="M138 130 V340" stroke="#fff" stroke-width="10" opacity=".35" stroke-linecap="round"/>
+                        <rect x="120" y="170" width="160" height="140" fill="#fff" stroke="#2c2722" stroke-width="3"/>
+                        <text x="200" y="292" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="15" fill="#1d1a17">MIEL CASERA</text>
+                        <use href="#sello" class="estampa" transform="translate(200 228) scale(.82)"/>
+                    </svg>
+                </div>
+                <!-- 3 · packaging: bolsa kraft -->
+                <div class="objeto" style="--sello: #22a565">
+                    <svg viewBox="0 0 400 400">
+                        <path d="M150 140 V100 Q150 56 200 56 Q250 56 250 100 V140" fill="none" stroke="#2c2722" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M90 130 H310 L330 372 H70 Z" fill="#c9a678" stroke="#2c2722" stroke-width="3"/>
+                        <path d="M90 130 L110 160 H290 L310 130" fill="#b38f61" stroke="#2c2722" stroke-width="3" stroke-linejoin="round"/>
+                        <text x="200" y="340" text-anchor="middle" font-family="Instrument Serif" font-style="italic" font-size="18" fill="#2c2722">gracias por tu compra</text>
+                        <use href="#sello" class="estampa" transform="translate(200 245) scale(1)"/>
+                    </svg>
+                </div>
+                <!-- 4 · papelería: tarjetas -->
+                <div class="objeto" style="--sello: #8cc63f">
+                    <svg viewBox="0 0 400 400">
+                        <g transform="rotate(-8 200 220)"><rect x="70" y="150" width="270" height="160" rx="8" fill="#1d1a17"/></g>
+                        <g transform="rotate(4 200 210)">
+                            <rect x="60" y="120" width="280" height="168" rx="8" fill="#fffdf8" stroke="#2c2722" stroke-width="3"/>
+                            <text x="160" y="190" font-family="Bricolage Grotesque" font-weight="800" font-size="20" fill="#1d1a17">Tu Nombre</text>
+                            <text x="160" y="212" font-family="Bricolage Grotesque" font-size="12" fill="#57504a">Gerente comercial</text>
+                            <rect x="160" y="236" width="140" height="4" rx="2" fill="#d9d0bf"/>
+                            <rect x="160" y="248" width="110" height="4" rx="2" fill="#d9d0bf"/>
+                            <use href="#sello" class="estampa" transform="translate(110 204) scale(.62)"/>
+                        </g>
+                    </svg>
+                </div>
+                <!-- 5 · stands y merchandising: taza -->
+                <div class="objeto" style="--sello: #29abe2">
+                    <svg viewBox="0 0 400 400">
+                        <path d="M290 170 Q350 170 350 230 Q350 290 290 290" fill="none" stroke="#2c2722" stroke-width="18"/>
+                        <path d="M290 170 Q350 170 350 230 Q350 290 290 290" fill="none" stroke="#fffdf8" stroke-width="10"/>
+                        <path d="M80 110 H300 V320 Q300 360 260 360 H120 Q80 360 80 320 Z" fill="#fffdf8" stroke="#2c2722" stroke-width="3"/>
+                        <ellipse cx="190" cy="110" rx="110" ry="16" fill="#3a2a1d" stroke="#2c2722" stroke-width="3"/>
+                        <path d="M150 80 q10 -20 0 -40 M190 76 q10 -20 0 -40 M230 80 q10 -20 0 -40" fill="none" stroke="#cfc6b6" stroke-width="4" stroke-linecap="round"/>
+                        <use href="#sello" class="estampa" transform="translate(190 235) scale(.95)"/>
+                    </svg>
+                </div>
+                <!-- 6 · editorial: libro -->
+                <div class="objeto" style="--sello: #fbb03b">
+                    <svg viewBox="0 0 400 400">
+                        <rect x="100" y="54" width="220" height="300" rx="6" fill="#2c2722"/>
+                        <rect x="88" y="44" width="220" height="300" rx="6" fill="#1f5e74" stroke="#2c2722" stroke-width="3"/>
+                        <rect x="88" y="44" width="22" height="300" fill="#174a5c"/>
+                        <text x="208" y="104" text-anchor="middle" font-family="Instrument Serif" font-size="30" fill="#f6f1e7">Anuario</text>
+                        <text x="208" y="126" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="600" font-size="12" letter-spacing="3" fill="#f6f1e7">PROMOCIÓN 2026</text>
+                        <rect x="300" y="60" width="20" height="290" fill="#efe8da"/>
+                        <use href="#sello" class="estampa" transform="translate(208 228) scale(1.05)"/>
+                    </svg>
+                </div>
+                <svg class="sello-grande" viewBox="-52 -52 104 104"><use href="#sello"/></svg>
+            </div>
+            <div class="puntos" data-servicios aria-hidden="true"><template><i style="--c: {{color}}"></i></template></div>
+        </div>
+    </section>
+
+    <section class="seccion" id="taller">
+        <div class="envase">
+            <div class="encabezado" data-aparecer>
+                <span class="rotulo">El taller</span>
+                <h2>Así se hace, <em>acá en Mercedes.</em></h2>
+                <p>Videos reales de nuestro Instagram: nada se terceriza, todo pasa por nuestras máquinas.</p>
+            </div>
+            <div class="reels" data-aparecer="hijos">
+                <figure class="reel"><video src="../assets/video/DY7IlgDRZUk.mp4" poster="../assets/img/DY7IlgDRZUk.webp" muted loop playsinline preload="none"></video><figcaption>Calcos súper chicos, en tiempo récord</figcaption></figure>
+                <figure class="reel"><video src="../assets/video/DXpI1M_DIcy.mp4" poster="../assets/img/DXpI1M_DIcy.webp" muted loop playsinline preload="none"></video><figcaption>Tarjetas y bolsas para @irene.cclothes</figcaption></figure>
+                <figure class="reel"><video src="../assets/video/DXRiMi8iCDC.mp4" poster="../assets/img/DXRiMi8iCDC.webp" muted loop playsinline preload="none"></video><figcaption>Una semana en la imprenta</figcaption></figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion" style="padding-top: 2rem">
+        <div class="envase">
+            <div class="encabezado" data-aparecer>
+                <span class="rotulo">Cómo trabajamos</span>
+                <h2>Simple, <em>de punta a punta.</em></h2>
+            </div>
+            <ol class="pasos" data-pasos data-aparecer="hijos">
+                <template><li class="paso"><b>{{i}}</b><h3>{{titulo}}</h3><p>{{texto}}</p></li></template>
+            </ol>
+        </div>
+    </section>
+
+    <section class="historia" id="historia">
+        <img src="../assets/img/fachada.webp" alt="Frente de Vitagraf en Calle 22, de noche, con el cartel iluminado" data-acercar>
+        <div class="envase">
+            <div>
+                <span class="rotulo" style="color: var(--naranja)">Historia</span>
+                <h2>102 años <em>y tres generaciones.</em></h2>
+                <p>Desde 1924 acompañamos a comercios, empresas e instituciones de Mercedes. Más que una imprenta, una historia construida sobre la confianza de nuestros clientes.</p>
+            </div>
+            <img class="viejo" src="../assets/img/taller-antiguo.webp" alt="El taller en sus primeras décadas">
+        </div>
+    </section>
+
+    <section class="seccion">
+        <div class="envase">
+            <div class="encabezado" data-aparecer style="text-align: center; margin-inline: auto; justify-items: center">
+                <span class="rotulo">Confían en nosotros</span>
+                <h2>Marcas que ya <em>están en todas partes.</em></h2>
+            </div>
+            <ul class="logos" data-clientes><template><li><img src="../assets/clientes/{{logo}}.webp" alt="{{nombre}}" loading="lazy"></li></template></ul>
+        </div>
+    </section>
+
+    <section class="seccion" id="consulta" style="padding-top: 2rem">
+        <div class="envase consulta">
+            <div class="consulta-lado">
+                <span class="rotulo">Presupuesto</span>
+                <h2>Contanos qué <em>tenés en mente.</em></h2>
+                <p>Marcá lo que necesitás y te llega la consulta armada a nuestro WhatsApp. Te respondemos con precio y tiempos.</p>
+                <ul class="contacto-lista">
+                    <li><a data-wa=""><span>WhatsApp</span><strong data-dato="whatsappVisible"></strong></a></li>
+                    <li><a href="tel:+542324433011"><span>Teléfono</span><strong data-dato="telefono"></strong></a></li>
+                    <li><a href="mailto:vitagraf@gmail.com"><span>Email</span><strong data-dato="email"></strong></a></li>
+                    <li><a data-mapa><span>Local</span><strong><span data-dato="direccion" style="color: inherit"></span></strong></a></li>
+                    <li><div><span>Horario</span><strong data-dato="horario"></strong></div></li>
+                </ul>
+            </div>
+            <form class="consulta-form" data-consulta>
+                <fieldset><legend>¿Qué necesitás?</legend><div class="chips" data-rubros></div></fieldset>
+                <fieldset data-paso-productos hidden><legend>¿Cuál? <small style="font-weight: 400">(podés marcar varios)</small></legend><div class="chips" data-productos></div></fieldset>
+                <div class="fila2">
+                    <label><span>Cantidad</span><input name="cantidad" placeholder="Ej: 200 bolsas"></label>
+                    <label><span>Diseño</span>
+                        <select name="diseno">
+                            <option value="">Elegí</option>
+                            <option>Ya tengo el diseño listo</option>
+                            <option>Tengo una idea, necesito ayuda con el diseño</option>
+                            <option>Necesito que me lo diseñen</option>
+                        </select>
+                    </label>
+                </div>
+                <label><span>Detalles</span><textarea name="detalle" rows="2" placeholder="Medidas, material, para cuándo…"></textarea></label>
+                <label><span>Tu nombre o empresa</span><input name="nombre" autocomplete="organization"></label>
+                <div class="globo" data-vista aria-live="polite"></div>
+                <button class="boton boton-wa" type="submit" style="justify-content: center; border: 0">Enviar por WhatsApp</button>
+            </form>
+        </div>
+        <div class="envase"><iframe class="mapa" title="Mapa: Vitagraf en Calle 22 Nº 261, Mercedes" loading="lazy" data-mapa-embebido></iframe></div>
+    </section>
+</main>
+
+<footer class="pie">
+    <div class="envase"><span>© Vitagraf · Imprenta desde 1924 · Mercedes, Bs. As.</span><span>@vitagraf.imprenta</span></div>
+</footer>
+<a class="wa-flotante" data-wa="" aria-label="Escribinos por WhatsApp"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z"/></svg></a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="comun.js"></script>
+<script>
+(() => {
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+    $$('[data-mapa]').forEach((a) => { a.href = VITA.mapa; a.target = '_blank'; });
+    $('[data-mapa-embebido]').src = VITA.mapaEmbebido;
+
+    // los reels se reproducen solo mientras se ven
+    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: 0.4 });
+    $$('.reel video').forEach((v) => io.observe(v));
+
+    const textos = $$('.texto');
+    const objetos = $$('.objeto');
+    const puntos = $$('.puntos i');
+    let actual = -1;
+    const activar = (i) => {
+        if (i === actual) return;
+        actual = i;
+        textos.forEach((t, j) => t.classList.toggle('activo', j === i));
+        puntos.forEach((p, j) => p.classList.toggle('activo', j === i));
+    };
+    activar(0);
+
+    if (VITA.quieto || ! window.gsap) return;
+    VITA.aparecer();
+
+    // portada: zoom hacia el centro; los trabajos salen volando hacia afuera
+    const figs = $$('.collage figure');
+    gsap.from(figs, { scale: 0.6, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.06 });
+    gsap.from('.portada-texto > *', { y: 30, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.08 });
+    const tlP = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '.portada', start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+    figs.forEach((f) => {
+        const r = f.getBoundingClientRect();
+        const dx = (r.left + r.width / 2 - innerWidth / 2) * 1.6;
+        const dy = (r.top + r.height / 2 - innerHeight / 2) * 1.6;
+        tlP.to(f, { x: dx, y: dy, scale: 2.2, opacity: 0, duration: 1 }, 0);
+    });
+    tlP.to('.portada-texto', { scale: 0.85, opacity: 0, duration: 0.6 }, 0.35);
+
+    // aplicaciones: el sello grande baja sobre cada objeto y queda impreso
+    const n = objetos.length;
+    const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+            trigger: '.aplicaciones', start: 'top top', end: 'bottom bottom', scrub: 0.6,
+            onUpdate: ({ progress }) => activar(Math.min(n - 1, Math.floor(progress * n))),
+        },
+    });
+    objetos.forEach((o, i) => {
+        const estampa = $('.estampa', o);
+        const t = i;
+        // el sello grande aterriza justo donde va la estampa de este objeto
+        const [, x, y, e] = estampa.getAttribute('transform').match(/translate\(([\d.]+) ([\d.]+)\) scale\(([\d.]+)\)/).map(Number);
+        tl.fromTo(o, { opacity: 0, scale: 0.7, rotate: -6 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.25, ease: 'power2.out' }, t)
+          .set('.sello-grande', { left: x / 4 + '%', top: y / 4 + '%', width: 26 * e + '%', '--sello': getComputedStyle(o).getPropertyValue('--sello') }, t + 0.1)
+          .fromTo('.sello-grande', { scale: 3.2, rotate: -25 }, { scale: 1, rotate: 0, duration: 0.3, ease: 'power3.in' }, t + 0.1)
+          .fromTo('.sello-grande', { opacity: 0 }, { opacity: 1, duration: 0.06 }, t + 0.1)
+          .to('.sello-grande', { opacity: 0, duration: 0.05 }, t + 0.42)
+          .fromTo(estampa, { opacity: 0 }, { opacity: 1, duration: 0.02 }, t + 0.4)
+          .fromTo(o, { y: 0 }, { y: -12, duration: 0.05, yoyo: true, repeat: 1 }, t + 0.4);
+        if (i < n - 1) tl.to(o, { opacity: 0, scale: 1.15, duration: 0.2, ease: 'power2.in' }, t + 0.8);
+        else tl.to({}, { duration: 0.3 }, t + 0.8);
+    });
+
+    // historia: la fachada se acerca
+    gsap.fromTo('[data-acercar]', { scale: 1.25 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.historia', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    gsap.from('.historia .viejo', { y: 80, rotate: 14, opacity: 0, duration: 1, ease: 'back.out(1.6)', scrollTrigger: { trigger: '.historia', start: 'top 50%', once: true } });
+
+    gsap.from('.logos li', { scale: 0, rotate: 30, stagger: 0.035, duration: 0.6, ease: 'back.out(2)', scrollTrigger: { trigger: '.logos', start: 'top 85%', once: true } });
+})();
+</script>
+</body>
+</html>

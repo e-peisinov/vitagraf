@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vitagraf · Maqueta B · Pliego</title>
+<link rel="icon" href="../assets/img/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root {
+    --tinta: #0f0e0d;
+    --tinta-2: #1c1a18;
+    --papel: #f3f2ee;
+    --carton: #e6e3db;
+    --acero: #8f8b82;
+    --naranja: #ff7300;
+    --cian: #00a0dc;
+    --magenta: #e4007c;
+    --amarillo: #ffd400;
+    --wa: #25d366;
+    --ancho: 84rem;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { overflow-x: clip; }
+body { font-family: Archivo, system-ui, sans-serif; font-variation-settings: "wdth" 100; background: var(--tinta); color: var(--papel); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+.envase { width: min(var(--ancho), 100% - 2.5rem); margin-inline: auto; }
+.ico { width: 1.2em; height: 1.2em; flex: none; }
+.mono { font-family: var(--mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+.ancha { font-variation-settings: "wdth" 125; font-weight: 800; letter-spacing: -.02em; line-height: .92; text-transform: uppercase; }
+.angosta { font-variation-settings: "wdth" 62; font-weight: 800; line-height: .88; text-transform: uppercase; }
+
+/* marcas de impresión */
+.corte { position: absolute; width: 28px; height: 28px; pointer-events: none; }
+.corte::before, .corte::after { content: ""; position: absolute; background: currentColor; }
+.corte::before { width: 100%; height: 1px; top: 50%; }
+.corte::after { height: 100%; width: 1px; left: 50%; }
+.corte.si { top: -14px; left: -14px; } .corte.sd { top: -14px; right: -14px; } .corte.ii { bottom: -14px; left: -14px; } .corte.id { bottom: -14px; right: -14px; }
+.registro { width: 30px; height: 30px; border: 1px solid currentColor; border-radius: 50%; position: relative; flex: none; }
+.registro::before, .registro::after { content: ""; position: absolute; background: currentColor; }
+.registro::before { left: -6px; right: -6px; top: 50%; height: 1px; }
+.registro::after { top: -6px; bottom: -6px; left: 50%; width: 1px; }
+.barra-cmyk { display: flex; height: 12px; }
+.barra-cmyk i { flex: 1; }
+.barra-cmyk i:nth-child(1) { background: var(--cian); } .barra-cmyk i:nth-child(2) { background: var(--magenta); } .barra-cmyk i:nth-child(3) { background: var(--amarillo); } .barra-cmyk i:nth-child(4) { background: #000; }
+.barra-cmyk i:nth-child(5) { background: var(--naranja); } .barra-cmyk i:nth-child(6) { background: color-mix(in srgb, var(--cian) 50%, #fff); } .barra-cmyk i:nth-child(7) { background: color-mix(in srgb, var(--magenta) 50%, #fff); } .barra-cmyk i:nth-child(8) { background: color-mix(in srgb, var(--amarillo) 50%, #fff); }
+
+.boton { display: inline-flex; align-items: center; gap: .8rem; padding: 1rem 1.4rem; font-weight: 700; font-variation-settings: "wdth" 112; text-transform: uppercase; letter-spacing: .04em; font-size: .9rem; border: 1.5px solid currentColor; transition: background .2s, color .2s; }
+.boton-naranja { background: var(--naranja); border-color: var(--naranja); color: var(--tinta); }
+.boton-naranja:hover { background: var(--papel); border-color: var(--papel); }
+.boton-linea:hover { background: var(--papel); color: var(--tinta); }
+
+/* ---------- cabecera ---------- */
+.cabecera { position: fixed; inset: 0 0 auto; z-index: 50; transition: background .3s; }
+.cabecera.con-fondo { background: rgba(15,14,13,.92); backdrop-filter: blur(10px); }
+.cabecera .envase { display: flex; align-items: center; gap: 2rem; height: 4.5rem; border-bottom: 1px solid rgba(243,242,238,.12); }
+.marca img { height: 2.3rem; width: auto; }
+.cabecera nav { display: flex; gap: 1.8rem; margin-left: auto; }
+.cabecera nav a { opacity: .75; } .cabecera nav a:hover { opacity: 1; color: var(--naranja); }
+.cabecera .boton { padding: .6rem 1rem; font-size: .78rem; }
+@media (max-width: 900px) { .cabecera nav { display: none; } .cabecera .boton { margin-left: auto; } }
+
+/* ---------- portada ---------- */
+.portada { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 7rem 0 0; overflow: hidden; }
+.portada video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .38; filter: grayscale(.4) contrast(1.1); }
+.portada::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,14,13,.3), rgba(15,14,13,.15) 40%, var(--tinta) 96%); }
+.portada > * { position: relative; z-index: 1; }
+.portada-marco { position: absolute !important; inset: 6.5rem 2rem 7rem; border: 1px dashed rgba(243,242,238,.18); color: rgba(243,242,238,.55); z-index: 1; }
+.portada h1 { font-size: clamp(2.3rem, 10.5vw, 11rem); }
+.portada h1 .naranja { color: var(--naranja); }
+.portada-fila { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: end; padding: 2rem 0 2.5rem; }
+.portada-fila p { font-size: clamp(1.05rem, 1.5vw, 1.3rem); max-width: 40ch; color: #d9d6cf; }
+.portada-fila .acciones { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: flex-end; }
+.portada-pie { display: flex; align-items: center; gap: 1.2rem; padding: 1rem 0 1.4rem; border-top: 1px solid rgba(243,242,238,.12); color: var(--acero); }
+.portada-pie .barra-cmyk { width: 12rem; }
+.portada-pie span:last-child { margin-left: auto; }
+@media (max-width: 760px) { .portada-fila { grid-template-columns: 1fr; } .portada-fila .acciones { justify-content: flex-start; } .portada-marco { inset: 5.5rem 1rem 6rem; } .portada-pie .barra-cmyk { display: none; } }
+
+/* ---------- escena: el pliego impuesto (zoom out) ---------- */
+.pliego { position: relative; height: 340vh; }
+.pliego-fijo { position: sticky; top: 0; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+.hoja { position: relative; width: min(88vw, 128svh); aspect-ratio: 16/9.6; background: var(--papel); color: var(--tinta); padding: 2.6% 2.6% 4%; display: grid; grid-template-rows: auto 1fr; gap: 2%; box-shadow: 0 60px 120px -40px #000; transform-origin: 26% 38%; }
+.hoja-cab { display: flex; align-items: center; gap: 1rem; color: var(--acero); }
+.hoja-cab .barra-cmyk { width: 30%; height: 8px; margin-left: auto; }
+.hoja-cab .registro { width: 18px; height: 18px; }
+.piezas { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 3.2%; }
+.pieza { position: relative; color: var(--tinta); }
+.pieza .corte { color: var(--acero); width: 18px; height: 18px; }
+.pieza .corte.si { top: -9px; left: -9px; } .pieza .corte.sd { top: -9px; right: -9px; } .pieza .corte.ii { bottom: -9px; left: -9px; } .pieza .corte.id { bottom: -9px; right: -9px; }
+.pieza a { position: absolute; inset: 0; display: block; overflow: hidden; background: var(--tinta); color: var(--papel); }
+.pieza img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .8; transition: opacity .3s, transform .6s; }
+.pieza a:hover img { opacity: 1; transform: scale(1.05); }
+.pieza-pie { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: .6rem; padding: .55rem .7rem; background: var(--c); color: var(--tinta); }
+.pieza-pie strong { font-variation-settings: "wdth" 112; font-weight: 800; text-transform: uppercase; font-size: clamp(.6rem, 1.05vw, 1rem); line-height: 1.1; }
+.pieza-pie .mono { margin-left: auto; font-size: .6rem; }
+.hoja-pie { position: absolute; left: 2.6%; right: 2.6%; bottom: 1.2%; display: flex; justify-content: space-between; color: var(--acero); font-size: .55rem; }
+.pliego-texto { position: absolute; left: 0; right: 0; top: 9svh; text-align: center; z-index: 2; pointer-events: none; }
+.pliego-texto h2 { font-size: clamp(2.2rem, 6vw, 5.5rem); }
+.pliego-texto p { color: var(--acero); margin-top: .6rem; }
+@media (max-width: 760px) {
+    .hoja { width: 92vw; aspect-ratio: 9/15; padding: 4%; }
+    .piezas { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); gap: 4%; }
+    .pieza-pie .mono { display: none; }
+    .hoja-cab .mono:not(:first-child) { display: none; }
+}
+
+/* ---------- índice de servicios ---------- */
+.seccion { padding: clamp(5rem, 10vw, 9rem) 0; position: relative; }
+.encabezado { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; }
+.encabezado h2 { font-size: clamp(2.4rem, 6vw, 5rem); }
+.encabezado p { max-width: 36ch; color: var(--acero); }
+.indice { border-top: 1px solid rgba(243,242,238,.15); }
+.fila { border-bottom: 1px solid rgba(243,242,238,.15); }
+.fila summary { list-style: none; display: grid; grid-template-columns: 4rem 1fr auto 2.5rem; gap: 1.5rem; align-items: center; padding: 1.6rem 0; cursor: pointer; position: relative; }
+.fila summary::-webkit-details-marker { display: none; }
+.fila .num { color: var(--c); }
+.fila h3 { font-size: clamp(1.6rem, 4vw, 3.4rem); transition: color .25s, transform .35s; }
+.fila summary:hover h3 { color: var(--c); transform: translateX(.6rem); }
+.fila .resumen { color: var(--acero); max-width: 28ch; text-align: right; }
+.fila .mas { width: 2.5rem; height: 2.5rem; border: 1px solid rgba(243,242,238,.3); display: grid; place-items: center; transition: transform .3s, background .3s; }
+.fila[open] .mas { transform: rotate(45deg); background: var(--c); color: var(--tinta); border-color: var(--c); }
+.fila-cuerpo { display: grid; grid-template-columns: 4rem 1fr 1fr; gap: 1.5rem; padding: 0 0 2rem; }
+.fila-cuerpo ul { grid-column: 2; list-style: none; padding: 0; columns: 2; column-gap: 2rem; }
+.fila-cuerpo li { padding: .45rem 0; border-bottom: 1px dashed rgba(243,242,238,.15); break-inside: avoid; }
+.fila-cuerpo .acciones { display: flex; flex-direction: column; gap: .6rem; align-items: flex-start; }
+.fila-cuerpo .acciones .boton:first-child { background: var(--c); border-color: var(--c); color: var(--tinta); }
+.flotante { position: fixed; width: 18rem; aspect-ratio: 4/5; pointer-events: none; z-index: 40; opacity: 0; transform: translate(-50%, -50%) rotate(-3deg) scale(.9); transition: opacity .25s, transform .25s; overflow: hidden; border: 6px solid var(--papel); }
+.flotante img { width: 100%; height: 100%; object-fit: cover; }
+.flotante.ver { opacity: 1; transform: translate(-50%, -50%) rotate(-3deg) scale(1); }
+@media (max-width: 760px) {
+    .fila summary { grid-template-columns: 2.5rem 1fr 2.5rem; }
+    .fila .resumen { display: none; }
+    .fila-cuerpo { grid-template-columns: 1fr; }
+    .fila-cuerpo ul { grid-column: auto; columns: 1; }
+    .flotante { display: none; }
+}
+
+/* ---------- proceso: orden de trabajo ---------- */
+.proceso { background: var(--papel); color: var(--tinta); }
+.proceso .encabezado p { color: #5b5750; }
+.pasos { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--tinta); list-style: none; padding: 0; }
+.paso { padding: 1.4rem 1.4rem 2rem 0; border-right: 1px solid var(--carton); position: relative; }
+.paso + .paso { padding-left: 1.4rem; }
+.paso:last-child { border-right: 0; }
+.paso .mono { color: var(--naranja); display: block; margin-bottom: 2.4rem; font-weight: 600; }
+.paso h3 { font-size: 1.5rem; font-variation-settings: "wdth" 112; font-weight: 800; line-height: 1.1; margin-bottom: .6rem; }
+.paso p { color: #5b5750; }
+.paso .tilde { position: absolute; top: 1.2rem; right: 1.2rem; width: 1.6rem; height: 1.6rem; border: 1.5px solid var(--tinta); display: grid; place-items: center; }
+.paso .tilde::after { content: ""; width: .5rem; height: .9rem; border: solid var(--naranja); border-width: 0 3px 3px 0; rotate: 45deg; translate: 0 -2px; transform: scale(var(--t, 1)); }
+@media (max-width: 860px) { .pasos { grid-template-columns: 1fr 1fr; } .paso { padding-left: 1.4rem !important; border-bottom: 1px solid var(--carton); } }
+@media (max-width: 520px) { .pasos { grid-template-columns: 1fr; } }
+
+/* ---------- historia: recorrido horizontal ---------- */
+.historia { overflow: hidden; }
+.riel { display: flex; gap: 4vw; padding: 0 6vw; width: max-content; align-items: center; height: 100svh; }
+.riel-intro { width: min(46rem, 80vw); }
+.riel-intro h2 { font-size: clamp(2.4rem, 4.6vw, 4.4rem); }
+.riel-intro p { color: var(--acero); margin-top: 1.2rem; max-width: 38ch; }
+.epoca { width: min(34rem, 78vw); position: relative; }
+.epoca figure { aspect-ratio: 4/3; overflow: hidden; position: relative; }
+.epoca img { width: 100%; height: 100%; object-fit: cover; }
+.epoca .anio { font-size: clamp(4rem, 9vw, 8rem); color: transparent; -webkit-text-stroke: 1.5px var(--naranja); position: absolute; top: -.55em; left: -.08em; z-index: 2; }
+.epoca p { margin-top: 1rem; color: #cfcbc3; }
+.lema { width: min(40rem, 85vw); }
+.lema strong { display: block; font-size: clamp(3rem, 8vw, 7rem); color: var(--naranja); }
+@media (max-width: 760px) {
+    .riel { flex-direction: column; width: auto; height: auto; padding: 4rem 1.25rem; gap: 4rem; align-items: stretch; }
+    .epoca, .riel-intro, .lema { width: auto; }
+}
+
+/* ---------- clientes ---------- */
+.logos { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 1px; background: rgba(243,242,238,.12); border: 1px solid rgba(243,242,238,.12); list-style: none; padding: 0; }
+.logos li { background: var(--tinta); aspect-ratio: 3/2; display: grid; place-items: center; padding: 1rem; }
+.logos img { max-height: 70%; width: auto; filter: grayscale(1) invert(1) brightness(1.4); mix-blend-mode: screen; opacity: .7; transition: opacity .3s; }
+.logos li:hover img { opacity: 1; }
+
+/* ---------- orden de trabajo (armador de consulta) ---------- */
+.orden { position: relative; background: var(--papel); color: var(--tinta); padding: clamp(1.4rem, 4vw, 3.4rem); max-width: 62rem; margin-inline: auto; }
+.orden .corte { color: var(--acero); }
+.orden-cab { display: flex; justify-content: space-between; gap: 1rem; align-items: start; border-bottom: 2px solid var(--tinta); padding-bottom: 1rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+.orden-cab h2 { font-size: clamp(2rem, 5vw, 3.6rem); }
+.orden-cab .mono { color: #5b5750; text-align: right; }
+.orden fieldset { border: 0; padding: 0; margin: 0 0 1.4rem; min-width: 0; }
+.orden legend, .orden label > span { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: #5b5750; margin-bottom: .6rem; display: block; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .9rem; border: 1.5px solid var(--tinta); font-weight: 600; font-size: .88rem; background: transparent; }
+.chip .ico { color: var(--tinta); }
+.chip:hover { background: var(--carton); }
+.chip[aria-pressed="true"] { background: var(--tinta); color: var(--papel); }
+.chip[aria-pressed="true"] .ico { color: var(--c); }
+.chip-chico { font-size: .8rem; padding: .4rem .75rem; font-weight: 500; }
+.orden-grilla { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2rem; }
+.orden input, .orden select, .orden textarea { width: 100%; font: inherit; padding: .5rem 0; border: 0; border-bottom: 1.5px solid var(--tinta); background: transparent; border-radius: 0; }
+.orden input:focus, .orden select:focus, .orden textarea:focus { outline: none; border-bottom-color: var(--naranja); box-shadow: 0 2px 0 var(--naranja); }
+.orden .ancho { grid-column: 1 / -1; }
+.orden-pie { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: end; margin-top: 1.8rem; padding-top: 1.4rem; border-top: 1px dashed var(--acero); }
+.vista-wa { font-family: var(--mono); font-size: .8rem; white-space: pre-line; color: #3d3a35; background: var(--carton); padding: 1rem; min-height: 6rem; }
+.orden .boton-naranja:hover { background: var(--tinta); border-color: var(--tinta); color: var(--papel); }
+@media (max-width: 760px) { .orden-grilla, .orden-pie { grid-template-columns: 1fr; } }
+
+/* ---------- contacto ---------- */
+.contacto { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(243,242,238,.15); }
+.contacto > * { padding: 1.6rem 1.4rem 1.6rem 0; border-right: 1px solid rgba(243,242,238,.15); }
+.contacto > * + * { padding-left: 1.4rem; }
+.contacto > :last-child { border-right: 0; }
+.contacto .mono { color: var(--acero); display: block; margin-bottom: .6rem; }
+.contacto strong { font-size: 1.25rem; font-variation-settings: "wdth" 112; display: block; }
+.contacto a:hover strong { color: var(--naranja); }
+.mapa { width: 100%; height: 22rem; border: 0; filter: grayscale(1) invert(.92) contrast(.9); margin-top: 2rem; }
+@media (max-width: 860px) { .contacto { grid-template-columns: 1fr 1fr; } .contacto > * { padding-left: 1.4rem !important; border-bottom: 1px solid rgba(243,242,238,.15); } }
+
+.pie { padding: 2rem 0 6rem; color: var(--acero); }
+.pie .envase { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.wa-flotante { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 60; display: inline-flex; align-items: center; gap: .6rem; padding: .9rem 1.2rem; background: var(--wa); color: #06321a; font-weight: 800; text-transform: uppercase; font-size: .8rem; letter-spacing: .04em; box-shadow: 6px 6px 0 var(--tinta), 6px 6px 0 1px var(--wa); }
+
+.quieto .pliego { height: auto; }
+.quieto .pliego-fijo { position: relative; height: auto; padding: 8rem 0 4rem; gap: 2rem; }
+.quieto .pliego-texto { position: static; }
+</style>
+</head>
+<body>
+
+<header class="cabecera">
+    <div class="envase">
+        <a href="#" class="marca" aria-label="Vitagraf, inicio"><img src="../assets/img/logo.webp" alt="Vitagraf"></a>
+        <nav class="mono" aria-label="Principal">
+            <a href="#servicios">Servicios</a>
+            <a href="#proceso">Cómo trabajamos</a>
+            <a href="#historia">Historia</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <a class="boton boton-naranja" href="#orden">Pedir presupuesto</a>
+    </div>
+</header>
+
+<main>
+    <section class="portada">
+        <video src="../assets/video/DXRiMi8iCDC.mp4" poster="../assets/img/DXRiMi8iCDC.webp" autoplay muted loop playsinline aria-hidden="true"></video>
+        <div class="portada-marco" aria-hidden="true"><i class="corte si"></i><i class="corte sd"></i><i class="corte ii"></i><i class="corte id"></i></div>
+        <div class="envase">
+            <p class="mono" style="color: var(--naranja); margin-bottom: 1rem">Imprenta · Mercedes, Bs. As. · Desde 1924</p>
+            <h1 class="ancha">Gráfica<br>por <span class="naranja">gráficos</span>.</h1>
+            <div class="portada-fila">
+                <p>Cartelería, etiquetas, packaging, papelería y producción editorial para empresas. Offset, digital y DTF en un mismo taller, con asesoramiento técnico y entregas programadas.</p>
+                <div class="acciones">
+                    <a class="boton boton-naranja" href="#orden">Armar mi pedido →</a>
+                    <a class="boton boton-linea" data-wa="">WhatsApp</a>
+                </div>
+            </div>
+        </div>
+        <div class="envase portada-pie mono">
+            <span class="registro" aria-hidden="true"></span>
+            <span>Cian · Magenta · Amarillo · Negro</span>
+            <span class="barra-cmyk" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span>↓ Bajá para ver el pliego</span>
+        </div>
+    </section>
+
+    <section class="pliego" aria-label="Servicios en el pliego">
+        <div class="pliego-fijo">
+            <div class="pliego-texto">
+                <h2 class="ancha">Todo en un pliego.</h2>
+                <p>Seis rubros, un solo taller. Tocá el que necesitás.</p>
+            </div>
+            <div class="hoja">
+                <div class="hoja-cab mono">
+                    <span class="registro" aria-hidden="true"></span>
+                    <span>Vitagraf · pliego 01</span>
+                    <span>70 × 100 cm</span>
+                    <span class="barra-cmyk" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                </div>
+                <div class="piezas" data-servicios>
+                    <template>
+                        <div class="pieza" style="--c: {{color}}">
+                            <i class="corte si"></i><i class="corte sd"></i><i class="corte ii"></i><i class="corte id"></i>
+                            <a href="#s-{{clave}}" data-abrir="{{clave}}"><img src="{{foto}}" alt="" loading="lazy"><span class="pieza-pie">{{iconoSvg}}<strong>{{titulo}}</strong><span class="mono">{{i}}</span></span></a>
+                        </div>
+                    </template>
+                </div>
+                <div class="hoja-pie mono"><span>Calle 22 Nº 261 · Mercedes</span><span>Gráfica por gráficos</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion" id="servicios">
+        <div class="envase">
+            <div class="encabezado">
+                <h2 class="ancha">Índice<br>de trabajos</h2>
+                <p>Abrí el rubro y consultá directo. Si no ves lo que buscás, preguntanos: probablemente lo hacemos.</p>
+            </div>
+            <div class="indice" data-servicios>
+                <template>
+                    <details class="fila" id="s-{{clave}}" style="--c: {{color}}" data-foto="{{foto}}">
+                        <summary><span class="num mono">{{i}}</span><h3 class="ancha">{{titulo}}</h3><span class="resumen">{{resumen}}</span><span class="mas" aria-hidden="true">+</span></summary>
+                        <div class="fila-cuerpo">
+                            <ul>{{lista}}</ul>
+                            <div class="acciones">
+                                <a class="boton" href="{{waUrl}}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+                                <a class="boton boton-linea" href="#orden" data-elegir="{{clave}}">Armar pedido</a>
+                            </div>
+                        </div>
+                    </details>
+                </template>
+            </div>
+        </div>
+        <div class="flotante" aria-hidden="true"><img src="../assets/img/fachada.webp" alt=""></div>
+    </section>
+
+    <section class="seccion proceso" id="proceso">
+        <div class="envase">
+            <div class="encabezado">
+                <h2 class="ancha">Orden<br>de trabajo</h2>
+                <p>Así sale un trabajo de Vitagraf. Hablás siempre con quien lo imprime.</p>
+            </div>
+            <ol class="pasos" data-pasos>
+                <template><li class="paso"><span class="mono">Paso {{i}}</span><span class="tilde" aria-hidden="true"></span><h3>{{titulo}}</h3><p>{{texto}}</p></li></template>
+            </ol>
+        </div>
+    </section>
+
+    <section class="historia" id="historia">
+        <div class="riel">
+            <div class="riel-intro">
+                <p class="mono" style="color: var(--naranja)">Historia</p>
+                <h2 class="ancha">Más de 100 años imprimiendo Mercedes.</h2>
+                <p>Desde 1924 acompañamos a comercios, empresas e instituciones. Hoy está al frente la tercera generación de trabajadores gráficos.</p>
+            </div>
+            <article class="epoca">
+                <span class="anio ancha">1924</span>
+                <figure><img src="../assets/img/taller-antiguo.webp" alt="El taller en sus primeras décadas, con dos operarios junto a las máquinas" loading="lazy"></figure>
+                <p>El taller en sus primeras décadas.</p>
+            </article>
+            <article class="epoca">
+                <span class="anio ancha">80s</span>
+                <figure><img src="../assets/img/guillotina.webp" alt="Operario trabajando con la guillotina en los años 80" loading="lazy"></figure>
+                <p>Años 80, en la guillotina del taller.</p>
+            </article>
+            <article class="epoca">
+                <span class="anio ancha">Hoy</span>
+                <figure><img src="../assets/img/trabajo-prensa.webp" alt="Impresora digital del taller actual" loading="lazy"></figure>
+                <p>Offset, digital, DTF, corte y troquelado. La tercera generación, con una troqueladora nueva para trabajos más variados.</p>
+            </article>
+            <div class="lema">
+                <p class="mono">Nuestro lema, desde la fachada</p>
+                <strong class="ancha">Gráfica por gráficos.</strong>
+                <a class="boton boton-naranja" href="#orden" style="margin-top: 1.6rem">Trabajemos juntos →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion">
+        <div class="envase">
+            <div class="encabezado"><h2 class="ancha">Confían<br>en nosotros</h2><p>Empresas, comercios e instituciones de Mercedes y la zona.</p></div>
+            <ul class="logos" data-clientes><template><li><img src="../assets/clientes/{{logo}}.webp" alt="{{nombre}}" loading="lazy"></li></template></ul>
+        </div>
+    </section>
+
+    <section class="seccion" id="orden" style="padding-top: 0">
+        <div class="envase">
+            <form class="orden" data-consulta>
+                <i class="corte si"></i><i class="corte sd"></i><i class="corte ii"></i><i class="corte id"></i>
+                <div class="orden-cab">
+                    <h2 class="ancha">Tu pedido</h2>
+                    <p class="mono">Orden de consulta<br>Respondemos L a V · 8 a 17 hs</p>
+                </div>
+                <fieldset><legend>01 · Rubro</legend><div class="chips" data-rubros></div></fieldset>
+                <fieldset data-paso-productos hidden><legend>02 · Producto (uno o varios)</legend><div class="chips" data-productos></div></fieldset>
+                <div class="orden-grilla">
+                    <label><span>03 · Cantidad aproximada</span><input name="cantidad" placeholder="Ej: 1000 volantes"></label>
+                    <label><span>04 · Diseño</span>
+                        <select name="diseno">
+                            <option value="">—</option>
+                            <option>Ya tengo el diseño listo</option>
+                            <option>Tengo una idea, necesito ayuda con el diseño</option>
+                            <option>Necesito que me lo diseñen</option>
+                        </select>
+                    </label>
+                    <label class="ancho"><span>05 · Detalles (medidas, material, fecha)</span><input name="detalle"></label>
+                    <label class="ancho"><span>06 · Nombre o empresa</span><input name="nombre" autocomplete="organization"></label>
+                </div>
+                <div class="orden-pie">
+                    <div class="vista-wa" data-vista aria-live="polite"></div>
+                    <button class="boton boton-naranja" type="submit">Enviar por WhatsApp →</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="seccion" id="contacto" style="padding-top: 0">
+        <div class="envase">
+            <div class="contacto">
+                <a data-wa=""><span class="mono">WhatsApp</span><strong data-dato="whatsappVisible"></strong></a>
+                <a href="tel:+542324433011"><span class="mono">Teléfono</span><strong data-dato="telefono"></strong></a>
+                <a data-mapa><span class="mono">Taller y local</span><strong data-dato="direccion"></strong><span data-dato="localidad"></span></a>
+                <div><span class="mono">Horario</span><strong data-dato="horario"></strong></div>
+            </div>
+            <iframe class="mapa" title="Mapa: Vitagraf en Calle 22 Nº 261, Mercedes" loading="lazy" data-mapa-embebido></iframe>
+        </div>
+    </section>
+</main>
+
+<footer class="pie mono">
+    <div class="envase"><span>© Vitagraf · Gráfica por gráficos · 1924</span><span>@vitagraf.imprenta · vitagraf@gmail.com</span></div>
+</footer>
+<a class="wa-flotante" data-wa=""><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z"/></svg>Consultar</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="comun.js"></script>
+<script>
+(() => {
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+    $$('[data-mapa]').forEach((a) => { a.href = VITA.mapa; a.target = '_blank'; });
+    $('[data-mapa-embebido]').src = VITA.mapaEmbebido;
+    const cab = $('.cabecera');
+    const marcar = () => cab.classList.toggle('con-fondo', scrollY > 30);
+    marcar(); addEventListener('scroll', marcar, { passive: true });
+
+    // una pieza del pliego abre su fila del índice
+    $$('[data-abrir]').forEach((a) => a.addEventListener('click', () => { const f = $('#s-' + a.dataset.abrir); if (f) f.open = true; }));
+    // una sola fila abierta a la vez
+    $$('.fila').forEach((f) => f.addEventListener('toggle', () => { if (f.open) $$('.fila').forEach((o) => { if (o !== f) o.open = false; }); }));
+    $$('.fila')[0].open = true;
+
+    // la foto del rubro sigue al cursor sobre el índice
+    const flot = $('.flotante');
+    $$('.fila summary').forEach((s) => {
+        s.addEventListener('mouseenter', () => { $('img', flot).src = s.parentElement.dataset.foto; flot.classList.add('ver'); });
+        s.addEventListener('mouseleave', () => flot.classList.remove('ver'));
+        s.addEventListener('mousemove', (e) => { flot.style.left = e.clientX + 'px'; flot.style.top = e.clientY + 'px'; });
+    });
+
+    if (VITA.quieto || ! window.gsap) return;
+
+    gsap.from('.portada h1', { yPercent: 30, opacity: 0, duration: 1.2, ease: 'expo.out' });
+    gsap.from('.portada-marco', { scale: 1.08, opacity: 0, duration: 1.6, ease: 'expo.out' });
+    gsap.to('.portada video', { scale: 1.2, ease: 'none', scrollTrigger: { trigger: '.portada', start: 'top top', end: 'bottom top', scrub: true } });
+
+    // el pliego: arranca pegado a una pieza y se aleja hasta verse entero
+    const mm = gsap.matchMedia();
+    mm.add({ ancho: '(min-width: 761px)', angosto: '(max-width: 760px)' }, ({ conditions }) => {
+        const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '.pliego', start: 'top top', end: 'bottom bottom', scrub: 0.7 } });
+        tl.fromTo('.hoja', { scale: conditions.ancho ? 3.4 : 2.6, rotate: -4, transformOrigin: '26% 38%' }, { transformOrigin: '50% 50%', scale: conditions.ancho ? 0.76 : 0.8, rotate: 0, duration: 0.6, ease: 'power2.inOut' }, 0)
+          .fromTo('.pliego-texto', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.15 }, 0.5)
+          .from('.pieza-pie', { yPercent: 100, stagger: 0.025, duration: 0.1 }, 0.3)
+          .to('.hoja', { y: conditions.ancho ? '9svh' : '7svh', duration: 0.3 }, 0.45).to({}, { duration: 0.25 });
+    });
+
+    // filas del índice
+    gsap.from('.fila', { y: 30, opacity: 0, stagger: 0.07, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.indice', start: 'top 80%', once: true } });
+
+    // orden de trabajo: los tildes se marcan al leer
+    $$('.paso').forEach((p, i) => {
+        gsap.fromTo(p, { '--t': 0 }, { '--t': 1, duration: 0.4, ease: 'back.out(3)', delay: i * 0.25, scrollTrigger: { trigger: '.pasos', start: 'top 70%', once: true } });
+    });
+
+    // historia: recorrido horizontal fijado (solo en pantallas anchas)
+    mm.add('(min-width: 761px)', () => {
+        const riel = $('.riel');
+        const distancia = () => riel.scrollWidth - innerWidth;
+        const tw = gsap.to(riel, { x: () => -distancia(), ease: 'none', scrollTrigger: { trigger: '.historia', start: 'top top', end: () => '+=' + distancia(), pin: true, scrub: 0.8, invalidateOnRefresh: true } });
+        $$('.epoca img').forEach((img) => gsap.fromTo(img, { scale: 1.3 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: img, containerAnimation: tw, start: 'left right', end: 'center center', scrub: true } }));
+    });
+
+    gsap.from('.logos li', { opacity: 0, stagger: 0.03, duration: 0.5, scrollTrigger: { trigger: '.logos', start: 'top 85%', once: true } });
+    gsap.from('.orden', { y: 80, rotate: 2, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.orden', start: 'top 85%', once: true } });
+})();
+</script>
+</body>
+</html>

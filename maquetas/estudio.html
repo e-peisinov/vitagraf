@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vitagraf · Maqueta E · Estudio</title>
+<link rel="icon" href="../assets/img/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root {
+    --negro: #0d0c0b;
+    --negro-2: #161412;
+    --gris: #8d877f;
+    --gris-2: #2a2724;
+    --hueso: #f2eee8;
+    --naranja: #ff7300;
+    --naranja-claro: #ff9d4d;
+    --kraft: #c8a273;
+    --wa: #25d366;
+    --ancho: 82rem;
+    --alto-cab: 4.6rem;
+    --mono: "Geist Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { overflow-x: clip; }
+body { font-family: Geist, system-ui, sans-serif; background: var(--negro); color: var(--hueso); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+.envase { width: min(var(--ancho), 100% - 2.5rem); margin-inline: auto; }
+.ico { width: 1.2em; height: 1.2em; flex: none; }
+h1, h2, h3 { font-weight: 600; letter-spacing: -.045em; line-height: .95; }
+.mono { font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
+.naranja { color: var(--naranja); }
+
+/* etiqueta troquelada: el rótulo de cada sección es un sticker */
+.sticker { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .8rem .35rem .45rem; border-radius: 999px; background: var(--hueso); color: var(--negro); font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 500; box-shadow: 0 0 0 3px var(--negro), 0 0 0 4px rgba(242,238,232,.18), 0 10px 20px -10px #000; rotate: -2deg; white-space: nowrap; }
+.sticker b { width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--naranja); display: grid; place-items: center; font-size: .7rem; color: var(--negro); flex: none; }
+
+.boton { display: inline-flex; align-items: center; gap: .7rem; padding: .95rem 1.4rem; border-radius: 999px; font-weight: 500; font-size: .95rem; transition: background .25s, color .25s, transform .25s; }
+.boton:hover { transform: translateY(-2px); }
+.boton-naranja { background: var(--naranja); color: var(--negro); }
+.boton-naranja:hover { background: var(--naranja-claro); }
+.boton-linea { box-shadow: inset 0 0 0 1px rgba(242,238,232,.3); }
+.boton-linea:hover { box-shadow: inset 0 0 0 1px var(--hueso); }
+
+/* ---------- cabecera ---------- */
+.cabecera { position: fixed; inset: 0 0 auto; z-index: 50; background: rgba(13,12,11,.82); backdrop-filter: blur(12px); }
+.cabecera .envase { display: flex; align-items: center; gap: 2rem; height: var(--alto-cab); }
+.marca img { height: 2.1rem; width: auto; }
+.cabecera nav { display: flex; gap: 1.8rem; margin-left: auto; font-size: .9rem; color: #cfc8bf; }
+.cabecera nav a:hover { color: var(--hueso); }
+.cabecera .boton { padding: .6rem 1.1rem; font-size: .85rem; }
+@media (max-width: 900px) { .cabecera nav { display: none; } .cabecera .boton { margin-left: auto; } }
+
+/* ---------- escena principal: de la plancha al producto ---------- */
+.escena { position: relative; height: 700vh; }
+.escena-fija { position: sticky; top: 0; height: 100svh; overflow: hidden; background: radial-gradient(60% 55% at 60% 42%, #2b2723 0%, #141210 55%, var(--negro) 100%); }
+.mesa { position: absolute; left: 63%; top: 47%; width: min(64vw, 70svh); aspect-ratio: 1; translate: -50% -50%; perspective: 1400px; }
+.mesa > * { position: absolute; }
+.titulares { position: absolute; left: 0; right: 0; bottom: 7svh; width: min(var(--ancho), 100% - 2.5rem); margin-inline: auto; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; z-index: 5; }
+.titulares::before { content: ""; position: absolute; left: -30vw; right: -10vw; bottom: -10svh; height: 70svh; background: radial-gradient(60% 70% at 25% 100%, rgba(13,12,11,.95), rgba(13,12,11,.75) 45%, transparent 75%); z-index: -1; pointer-events: none; }
+.titular { grid-area: 1 / 1; opacity: 0; }
+.titular.primero { opacity: 1; }
+.titular h1, .titular h2 { font-size: clamp(2.4rem, 5.8vw, 6rem); max-width: 10ch; }
+.titular p { color: #bdb5ab; max-width: 40ch; margin-top: 1rem; font-size: clamp(.95rem, 1.2vw, 1.1rem); }
+.ficha-tecnica { grid-area: 1 / 2; text-align: right; position: relative; min-width: 16rem; min-height: 1rem; }
+.ficha-tecnica .linea { opacity: 0; position: absolute; right: 0; bottom: 0; white-space: nowrap; }
+.ficha-tecnica .linea.primero { opacity: 1; }
+.progreso { position: absolute; left: 50%; top: 6.2rem; translate: -50% 0; display: flex; gap: .4rem; z-index: 5; }
+.progreso i { width: 2.4rem; height: 2px; background: var(--gris-2); overflow: hidden; position: relative; }
+.progreso i::after { content: ""; position: absolute; inset: 0; background: var(--naranja); transform: scaleX(var(--p, 0)); transform-origin: left; }
+
+/* la plancha y su espejo: misma caja y mismo origen, así el sticker suelto
+   escala exactamente igual que la plancha mientras la cámara se acerca */
+.plancha, .espejo { inset: 6% 16%; transform-origin: 34.5% 35%; }
+.plancha svg { width: 100%; height: 100%; filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)); }
+.espejo { pointer-events: none; z-index: 3; transform-style: preserve-3d; perspective: 900px; }
+.suelto { position: absolute; --l: 0; transform-style: preserve-3d; }
+.suelto svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 calc(var(--l) * 26px) calc(var(--l) * 22px) rgba(0,0,0,calc(.15 + var(--l) * .45))); }
+.js-escena .original { opacity: 0; }
+/* frasco */
+.frasco { width: 34%; left: 33%; top: 18%; height: 74%; opacity: 0; }
+.frasco svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 40px 40px rgba(0,0,0,.6)); }
+.etq-fondo { transform-box: fill-box; transform-origin: center; }
+/* caja: troquel que se pliega en 3D */
+.caja-lugar { width: 100%; height: 100%; left: 0; top: 0; display: grid; place-items: center; transform-style: preserve-3d; opacity: 0; }
+.caja { --s: min(13vw, 14svh); position: relative; width: var(--s); height: var(--s); transform-style: preserve-3d; transform-origin: 50% 50% calc(var(--s) * -.5); }
+.cara { position: absolute; width: var(--s); height: var(--s); transform-style: preserve-3d; background: var(--kraft); outline: 1px dashed rgba(13,12,11,.35); outline-offset: -1px; }
+.cara::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(0,0,0,.12)); }
+.cara.base { left: 0; top: 0; }
+.cara.arriba { left: 0; top: calc(var(--s) * -1); transform-origin: 50% 100%; background: #d9b689; }
+.cara.abajo { left: 0; top: var(--s); transform-origin: 50% 0; background: var(--naranja); }
+.cara.izq { left: calc(var(--s) * -1); top: 0; transform-origin: 100% 50%; }
+.cara.der { left: var(--s); top: 0; transform-origin: 0 50%; background: var(--naranja); }
+.cara.tapa { left: 0; top: calc(var(--s) * -1); transform-origin: 50% 100%; background: var(--naranja); }
+.cara .logo-caja { position: absolute; inset: 22%; display: grid; place-items: center; }
+.cara .logo-caja svg { width: 100%; }
+/* bolsa */
+.bolsa { width: 30%; left: 66%; top: 30%; height: 62%; opacity: 0; }
+.bolsa svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 40px 40px rgba(0,0,0,.6)); }
+.sombra-mesa { left: 8%; right: 8%; bottom: 4%; height: 8%; background: radial-gradient(closest-side, rgba(0,0,0,.65), transparent); opacity: 0; }
+@media (max-width: 760px) {
+    .mesa { width: 92vw; top: 36%; left: 50%; }
+    .caja { --s: 22vw; }
+    .titulares { grid-template-columns: 1fr; bottom: 4svh; }
+    .ficha-tecnica { grid-area: 2 / 1; text-align: left; min-height: 1.2rem; }
+    .ficha-tecnica .linea { left: 0; right: auto; }
+    .titular h1, .titular h2 { font-size: 2.3rem; }
+}
+
+/* ---------- catálogo: entra completo en una pantalla y se recorre de costado ---------- */
+.catalogo { position: relative; background: var(--negro); }
+.catalogo-cab { padding: 1.4rem 0 1.6rem; display: flex; justify-content: space-between; align-items: end; gap: 1.5rem 3rem; flex-wrap: wrap; }
+.catalogo-cab h2 { font-size: clamp(1.9rem, 3.4vw, 3.3rem); margin-top: 1rem; }
+.catalogo-cab p { max-width: 34ch; color: #bdb5ab; font-size: .95rem; }
+.riel-cont { overflow: hidden; }
+.riel { display: flex; gap: 1rem; padding: .4rem max(1.25rem, (100vw - var(--ancho)) / 2) .4rem; width: max-content; }
+.pieza { width: clamp(16.5rem, 21vw, 20.5rem); background: var(--negro-2); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: inset 0 0 0 1px rgba(242,238,232,.06); }
+.pieza-escena { height: clamp(8rem, 23svh, 12.5rem); position: relative; display: grid; place-items: center; background: radial-gradient(70% 70% at 50% 45%, #2c2824, #161412 70%); overflow: hidden; }
+.pieza-escena svg { width: 62%; height: 78%; overflow: visible; filter: drop-shadow(0 20px 20px rgba(0,0,0,.55)); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.pieza:hover .pieza-escena svg { transform: scale(1.06) rotate(-2deg); }
+.pieza-escena .num { position: absolute; left: 1rem; top: .9rem; }
+.pieza-cuerpo { padding: 1.1rem 1.2rem 1.2rem; display: grid; gap: .55rem; flex: 1; align-content: start; }
+.pieza h3 { font-size: 1.3rem; letter-spacing: -.03em; line-height: 1.05; }
+.pieza ul { list-style: none; padding: 0; display: grid; }
+.pieza li { font-family: var(--mono); font-size: .68rem; line-height: 1.35; color: #c5bdb2; padding: .36rem 0; border-top: 1px solid rgba(242,238,232,.08); display: flex; gap: .6rem; }
+.pieza li::before { content: "+"; color: var(--naranja); }
+.pieza .acciones { display: flex; gap: .5rem; margin-top: auto; padding-top: .5rem; flex-wrap: wrap; }
+.pieza .acciones .boton { padding: .6rem 1rem; font-size: .82rem; }
+.catalogo-pie { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 0 0; }
+.catalogo-pie .barra { flex: 1; height: 2px; background: var(--gris-2); position: relative; overflow: hidden; }
+.catalogo-pie .barra i { position: absolute; inset: 0; background: var(--naranja); transform: scaleX(0); transform-origin: left; }
+@media (min-width: 761px) { .catalogo { height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-top: var(--alto-cab); } }
+@media (max-width: 760px) { .catalogo { padding: 6rem 0 4rem; } .riel-cont { overflow-x: auto; scroll-snap-type: x mandatory; } .pieza { width: 80vw; scroll-snap-align: center; } .catalogo-pie { display: none; } }
+
+/* ---------- muestrario de materiales ---------- */
+.seccion { padding: clamp(5rem, 10vw, 9rem) 0; position: relative; }
+.encabezado { display: grid; gap: 1.2rem; max-width: 46rem; margin-bottom: 3.4rem; justify-items: start; }
+.encabezado h2 { font-size: clamp(2.3rem, 5vw, 4.4rem); }
+.encabezado p { color: #bdb5ab; font-size: 1.08rem; }
+.muestrario { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: .6rem; perspective: 1200px; }
+.muestra { aspect-ratio: .62; border-radius: 10px 10px 4px 4px; position: relative; padding: .9rem .8rem; display: flex; flex-direction: column; justify-content: space-between; background: var(--m); color: var(--negro); box-shadow: 0 20px 30px -18px #000; transform-origin: 50% 100%; overflow: hidden; }
+.muestra::before { content: ""; position: absolute; top: .7rem; right: .7rem; width: .7rem; height: .7rem; border-radius: 50%; background: var(--negro); box-shadow: inset 0 1px 2px #000; }
+.muestra::after { content: ""; position: absolute; inset: 0; background: var(--textura, none); opacity: .5; mix-blend-mode: multiply; pointer-events: none; }
+.muestra strong { font-size: 1.05rem; letter-spacing: -.02em; line-height: 1.1; position: relative; z-index: 1; }
+.muestra span { font-family: var(--mono); font-size: .7rem; letter-spacing: .04em; text-transform: uppercase; opacity: .75; position: relative; z-index: 1; }
+@media (max-width: 960px) { .muestrario { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .muestrario { grid-template-columns: repeat(2, minmax(0, 1fr)); } .muestra { aspect-ratio: .9; } }
+
+/* ---------- proceso ---------- */
+.pasos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; border-top: 1px solid rgba(242,238,232,.12); }
+.paso { padding: 1.8rem 1.6rem 0 0; display: grid; gap: .7rem; align-content: start; }
+.paso b { font-family: var(--mono); font-weight: 500; font-size: .75rem; color: var(--naranja); letter-spacing: .08em; }
+.paso h3 { font-size: 1.35rem; letter-spacing: -.03em; line-height: 1.1; }
+.paso p { color: #a9a197; font-size: .95rem; }
+@media (max-width: 860px) { .pasos { grid-template-columns: 1fr 1fr; gap: 2rem 0; } }
+@media (max-width: 520px) { .pasos { grid-template-columns: 1fr; } }
+
+/* ---------- historia: la del sitio original, completa, en recorrido horizontal ---------- */
+.historia { position: relative; background: var(--negro-2); overflow: hidden; }
+.hist-riel { display: flex; align-items: center; gap: clamp(3rem, 7vw, 8rem); height: 100svh; padding: var(--alto-cab) 8vw 3rem; width: max-content; }
+.hist-panel { flex: none; }
+.hist-intro { width: min(34rem, 80vw); }
+.hist-intro h2 { font-size: clamp(3rem, 7vw, 6.6rem); margin: 1.4rem 0 1.2rem; }
+.hist-intro p { color: #bdb5ab; font-size: 1.1rem; max-width: 30ch; }
+.hist-intro .mono { display: block; margin-top: 2.4rem; }
+.hist-capitulo { width: min(64rem, 82vw); display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+.hist-foto { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 4/3.2; }
+.hist-foto img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05) brightness(.92); }
+.hist-foto::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255,115,0,.35), transparent 55%); mix-blend-mode: color; }
+.hist-foto .sticker { position: absolute; left: 1rem; bottom: 1rem; rotate: -4deg; }
+.hist-capitulo .rotulo-grande { font-size: clamp(2.6rem, 5vw, 4.8rem); font-weight: 600; letter-spacing: -.04em; line-height: .95; color: transparent; -webkit-text-stroke: 1.2px var(--naranja); display: block; margin-bottom: 1.2rem; }
+.hist-capitulo p { color: #d6cfc5; font-size: clamp(1rem, 1.3vw, 1.18rem); max-width: 46ch; }
+.hist-final { width: min(36rem, 80vw); }
+.hist-final strong { display: block; font-size: clamp(3rem, 7vw, 6.4rem); letter-spacing: -.04em; line-height: .92; font-weight: 600; }
+.hist-final .boton { margin-top: 2rem; }
+.hist-reloj { position: absolute; left: 8vw; right: 8vw; bottom: 2.2rem; display: flex; align-items: center; gap: 1.2rem; }
+.hist-reloj .anio { font-family: var(--mono); font-size: .9rem; color: var(--hueso); font-variant-numeric: tabular-nums; min-width: 3.5rem; }
+.hist-reloj .barra { flex: 1; height: 2px; background: var(--gris-2); position: relative; overflow: hidden; }
+.hist-reloj .barra i { position: absolute; inset: 0; background: var(--naranja); transform: scaleX(0); transform-origin: left; }
+@media (max-width: 760px) {
+    .hist-riel { flex-direction: column; align-items: stretch; height: auto; width: auto; padding: 6rem 1.25rem 4rem; gap: 4rem; }
+    .hist-intro, .hist-capitulo, .hist-final { width: auto; }
+    .hist-capitulo { grid-template-columns: 1fr; }
+    .hist-reloj { display: none; }
+}
+
+/* ---------- clientes: las marcas se van pegando ---------- */
+.logos { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid rgba(242,238,232,.1); border-left: 1px solid rgba(242,238,232,.1); list-style: none; padding: 0; }
+.logos li { position: relative; aspect-ratio: 3/2; display: grid; place-items: center; padding: 1.2rem; border-right: 1px solid rgba(242,238,232,.1); border-bottom: 1px solid rgba(242,238,232,.1); min-width: 0; }
+/* el lugar marcado, como el troquel vacío de una plancha */
+.logos li::before { content: ""; position: absolute; width: 46%; aspect-ratio: 1; border-radius: 50%; border: 1px dashed rgba(242,238,232,.16); opacity: var(--hueco, 1); }
+.logos img { position: relative; max-width: 100%; max-height: 64%; width: auto; height: auto; object-fit: contain; filter: grayscale(1) invert(1) brightness(1.3); mix-blend-mode: screen; opacity: .7; }
+.logos li:hover img { opacity: 1; }
+@media (max-width: 860px) { .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* ---------- contacto ---------- */
+.contacto { background: var(--hueso); color: var(--negro); border-radius: 32px 32px 0 0; }
+.contacto .encabezado p { color: #5a534c; }
+.contacto-grilla { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+.consulta { display: grid; gap: 1.5rem; }
+fieldset { border: 0; padding: 0; min-width: 0; }
+legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: #5a534c; display: block; margin-bottom: .6rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+.chip { display: inline-flex; align-items: center; gap: .45rem; padding: .6rem 1rem; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px rgba(13,12,11,.12); font-size: .9rem; font-weight: 500; transition: background .2s, color .2s; }
+.chip .ico { color: var(--naranja); }
+.chip:hover { box-shadow: inset 0 0 0 1px var(--negro); }
+.chip[aria-pressed="true"] { background: var(--negro); color: var(--hueso); }
+.chip-chico { font-size: .82rem; padding: .45rem .85rem; }
+.fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.consulta input, .consulta select, .consulta textarea { width: 100%; font: inherit; padding: .85rem 1rem; border-radius: 12px; border: 0; background: #fff; box-shadow: inset 0 0 0 1px rgba(13,12,11,.12); }
+.consulta input:focus, .consulta select:focus, .consulta textarea:focus { outline: 2px solid var(--naranja); }
+.ticket { background: #fff; border-radius: 18px; padding: 1.4rem; display: grid; gap: 1rem; position: sticky; top: 6rem; box-shadow: 0 30px 50px -35px rgba(0,0,0,.5); }
+.ticket .vista { font-family: var(--mono); font-size: .8rem; white-space: pre-line; color: #3c3732; min-height: 7rem; border-top: 1px dashed rgba(13,12,11,.25); border-bottom: 1px dashed rgba(13,12,11,.25); padding: 1rem 0; }
+.ticket .boton-wa { background: var(--wa); color: #06321a; justify-content: center; }
+.datos { display: grid; margin-top: .4rem; }
+.datos a, .datos div { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 0; font-size: .9rem; border-bottom: 1px solid rgba(13,12,11,.08); }
+.datos span { color: #5a534c; }
+@media (max-width: 860px) { .contacto-grilla, .fila2 { grid-template-columns: 1fr; } .ticket { position: static; } }
+.pie { background: var(--hueso); color: #5a534c; padding: 2rem 0 6rem; font-size: .85rem; }
+.pie .envase { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-top: 1px solid rgba(13,12,11,.1); padding-top: 1.6rem; }
+.wa-flotante { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 60; width: 3.6rem; height: 3.6rem; border-radius: 50%; background: var(--wa); color: #06321a; display: grid; place-items: center; box-shadow: 0 12px 24px -10px rgba(0,0,0,.7); }
+.wa-flotante .ico { width: 1.7rem; height: 1.7rem; }
+
+.quieto .escena { height: auto; }
+.quieto .escena-fija { position: relative; height: 100svh; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+        <!-- el libro del logo, en vector -->
+        <g id="libro-logo"><path d="M-22 -14 L-2 -8 V18 L-22 12 Z" fill="#ff9d4d"/><path d="M2 -8 L22 -14 V12 L2 18 Z" fill="#ff7300"/></g>
+        <!-- un sticker de la plancha (radio exterior 46) -->
+        <g id="sticker">
+            <circle r="46" fill="#fff"/>
+            <circle r="40" fill="#1a1714"/>
+            <circle r="40" fill="none" stroke="#ff7300" stroke-width="1.5" stroke-dasharray="1.5 3"/>
+            <use href="#libro-logo" transform="translate(0 -6) scale(.9)"/>
+            <text y="26" text-anchor="middle" font-family="Geist, sans-serif" font-weight="600" font-size="8.5" letter-spacing="1.6" fill="#f2eee8">TU MARCA</text>
+        </g>
+    </defs>
+</svg>
+
+<header class="cabecera">
+    <div class="envase">
+        <a href="#" class="marca" aria-label="Vitagraf, inicio"><img src="../assets/img/logo.webp" alt="Vitagraf"></a>
+        <nav aria-label="Principal">
+            <a href="#catalogo">Productos</a>
+            <a href="#materiales">Materiales</a>
+            <a href="#historia">Historia</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <a class="boton boton-naranja" href="#contacto">Cotizar</a>
+    </div>
+</header>
+
+<main>
+    <section class="escena" aria-label="De la plancha al producto">
+        <div class="escena-fija">
+            <div class="progreso" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="mesa" aria-hidden="true">
+                <div class="sombra-mesa"></div>
+                <!-- plancha de 3 × 4 stickers con marcas de corte (viewBox 300 × 400) -->
+                <div class="plancha">
+                    <svg viewBox="0 0 300 400">
+                        <rect x="0" y="0" width="300" height="400" rx="4" fill="#f2eee8"/>
+                        <g stroke="#8d877f" stroke-width=".7"><path d="M10 0 V8 M0 10 H8 M290 0 V8 M300 10 H292 M10 400 V392 M0 390 H8 M290 400 V392 M300 390 H292"/></g>
+                        <text x="22" y="22" font-family="Geist Mono, monospace" font-size="6" fill="#8d877f">VITAGRAF · PLANCHA 01 · VINILO BLANCO · CORTE TROQUELADO</text>
+                        <!-- el hueco que queda cuando el sticker se despega -->
+                        <circle cx="68" cy="105" r="28.5" fill="#d8d2c9"/>
+                        <circle cx="68" cy="105" r="28.5" fill="none" stroke="#bdb6ab" stroke-width=".6" stroke-dasharray="2 2"/>
+                        <use class="original" href="#sticker" transform="translate(68 105) scale(.62)"/>
+                        <use href="#sticker" transform="translate(150 105) scale(.62)"/><use href="#sticker" transform="translate(232 105) scale(.62)"/>
+                        <use href="#sticker" transform="translate(68 187) scale(.62)"/><use href="#sticker" transform="translate(150 187) scale(.62)"/><use href="#sticker" transform="translate(232 187) scale(.62)"/>
+                        <use href="#sticker" transform="translate(68 269) scale(.62)"/><use href="#sticker" transform="translate(150 269) scale(.62)"/><use href="#sticker" transform="translate(232 269) scale(.62)"/>
+                        <use href="#sticker" transform="translate(68 351) scale(.62)"/><use href="#sticker" transform="translate(150 351) scale(.62)"/><use href="#sticker" transform="translate(232 351) scale(.62)"/>
+                        <rect x="22" y="384" width="10" height="6" fill="#00a0dc"/><rect x="32" y="384" width="10" height="6" fill="#e4007c"/><rect x="42" y="384" width="10" height="6" fill="#ffd400"/><rect x="52" y="384" width="10" height="6" fill="#1a1714"/>
+                    </svg>
+                </div>
+                <!-- el sticker que se despega vive en una copia invisible de la plancha -->
+                <div class="espejo"><div class="suelto"><svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg></div></div>
+
+                <!-- frasco de vidrio (viewBox 200 × 330) -->
+                <div class="frasco">
+                    <svg viewBox="0 0 200 330">
+                        <defs>
+                            <linearGradient id="vidrio" x1="0" x2="1"><stop offset="0" stop-color="#3a2a1a"/><stop offset=".25" stop-color="#7a4f22"/><stop offset=".55" stop-color="#a86c2c"/><stop offset=".8" stop-color="#6b4420"/><stop offset="1" stop-color="#2e2014"/></linearGradient>
+                            <linearGradient id="tapa" x1="0" x2="1"><stop offset="0" stop-color="#1a1714"/><stop offset=".5" stop-color="#4a443e"/><stop offset="1" stop-color="#1a1714"/></linearGradient>
+                            <linearGradient id="curva" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></linearGradient>
+                        </defs>
+                        <rect x="46" y="0" width="108" height="46" rx="6" fill="url(#tapa)"/>
+                        <rect x="56" y="44" width="88" height="16" fill="#5b3a1c"/>
+                        <path d="M30 80 Q30 60 56 60 H144 Q170 60 170 80 V306 Q170 330 146 330 H54 Q30 330 30 306 Z" fill="url(#vidrio)"/>
+                        <rect x="44" y="84" width="9" height="220" rx="4.5" fill="#fff" opacity=".18"/>
+                        <g class="etq-fondo"><rect x="30" y="140" width="140" height="130" fill="#f2eee8"/><rect x="30" y="140" width="140" height="130" fill="url(#curva)"/></g>
+                        <use class="etq-sticker" href="#sticker" transform="translate(100 192) scale(.62)" opacity="0"/>
+                        <text class="etq-texto" x="100" y="256" text-anchor="middle" font-family="Geist, sans-serif" font-weight="600" font-size="10" letter-spacing="2" fill="#1a1714" opacity="0">MIEL · 500 G</text>
+                    </svg>
+                </div>
+
+                <!-- caja: el troquel plano se pliega -->
+                <div class="caja-lugar">
+                    <div class="caja">
+                        <div class="cara base"><div class="logo-caja"><svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg></div>
+                            <div class="cara arriba"><div class="cara tapa"></div></div>
+                            <div class="cara abajo"></div>
+                            <div class="cara izq"></div>
+                            <div class="cara der"><div class="logo-caja"><svg viewBox="-30 -30 60 60"><use href="#libro-logo"/></svg></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- bolsa kraft -->
+                <div class="bolsa">
+                    <svg viewBox="0 0 200 300">
+                        <defs><linearGradient id="papel-kraft" x1="0" x2="1"><stop offset="0" stop-color="#9b774c"/><stop offset=".45" stop-color="#cfa977"/><stop offset="1" stop-color="#a47f53"/></linearGradient></defs>
+                        <path d="M64 90 V60 Q64 26 100 26 Q136 26 136 60 V90" fill="none" stroke="#1a1714" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M24 80 H176 L184 300 H16 Z" fill="url(#papel-kraft)"/>
+                        <path d="M24 80 H176 L170 96 H30 Z" fill="#000" opacity=".12"/>
+                        <use href="#sticker" transform="translate(100 190) scale(.78)"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="titulares">
+                <div class="titular primero">
+                    <span class="sticker"><b>V</b>Imprenta · Mercedes · 1924</span>
+                    <h1 style="margin-top: 1.4rem">Tu marca, impresa con precisión.</h1>
+                    <p>Etiquetas, stickers, packaging y cartelería para empresas. Bajá para ver cómo trabajamos.</p>
+                </div>
+                <div class="titular"><h2>Se despega.<br><span class="naranja">Se pega.</span></h2><p>Stickers y etiquetas troqueladas a la medida exacta de tu producto.</p></div>
+                <div class="titular"><h2>Tu producto,<br>con identidad.</h2><p>Etiquetas adhesivas, colgantes y DTF: brillo, relieve y resistentes al agua.</p></div>
+                <div class="titular"><h2>Del troquel<br>a la <span class="naranja">caja</span>.</h2><p>Cajas, bolsas y packaging impresos y cortados en nuestro taller.</p></div>
+                <div class="titular">
+                    <h2>Todo sale<br>de un mismo taller.</h2>
+                    <div style="display: flex; gap: .6rem; margin-top: 1.6rem; flex-wrap: wrap"><a class="boton boton-naranja" href="#contacto">Cotizar mi proyecto</a><a class="boton boton-linea" href="#catalogo">Ver productos</a></div>
+                </div>
+                <div class="ficha-tecnica mono">
+                    <span class="linea primero">Plancha 01 — vinilo blanco</span>
+                    <span class="linea">Ø 50 mm — corte troquelado</span>
+                    <span class="linea">Etiqueta — aplicada</span>
+                    <span class="linea">Troquel — plegado</span>
+                    <span class="linea">Etiqueta · caja · bolsa</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="catalogo" id="catalogo">
+        <div class="envase catalogo-cab">
+            <div><span class="sticker"><b>01</b>Productos</span><h2>Seis líneas de trabajo. Una imprenta.</h2></div>
+            <p>Elegí la pieza que necesitás y consultá directo. Si no está en la lista, preguntanos.</p>
+        </div>
+        <div class="riel-cont">
+            <div class="riel" data-servicios>
+                <template>
+                    <article class="pieza" data-pieza="{{clave}}">
+                        <div class="pieza-escena"><span class="num mono">{{i}} / 06</span></div>
+                        <div class="pieza-cuerpo">
+                            <h3>{{titulo}}</h3>
+                            <ul>{{lista}}</ul>
+                            <div class="acciones">
+                                <a class="boton boton-naranja" href="{{waUrl}}" target="_blank" rel="noopener">Consultar</a>
+                                <a class="boton boton-linea" href="#contacto" data-elegir="{{clave}}">Cotizar</a>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+            </div>
+        </div>
+        <div class="envase catalogo-pie" aria-hidden="true"><span class="mono">01</span><span class="barra"><i></i></span><span class="mono">06</span></div>
+    </section>
+
+    <section class="seccion" id="materiales">
+        <div class="envase">
+            <div class="encabezado">
+                <span class="sticker"><b>02</b>Materiales</span>
+                <h2>Cada trabajo, en el material justo.</h2>
+                <p>Te asesoramos para elegir el soporte según dónde va a estar tu pieza: adentro, afuera, en la mano o en la vidriera.</p>
+            </div>
+            <div class="muestrario">
+                <div class="muestra" style="--m: #f4f1ea"><span>Adhesivo</span><strong>Vinilo blanco</strong></div>
+                <div class="muestra" style="--m: linear-gradient(135deg, #fff4e0, #ffd2a6 40%, #fff 60%, #ffc48a)"><span>Brillo y relieve</span><strong>DTF</strong></div>
+                <div class="muestra" style="--m: #c8a273; --textura: repeating-linear-gradient(80deg, transparent 0 3px, rgba(0,0,0,.08) 3px 4px)"><span>Bolsas</span><strong>Papel kraft</strong></div>
+                <div class="muestra" style="--m: #ffffff"><span>Bolsas</span><strong>Papel blanco</strong></div>
+                <div class="muestra" style="--m: #ff9d4d"><span>Bolsas y tarjetas</span><strong>Cartulina</strong></div>
+                <div class="muestra" style="--m: #e9e6e1; --textura: repeating-linear-gradient(0deg, transparent 0 4px, rgba(0,0,0,.07) 4px 5px), repeating-linear-gradient(90deg, transparent 0 4px, rgba(0,0,0,.07) 4px 5px)"><span>Exterior</span><strong>Lona</strong></div>
+                <div class="muestra" style="--m: #d9dde0"><span>Carteles</span><strong>PVC</strong></div>
+                <div class="muestra" style="--m: #ff7300"><span>Corpóreos</span><strong>Polyfan</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion" style="padding-top: 0">
+        <div class="envase">
+            <div class="encabezado">
+                <span class="sticker"><b>03</b>Proceso</span>
+                <h2>Así trabajamos.</h2>
+            </div>
+            <ol class="pasos" data-pasos><template><li class="paso"><b>PASO {{i}}</b><h3>{{titulo}}</h3><p>{{texto}}</p></li></template></ol>
+        </div>
+    </section>
+
+    <section class="historia" id="historia" aria-labelledby="titulo-historia">
+        <div class="hist-riel">
+            <div class="hist-panel hist-intro">
+                <span class="sticker"><b>04</b>Historia</span>
+                <h2 id="titulo-historia">Nuestra historia</h2>
+                <p>Más de un siglo de oficio gráfico en Mercedes, hoy en manos de la tercera generación.</p>
+                <span class="mono">Seguí bajando →</span>
+            </div>
+            <article class="hist-panel hist-capitulo">
+                <figure class="hist-foto"><img src="../assets/img/taller-antiguo.webp" alt="Dos trabajadores gráficos junto a una máquina de imprenta en el taller antiguo de Vitagraf." loading="lazy"><span class="sticker"><b>1</b>El taller</span></figure>
+                <div>
+                    <span class="rotulo-grande">1924</span>
+                    <p>Desde 1924, Vitagraf forma parte de la historia de la ciudad de Mercedes, Buenos Aires. Nacimos con el compromiso de ofrecer trabajos gráficos de calidad y, a lo largo de más de un siglo, hemos acompañado a generaciones de clientes, comercios, empresas e instituciones.</p>
+                </div>
+            </article>
+            <article class="hist-panel hist-capitulo">
+                <figure class="hist-foto"><img src="../assets/img/guillotina.webp" alt="Un trabajador gráfico cortando papel con una guillotina en el taller." loading="lazy"><span class="sticker"><b>2</b>El oficio</span></figure>
+                <div>
+                    <span class="rotulo-grande">3.ª generación</span>
+                    <p>Hoy, la imprenta continúa en manos de la tercera generación de trabajadores gráficos, manteniendo el mismo espíritu de dedicación y responsabilidad que dio origen a este proyecto familiar. Combinamos la experiencia adquirida durante décadas con tecnología de impresión actual para brindar soluciones gráficas de alta calidad.</p>
+                </div>
+            </article>
+            <article class="hist-panel hist-capitulo">
+                <figure class="hist-foto"><img src="../assets/img/fachada.webp" alt="Frente de Vitagraf en Calle 22, de noche, con el cartel iluminado." loading="lazy"><span class="sticker"><b>3</b>Calle 22</span></figure>
+                <div>
+                    <span class="rotulo-grande">+100 años</span>
+                    <p>Más que una imprenta, somos una empresa con una historia construida sobre la confianza de nuestros clientes y la pasión por el oficio gráfico. Cada trabajo que realizamos refleja ese compromiso que nos acompaña desde hace más de 100 años.</p>
+                </div>
+            </article>
+            <div class="hist-panel hist-final">
+                <span class="mono">Nuestro lema, desde la fachada</span>
+                <strong>Gráfica por <span class="naranja">gráficos.</span></strong>
+                <a class="boton boton-naranja" href="#contacto">Trabajemos juntos</a>
+            </div>
+        </div>
+        <div class="hist-reloj" aria-hidden="true"><span class="anio" data-anio>1924</span><span class="barra"><i></i></span><span class="anio" style="text-align: right">2026</span></div>
+    </section>
+
+    <section class="seccion clientes">
+        <div class="envase">
+            <div class="encabezado"><span class="sticker"><b>05</b>Clientes</span><h2>Confían en nosotros.</h2></div>
+            <ul class="logos" data-clientes><template><li><img src="../assets/clientes/{{logo}}.webp" alt="{{nombre}}" loading="lazy"></li></template></ul>
+        </div>
+    </section>
+
+    <section class="seccion contacto" id="contacto">
+        <div class="envase">
+            <div class="encabezado"><span class="sticker" style="box-shadow: 0 0 0 3px var(--hueso), 0 0 0 4px rgba(13,12,11,.15)"><b>06</b>Cotizar</span><h2>Contanos tu proyecto.</h2><p>Elegí qué necesitás y te llega la consulta armada a nuestro WhatsApp.</p></div>
+            <div class="contacto-grilla">
+                <form class="consulta" data-consulta id="form-consulta">
+                    <fieldset><legend>Producto</legend><div class="chips" data-rubros></div></fieldset>
+                    <fieldset data-paso-productos hidden><legend>Detalle (podés marcar varios)</legend><div class="chips" data-productos></div></fieldset>
+                    <div class="fila2">
+                        <label><span>Cantidad</span><input name="cantidad" placeholder="Ej: 1000 stickers"></label>
+                        <label><span>Diseño</span>
+                            <select name="diseno">
+                                <option value="">Elegí</option>
+                                <option>Ya tengo el diseño listo</option>
+                                <option>Tengo una idea, necesito ayuda con el diseño</option>
+                                <option>Necesito que me lo diseñen</option>
+                            </select>
+                        </label>
+                    </div>
+                    <label><span>Medidas, material, fecha</span><textarea name="detalle" rows="2"></textarea></label>
+                    <label><span>Nombre o empresa</span><input name="nombre" autocomplete="organization"></label>
+                </form>
+                <aside class="ticket">
+                    <span class="mono">Tu consulta</span>
+                    <div class="vista" data-vista-de="form-consulta" aria-live="polite"></div>
+                    <button class="boton boton-wa" type="submit" form="form-consulta">Enviar por WhatsApp</button>
+                    <div class="datos">
+                        <a href="tel:+542324433011"><span>Teléfono</span><strong data-dato="telefono"></strong></a>
+                        <a href="mailto:vitagraf@gmail.com"><span>Email</span><strong data-dato="email"></strong></a>
+                        <a data-mapa><span>Local</span><strong data-dato="direccion"></strong></a>
+                        <div><span>Horario</span><strong>L a V · 8 a 17 hs</strong></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="pie"><div class="envase"><span>© Vitagraf · Imprenta desde 1924 · Mercedes, Bs. As.</span><span>@vitagraf.imprenta</span></div></footer>
+<a class="wa-flotante" data-wa="" aria-label="Escribinos por WhatsApp"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z"/></svg></a>
+
+<!-- un objeto por línea de producto, para las fichas del catálogo -->
+<template id="objetos">
+    <svg data-o="local" viewBox="0 0 200 200"><defs><linearGradient id="o1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffb070"/><stop offset="1" stop-color="#ff7300"/></linearGradient></defs><rect x="20" y="52" width="160" height="70" rx="10" fill="#1a1714"/><rect x="26" y="58" width="148" height="58" rx="6" fill="url(#o1)"/><text x="100" y="96" text-anchor="middle" font-family="Geist" font-weight="700" font-size="26" letter-spacing="-1" fill="#1a1714">TU LOCAL</text><rect x="60" y="122" width="6" height="40" fill="#3a3530"/><rect x="134" y="122" width="6" height="40" fill="#3a3530"/><rect x="40" y="160" width="120" height="6" rx="3" fill="#2a2724"/></svg>
+    <svg data-o="etiquetas" viewBox="0 0 200 200"><circle cx="70" cy="100" r="54" fill="#f2eee8"/><circle cx="70" cy="100" r="22" fill="#2a2724"/><circle cx="70" cy="100" r="16" fill="#161412"/><path d="M70 46 H190 V154 H70" fill="#f2eee8"/><use href="#sticker" transform="translate(112 100) scale(.42)"/><use href="#sticker" transform="translate(160 100) scale(.42)"/><circle cx="70" cy="100" r="54" fill="none" stroke="#d8d2c9" stroke-width="1"/></svg>
+    <svg data-o="packaging" viewBox="0 0 200 200"><path d="M76 66 V50 Q76 30 100 30 Q124 30 124 50 V66" fill="none" stroke="#1a1714" stroke-width="5" stroke-linecap="round"/><path d="M46 60 H154 L160 180 H40 Z" fill="#c8a273"/><path d="M46 60 H154 L150 72 H50 Z" fill="#000" opacity=".12"/><use href="#sticker" transform="translate(100 122) scale(.55)"/></svg>
+    <svg data-o="papeleria" viewBox="0 0 200 200"><g transform="rotate(-10 100 100)"><rect x="34" y="66" width="140" height="84" rx="5" fill="#1a1714"/></g><g transform="rotate(4 100 100)"><rect x="28" y="56" width="140" height="84" rx="5" fill="#f2eee8"/><use href="#libro-logo" transform="translate(62 96) scale(.8)"/><text x="88" y="94" font-family="Geist" font-weight="700" font-size="12" fill="#1a1714">Tu Nombre</text><rect x="88" y="102" width="56" height="3" rx="1.5" fill="#c9c2b8"/><rect x="88" y="110" width="40" height="3" rx="1.5" fill="#c9c2b8"/></g></svg>
+    <svg data-o="eventos" viewBox="0 0 200 200"><path d="M70 180 V30 Q120 30 140 70 Q150 110 120 150 L84 150" fill="#ff7300"/><path d="M70 30 V180" stroke="#2a2724" stroke-width="4"/><text transform="translate(108 140) rotate(-90)" font-family="Geist" font-weight="700" font-size="16" letter-spacing="1" fill="#1a1714">TU MARCA</text><ellipse cx="70" cy="182" rx="26" ry="6" fill="#2a2724"/></svg>
+    <svg data-o="editorial" viewBox="0 0 200 200"><rect x="56" y="30" width="104" height="146" rx="4" fill="#2a2724"/><rect x="48" y="24" width="104" height="146" rx="4" fill="#f2eee8"/><rect x="48" y="24" width="10" height="146" fill="#d8d2c9"/><text x="104" y="74" text-anchor="middle" font-family="Geist" font-weight="700" font-size="16" letter-spacing="-.5" fill="#1a1714">Anuario</text><text x="104" y="90" text-anchor="middle" font-family="Geist Mono" font-size="7" letter-spacing="1.5" fill="#8d877f">PROMOCIÓN 2026</text><use href="#libro-logo" transform="translate(104 130) scale(1.1)"/></svg>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="comun.js"></script>
+<script>
+(() => {
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+    $$('[data-mapa]').forEach((a) => { a.href = VITA.mapa; a.target = '_blank'; });
+
+    // cada ficha del catálogo recibe su objeto
+    const objetos = $('#objetos').content;
+    $$('[data-pieza]').forEach((p) => {
+        const o = objetos.querySelector('[data-o="' + p.dataset.pieza + '"]');
+        if (o) $('.pieza-escena', p).prepend(o.cloneNode(true));
+    });
+
+    if (VITA.quieto || ! window.gsap) return;
+    document.documentElement.classList.add('js-escena');
+
+    /*
+     * Geometría de la escena, calculada con las cajas sin transformar (la
+     * mesa es cuadrada). Ubica el sticker suelto exactamente encima del de la
+     * plancha y calcula cuánto tiene que viajar y escalar para quedar
+     * exactamente encima del lugar de la etiqueta en el frasco. Así los
+     * cambios de un elemento por otro pasan superpuestos y no se notan.
+     */
+    const G = {};
+    function geometria() {
+        const M = $('.mesa').offsetWidth;
+        // plancha: inset 6% 16%, viewBox 300 × 400 centrado (meet)
+        const pw = M * 0.68, ph = M * 0.88;
+        const k = Math.min(pw / 300, ph / 400);
+        const ox = (pw - 300 * k) / 2, oy = (ph - 400 * k) / 2;
+        const lado = 96 * 0.62 * k;       // el SVG del suelto mide 96 unidades
+        const cx = ox + 68 * k, cy = oy + 105 * k;
+        Object.assign($('.suelto').style, { width: lado + 'px', height: lado + 'px', left: cx - lado / 2 + 'px', top: cy - lado / 2 + 'px' });
+        // frasco: left 33%, top 18%, 34% × 74%, viewBox 200 × 330 centrado
+        const fw = M * 0.34, fh = M * 0.74;
+        const kf = Math.min(fw / 200, fh / 330);
+        const fx = M * 0.33 + (fw - 200 * kf) / 2, fy = M * 0.18 + (fh - 330 * kf) / 2;
+        // centro del sticker en coordenadas de la mesa
+        const sx = M * 0.16 + cx, sy = M * 0.06 + cy;
+        G.dx = fx + 100 * kf - sx;
+        G.dy = fy + 192 * kf - sy;
+        G.s = kf / k;
+    }
+    geometria();
+    ScrollTrigger.addEventListener('refreshInit', geometria);
+
+    const titulares = $$('.titular');
+    const lineas = $$('.ficha-tecnica .linea');
+    const barras = $$('.progreso i');
+    let actual = 0;
+    const mostrar = (i) => {
+        if (i === actual) return;
+        gsap.to(titulares[actual], { opacity: 0, y: -24, duration: 0.45, ease: 'power2.inOut', overwrite: true });
+        gsap.fromTo(titulares[i], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.2, overwrite: true });
+        lineas.forEach((l, j) => gsap.to(l, { opacity: j === i ? 1 : 0, duration: 0.4, overwrite: true }));
+        actual = i;
+    };
+    gsap.from('.titular.primero > *', { y: 30, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out' });
+    gsap.from('.plancha, .espejo', { y: 120, rotateX: 40, opacity: 0, duration: 1.4, ease: 'expo.out' });
+
+    const Z = () => (innerWidth < 761 ? 1.5 : 2.5);
+    // tiempo en que empieza cada titular dentro de la línea de tiempo
+    const CORTES = [1.0, 2.7, 4.0, 6.0];
+    const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+            trigger: '.escena', start: 'top top', end: 'bottom bottom', scrub: 1.2, invalidateOnRefresh: true,
+            onUpdate: ({ progress }) => {
+                const t = progress * tl.duration();
+                mostrar(CORTES.filter((c) => t >= c).length);
+                barras.forEach((b, j) => b.style.setProperty('--p', Math.min(1, Math.max(0, progress * 4 - j)).toFixed(3)));
+            },
+        },
+    });
+
+    // acto 1 — la cámara se acerca al primer sticker (plancha y espejo, juntos)
+    tl.to('.plancha, .espejo', { scale: Z, duration: 1, ease: 'power2.inOut' }, 0)
+    // el borde se levanta de a poco y el sticker se despega con su sombra
+      .to('.suelto', { rotateY: -32, rotateX: 14, z: 150, '--l': 1, duration: 1, ease: 'sine.inOut' }, 0.95)
+    // la plancha se aleja hacia abajo mientras el espejo vuelve a escala 1
+      .to('.plancha', { scale: 1, yPercent: 40, opacity: 0, duration: 1.2, ease: 'power2.inOut' }, 1.8)
+      .to('.espejo', { scale: 1, duration: 1.2, ease: 'power2.inOut' }, 1.8)
+
+    // acto 2 — entra el frasco y el sticker viaja hasta su lugar
+      .fromTo('.frasco', { opacity: 0, yPercent: 25 }, { opacity: 1, yPercent: 0, duration: 1, ease: 'power2.out' }, 2.1)
+      .to('.sombra-mesa', { opacity: 1, duration: 0.8, ease: 'sine.inOut' }, 2.1)
+      .to('.suelto', { x: () => G.dx, y: () => G.dy, scale: () => G.s, rotateY: 0, rotateX: 0, z: 0, duration: 1.4, ease: 'power2.inOut' }, 2.0)
+    // al apoyarse, la etiqueta envuelve el frasco desde el centro y la sombra se achica
+      .fromTo('.etq-fondo', { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'sine.inOut' }, 3.05)
+      .to('.suelto', { '--l': 0, duration: 0.45, ease: 'sine.inOut' }, 3.0)
+      .to('.frasco', { scale: 1.025, duration: 0.15, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 3.35)
+    // con los dos stickers superpuestos, se pasa del suelto al del frasco
+      .to('.etq-sticker', { opacity: 1, duration: 0.12 }, 3.42)
+      .to('.suelto', { opacity: 0, duration: 0.12 }, 3.46)
+      .to('.etq-texto', { opacity: 1, duration: 0.4, ease: 'sine.inOut' }, 3.5)
+
+    // acto 3 — el frasco se corre y el troquel se pliega en caja
+      .to('.frasco', { left: '2%', scale: 0.82, duration: 1, ease: 'power2.inOut' }, 4.0)
+      .fromTo('.caja-lugar', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'sine.inOut' }, 4.2)
+      .set('.caja', { scale: 0.75 }, 0)
+      .fromTo('.cara.arriba', { rotateX: 0 }, { rotateX: 90, duration: 0.7, ease: 'power2.inOut' }, 4.6)
+      .fromTo('.cara.abajo', { rotateX: 0 }, { rotateX: -90, duration: 0.7, ease: 'power2.inOut' }, 4.65)
+      .fromTo('.cara.izq', { rotateY: 0 }, { rotateY: -90, duration: 0.7, ease: 'power2.inOut' }, 4.7)
+      .fromTo('.cara.der', { rotateY: 0 }, { rotateY: 90, duration: 0.7, ease: 'power2.inOut' }, 4.75)
+      .fromTo('.cara.tapa', { rotateX: 0 }, { rotateX: 90, duration: 0.6, ease: 'power2.inOut' }, 5.25)
+      .to('.caja', { rotateX: -24, rotateY: -38, scale: 0.9, duration: 1.2, ease: 'power2.inOut' }, 4.9)
+
+    // acto 4 — la línea completa
+      .fromTo('.bolsa', { opacity: 0, xPercent: 40 }, { opacity: 1, xPercent: 0, duration: 1, ease: 'power2.out' }, 6.0)
+      .to('.caja-lugar', { xPercent: 4, yPercent: 6, duration: 1, ease: 'power2.inOut' }, 6.0)
+      .to('.mesa', { scale: 0.92, duration: 1, ease: 'power2.inOut' }, 6.0)
+      .to({}, { duration: 0.8 });
+
+    const mm = gsap.matchMedia();
+
+    // catálogo: título y fichas enteros en pantalla; el riel se recorre de costado
+    mm.add('(min-width: 761px)', () => {
+        const riel = $('.riel');
+        const distancia = () => Math.max(0, riel.scrollWidth - innerWidth);
+        const tlc = gsap.timeline({ scrollTrigger: { trigger: '.catalogo', start: 'top top', end: () => '+=' + (distancia() + innerHeight * 0.5), pin: true, scrub: 1, invalidateOnRefresh: true } });
+        // una pausa corta al llegar, para leer las primeras fichas, y otra al final
+        tlc.to({}, { duration: 0.12 })
+           .to(riel, { x: () => -distancia(), ease: 'none', duration: 1 })
+           .to('.catalogo-pie .barra i', { scaleX: 1, ease: 'none', duration: 1 }, 0.12)
+           .to({}, { duration: 0.12 });
+    });
+
+    // historia: recorrido horizontal con el año que corre de 1924 a hoy
+    mm.add('(min-width: 761px)', () => {
+        const riel = $('.hist-riel');
+        const distancia = () => riel.scrollWidth - innerWidth;
+        const anio = $('[data-anio]');
+        const tw = gsap.to(riel, {
+            x: () => -distancia(), ease: 'none',
+            scrollTrigger: {
+                trigger: '.historia', start: 'top top', end: () => '+=' + distancia() * 1.1, pin: true, scrub: 1, invalidateOnRefresh: true,
+                onUpdate: ({ progress }) => {
+                    anio.textContent = Math.round(1924 + (2026 - 1924) * progress);
+                    $('.hist-reloj .barra i').style.transform = 'scaleX(' + progress.toFixed(4) + ')';
+                },
+            },
+        });
+        $$('.hist-foto img').forEach((img) => gsap.fromTo(img, { scale: 1.25, xPercent: -4 }, { scale: 1, xPercent: 4, ease: 'none', scrollTrigger: { trigger: img.closest('.hist-panel'), containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } }));
+        $$('.hist-capitulo > div').forEach((t) => gsap.fromTo(t, { x: 80, opacity: 0.2 }, { x: 0, opacity: 1, ease: 'sine.out', scrollTrigger: { trigger: t, containerAnimation: tw, start: 'left 95%', end: 'left 55%', scrub: true } }));
+    });
+
+    // clientes: las marcas se van pegando en su lugar, en orden salteado, con el scroll
+    const celdas = gsap.utils.shuffle($$('.logos li'));
+    const tlLogos = gsap.timeline({ scrollTrigger: { trigger: '.logos', start: 'top 85%', end: 'bottom 55%', scrub: 1 } });
+    celdas.forEach((li, i) => {
+        tlLogos.fromTo($('img', li), { opacity: 0, scale: 1.35, rotate: -8, filter: 'grayscale(1) invert(1) brightness(1.3) blur(6px)' },
+            { opacity: 0.7, scale: 1, rotate: 0, filter: 'grayscale(1) invert(1) brightness(1.3) blur(0px)', duration: 0.5, ease: 'power2.out' }, i * 0.18)
+               .fromTo(li, { '--hueco': 1 }, { '--hueco': 0, duration: 0.4, ease: 'sine.inOut' }, i * 0.18 + 0.1);
+    });
+
+    // muestrario y proceso
+    gsap.from('.muestra', { rotateX: -70, y: 40, opacity: 0, stagger: 0.06, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '.muestrario', start: 'top 80%', once: true } });
+    gsap.from('.paso', { y: 30, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.pasos', start: 'top 80%', once: true } });
+    $$('.encabezado .sticker, .catalogo-cab .sticker').forEach((s) => gsap.from(s, { scale: 0, rotate: -40, duration: 0.8, ease: 'back.out(2)', scrollTrigger: { trigger: s, start: 'top 88%', once: true } }));
+})();
+</script>
+</body>
+</html>

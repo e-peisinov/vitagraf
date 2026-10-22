@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vitagraf 2 · Maquetas</title>
+<link rel="icon" href="../assets/img/icono.png">
+<style>
+:root { --tinta: #17141c; --gris: #6b6570; --linea: #e5e1e8; --naranja: #ff7300; }
+* { box-sizing: border-box; margin: 0; }
+body { font-family: system-ui, sans-serif; color: var(--tinta); background: #faf9f7; line-height: 1.55; padding: 3rem 1.25rem 5rem; }
+.envase { max-width: 70rem; margin: 0 auto; }
+header { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+header img { height: 3rem; }
+h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -.02em; }
+header p { color: var(--gris); flex-basis: 100%; max-width: 62ch; }
+.grilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: 1.4rem; }
+a.tarjeta { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: #fff; border: 1px solid var(--linea); text-decoration: none; color: inherit; transition: transform .25s, box-shadow .25s; }
+a.tarjeta:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -30px rgba(0,0,0,.4); }
+.muestra { height: 11rem; display: grid; place-items: center; font-weight: 800; font-size: 2rem; letter-spacing: -.03em; }
+.a .muestra { background: radial-gradient(circle at 0 100%, #ff5fb0, transparent 55%), radial-gradient(circle at 100% 0, #ff7300, transparent 55%), #fff; font-family: Poppins, system-ui; }
+.b .muestra { background: #0f0e0d; color: #f3f2ee; text-transform: uppercase; font-stretch: expanded; border-bottom: 10px solid; border-image: linear-gradient(90deg, #00a0dc 25%, #e4007c 25% 50%, #ffd400 50% 75%, #000 75%) 1; }
+.b .muestra span { color: #ff7300; }
+.d .muestra { background: #ff7300; color: #1a1714; font-size: 1.7rem; position: relative; } .d .muestra::after { content: ""; position: absolute; top: 0; right: 0; width: 38px; height: 38px; background: linear-gradient(225deg, #faf9f7 50%, #e8e0d2 50%); }
+.e .muestra { background: radial-gradient(60% 70% at 50% 40%, #2b2723, #0d0c0b); color: #f2eee8; font-family: system-ui; } .e .muestra span { color: #ff7300; }
+.c .muestra { background: #f6f1e7; font-family: Georgia, serif; font-style: italic; font-weight: 400; color: #a94a00; }
+.cuerpo { padding: 1.3rem 1.4rem 1.5rem; display: grid; gap: .6rem; }
+.cuerpo h2 { font-size: 1.3rem; }
+.cuerpo p { color: var(--gris); font-size: .95rem; }
+.cuerpo ul { padding-left: 1.1rem; font-size: .9rem; color: var(--gris); display: grid; gap: .2rem; }
+.ir { margin-top: .4rem; font-weight: 700; color: #a94a00; }
+.nota { margin-top: 2.5rem; padding: 1.2rem 1.4rem; border-radius: 14px; background: #fff3e8; font-size: .92rem; }
+</style>
+</head>
+<body>
+<div class="envase">
+    <header>
+        <img src="../assets/img/logo-oscuro.webp" alt="Vitagraf">
+        <h1>Cinco direcciones para la nueva landing</h1>
+        <p>Todas comparten lo comercial: servicios agrupados por lo que necesita el cliente, una consulta directa en cada rubro y un armador de presupuesto que manda el pedido ya escrito a WhatsApp. Cambian el estilo y la escena de scroll. Conviene verlas en la compu y en el celular.</p>
+    </header>
+    <div class="grilla">
+        <a class="tarjeta a" href="degrade.html">
+            <div class="muestra">¿Qué necesitás?</div>
+            <div class="cuerpo">
+                <h2>A · Degradé</h2>
+                <p>Sigue el estilo actual del Instagram: blanco, degradé magenta y naranja, letra redonda pesada.</p>
+                <ul>
+                    <li>La portada es una pregunta con seis botones del tipo «Quiero que se vea mi local».</li>
+                    <li>Escena: una foto de etiquetas llena la pantalla y se aleja hasta formar el mosaico del taller.</li>
+                    <li>Es la más amigable y la más fácil de mantener.</li>
+                </ul>
+                <span class="ir">Ver maqueta →</span>
+            </div>
+        </a>
+        <a class="tarjeta b" href="pliego.html">
+            <div class="muestra">Gráfica por <span>&nbsp;gráficos</span></div>
+            <div class="cuerpo">
+                <h2>B · Pliego</h2>
+                <p>Oscura e industrial, de imprenta de oficio: marcas de corte, barra CMYK, letra ancha y el lema histórico de la fachada.</p>
+                <ul>
+                    <li>La portada tiene un video real del taller de fondo.</li>
+                    <li>Escena: un pliego impreso se aleja y los seis rubros aparecen como piezas impuestas.</li>
+                    <li>Índice de servicios desplegable, historia en recorrido horizontal y el pedido como «orden de trabajo».</li>
+                </ul>
+                <span class="ir">Ver maqueta →</span>
+            </div>
+        </a>
+        <a class="tarjeta c" href="marca.html">
+            <div class="muestra">Tu marca, en todas partes</div>
+            <div class="cuerpo">
+                <h2>C · Tu marca, en todas partes</h2>
+                <p>La más decorada y vendedora: le habla al cliente de <em>su</em> marca, como el posteo «Tu marca puede estar en todas partes».</p>
+                <ul>
+                    <li>La portada es un collage de trabajos que sale volando con el scroll (zoom hacia adentro).</li>
+                    <li>Escena: un sello «tu marca» se estampa en un cartel, un frasco, una bolsa, una tarjeta, una taza y un libro.</li>
+                    <li>Muestra los reels reales del taller.</li>
+                </ul>
+                <span class="ir">Ver maqueta →</span>
+            </div>
+        </a>
+        <a class="tarjeta d" href="papel.html">
+            <div class="muestra">Impresión que hace crecer</div>
+            <div class="cuerpo">
+                <h2>D · Papel <small style="color: #a94a00">· nueva</small></h2>
+                <p>Diseño libre, sin la estructura del sitio viejo. Toma solo el nombre, los naranjas del logo y la Historia, con detalles de papel: grano, bordes rasgados, esquinas dobladas y cinta.</p>
+                <ul>
+                    <li>Escena: el libro del logo, hecho con dos hojas de papel, se abre y crece hasta teñir la pantalla de naranja.</li>
+                    <li>Los servicios son una carpeta con pestañas, y cada rubro está en un papel distinto.</li>
+                    <li>Los pasos son una tira plegada que se despliega. En la Historia, un almanaque corre de 1924 a hoy entre fotos pegadas con cinta. El presupuesto es una carta que sale de un sobre.</li>
+                </ul>
+                <span class="ir">Ver maqueta →</span>
+            </div>
+        </a>
+        <a class="tarjeta e" href="estudio.html">
+            <div class="muestra">Se despega.&nbsp;<span>Se pega.</span></div>
+            <div class="cuerpo">
+                <h2>E · Estudio <small style="color: #a94a00">· nueva</small></h2>
+                <p>Inspirada en @w.wearebrand: fondo de estudio oscuro y el producto como protagonista de una escena que avanza con el scroll. Usa objetos del rubro y mantiene un tono serio.</p>
+                <ul>
+                    <li>Escena: un sticker se despega de una plancha y se pega en un frasco, un troquel se pliega en caja 3D y se suma una bolsa.</li>
+                    <li>Catálogo en recorrido horizontal: cada línea de productos tiene su objeto y una ficha técnica.</li>
+                    <li>Hay un muestrario de materiales (vinilo, DTF, kraft, lona, PVC, polyfan…), los rótulos son stickers troquelados y la cotización sale en forma de ticket.</li>
+                </ul>
+                <span class="ir">Ver maqueta →</span>
+            </div>
+        </a>
+    </div>
+    <p class="nota"><strong>Fotos provisorias.</strong> Las fotos de trabajos son cuadros sacados de tres reels de Instagram (432 px), por eso algunas se ven borrosas a pantalla completa. Para la versión final hacen falta fotos originales de trabajos terminados.</p>
+</div>
+</body>
+</html>
