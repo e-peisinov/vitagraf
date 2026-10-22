@@ -1,0 +1,92 @@
+/*
+ * Base compartida de la dirección «Estudio»: inicio (estudio.html) y
+ * catálogo (catalogo.html). Colores, tipografía, botones, cabecera,
+ * rótulos sticker, decoración en movimiento, gota de tinta y pie.
+ */
+:root {
+    --negro: #0d0c0b;
+    --negro-2: #161412;
+    --gris: #8d877f;
+    --gris-2: #2a2724;
+    --hueso: #f2eee8;
+    --naranja: #ff7300;
+    --naranja-claro: #ff9d4d;
+    --kraft: #c8a273;
+    --wa: #25d366;
+    --ancho: 82rem;
+    --alto-cab: 4.6rem;
+    --mono: "Geist Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { overflow-x: clip; }
+body { font-family: Geist, system-ui, sans-serif; background: var(--negro); color: var(--hueso); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+.envase { width: min(var(--ancho), 100% - 2.5rem); margin-inline: auto; }
+.ico { width: 1.2em; height: 1.2em; flex: none; }
+h1, h2, h3 { font-weight: 600; letter-spacing: -.045em; line-height: .95; }
+.mono { font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); }
+.naranja { color: var(--naranja); }
+
+/* etiqueta troquelada: el rótulo de cada sección es un sticker */
+.sticker { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .8rem .35rem .45rem; border-radius: 999px; background: var(--hueso); color: var(--negro); font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 500; box-shadow: 0 0 0 3px var(--negro), 0 0 0 4px rgba(242,238,232,.18), 0 10px 20px -10px #000; rotate: -2deg; white-space: nowrap; }
+.sticker b { width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--naranja); display: grid; place-items: center; font-size: .7rem; color: var(--negro); flex: none; }
+
+.boton { display: inline-flex; align-items: center; gap: .7rem; padding: .95rem 1.4rem; border-radius: 999px; font-weight: 500; font-size: .95rem; transition: background .25s, color .25s, transform .25s; }
+.boton:hover { transform: translateY(-2px); }
+.boton-naranja { background: var(--naranja); color: var(--negro); }
+.boton-naranja:hover { background: var(--naranja-claro); }
+.boton-linea { box-shadow: inset 0 0 0 1px rgba(242,238,232,.3); }
+.boton-linea:hover { box-shadow: inset 0 0 0 1px var(--hueso); }
+
+/* ---------- cabecera ---------- */
+.cabecera { position: fixed; inset: 0 0 auto; z-index: 50; background: rgba(13,12,11,.82); backdrop-filter: blur(12px); }
+.cabecera .envase { display: flex; align-items: center; gap: 2rem; height: var(--alto-cab); }
+.marca img { height: 2.1rem; width: auto; }
+.cabecera nav { display: flex; gap: 1.8rem; margin-left: auto; font-size: .9rem; color: #cfc8bf; }
+.cabecera nav a:hover, .cabecera nav a[aria-current="page"] { color: var(--hueso); }
+.cabecera nav a[aria-current="page"] { box-shadow: 0 2px 0 var(--naranja); }
+.cabecera .boton { padding: .6rem 1.1rem; font-size: .85rem; }
+@media (max-width: 900px) { .cabecera nav { display: none; } .cabecera .boton { margin-left: auto; } }
+
+/* ---------- gota de tinta detrás de los títulos ---------- */
+.con-gota { position: relative; isolation: isolate; }
+.gota-lugar { position: absolute; left: -.35em; top: 50%; width: clamp(6rem, 11vw, 10rem); aspect-ratio: 1; translate: -18% -50%; z-index: -1; pointer-events: none; }
+.gota-lugar .mancha, .gota-lugar .onda, .gota-lugar .gota { position: absolute; }
+.gota-lugar .mancha { inset: 0; opacity: 0; }
+.gota-lugar .mancha svg { width: 100%; height: 100%; overflow: visible; }
+.gota-lugar .onda { inset: 8%; border-radius: 50%; border: 1.5px solid var(--naranja); opacity: 0; }
+.gota-lugar .gota { left: 50%; top: 50%; width: .9rem; height: 1.25rem; margin: -.62rem 0 0 -.45rem; background: var(--naranja); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; opacity: 0; }
+.quieto .gota-lugar .mancha { opacity: .2; }
+
+/* ---------- decoración: cubos, esferas, stickers y marcas de registro ---------- */
+.decor { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.deco { position: absolute; left: var(--x); top: var(--y); width: var(--t); height: var(--t); perspective: 700px; }
+.deco.lejos { filter: blur(2px); opacity: .55; }
+.deco-in { width: 100%; height: 100%; transform-style: preserve-3d; }
+/* cubo: una cajita de troquel, con la línea punteada en las aristas */
+.cubo { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.cubo i { position: absolute; inset: 0; background: var(--c); outline: 1px dashed rgba(13,12,11,.4); outline-offset: -3px; }
+.cubo i::after { content: ""; position: absolute; inset: 0; background: var(--luz, transparent); }
+.cubo i:nth-child(1) { transform: translateZ(calc(var(--t) / 2)); }
+.cubo i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.25); }
+.cubo i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.18); }
+.cubo i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.32); }
+.cubo i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(255,255,255,.18); }
+.cubo i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.4); }
+/* esfera mate, con su sombra abajo */
+.esfera { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 32% 28%, var(--c1), var(--c2) 48%, var(--c3) 100%); box-shadow: 0 calc(var(--t) * .45) calc(var(--t) * .4) calc(var(--t) * -.25) rgba(0,0,0,.55); }
+/* mini sticker que gira en el aire */
+.disco { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.disco svg { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; }
+.disco svg + svg { transform: rotateY(180deg); }
+/* marca de registro de imprenta */
+.registro-deco svg { width: 100%; height: 100%; overflow: visible; }
+@media (max-width: 760px) { .deco.no-movil { display: none; } .deco { scale: .65; } }
+
+/* ---------- pie y WhatsApp flotante ---------- */
+.pie { background: var(--hueso); color: #5a534c; padding: 2rem 0 6rem; font-size: .85rem; }
+.pie .envase { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-top: 1px solid rgba(13,12,11,.1); padding-top: 1.6rem; }
+.wa-flotante { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 60; width: 3.6rem; height: 3.6rem; border-radius: 50%; background: var(--wa); color: #06321a; display: grid; place-items: center; box-shadow: 0 12px 24px -10px rgba(0,0,0,.7); }
+.wa-flotante .ico { width: 1.7rem; height: 1.7rem; }

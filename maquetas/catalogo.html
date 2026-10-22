@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo · Vitagraf</title>
+<link rel="icon" href="../assets/img/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="estudio-base.css">
+<style>
+section { position: relative; }
+section > .envase { position: relative; z-index: 1; }
+
+/* ---------- portada: la plancha de líneas de producto ---------- */
+.cat-portada { padding: calc(var(--alto-cab) + 4rem) 0 4rem; background: radial-gradient(55% 60% at 72% 45%, #2b2723, #141210 60%, var(--negro)); overflow: hidden; }
+.cat-portada .envase { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; min-height: min(70svh, 40rem); }
+.cat-portada h1 { font-size: clamp(3.4rem, 9vw, 8.4rem); margin: 1.4rem 0 1.2rem; }
+.cat-portada p { color: #bdb5ab; font-size: clamp(1rem, 1.3vw, 1.15rem); max-width: 40ch; }
+.cifras { display: flex; gap: 2.2rem; margin-top: 2rem; }
+.cifras strong { display: block; font-size: 2.4rem; font-weight: 600; letter-spacing: -.04em; line-height: 1; }
+/* la plancha: una hoja con un sticker por línea; tocar uno filtra */
+.plancha-lineas { position: relative; background: var(--hueso); border-radius: 6px; padding: 2.2rem 1.6rem 2.6rem; box-shadow: 0 40px 60px -30px #000; rotate: 2deg; }
+.plancha-lineas .cab { display: flex; justify-content: space-between; gap: 1rem; color: #8d877f; margin-bottom: 1.4rem; }
+.plancha-lineas .cab .mono { font-size: .64rem; color: #6b655d; }
+.plancha-lineas ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem 1rem; }
+.linea-sticker { position: relative; display: grid; justify-items: center; gap: .55rem; width: 100%; color: var(--negro); }
+.linea-sticker .hueco { position: absolute; top: 0; left: 50%; width: min(7.4rem, 100%); aspect-ratio: 1; translate: -50% 0; border-radius: 50%; background: #d8d2c9; box-shadow: inset 0 0 0 1px #bdb6ab; }
+.linea-sticker .disco-linea { position: relative; width: min(7.4rem, 100%); aspect-ratio: 1; border-radius: 50%; background: #1a1714; box-shadow: 0 0 0 5px #fff, 0 6px 10px -4px rgba(0,0,0,.35); display: grid; place-items: center; overflow: hidden; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; transform-origin: 85% 15%; }
+.linea-sticker .disco-linea svg { width: 70%; height: 70%; }
+.linea-sticker:hover .disco-linea, .linea-sticker:focus-visible .disco-linea { transform: rotate(-8deg) rotateX(18deg) translate(-3px, -6px); box-shadow: 0 0 0 5px #fff, 0 18px 18px -8px rgba(0,0,0,.45); }
+.linea-sticker:focus-visible { outline: none; }
+.linea-sticker:focus-visible .disco-linea { outline: 3px solid var(--naranja); outline-offset: 6px; }
+.linea-sticker .nombre { font-size: .82rem; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; text-align: center; }
+.linea-sticker .cant { font-family: var(--mono); font-size: .68rem; color: #6b655d; }
+.plancha-lineas .cmyk { position: absolute; left: 1.6rem; bottom: .9rem; display: flex; }
+.plancha-lineas .cmyk i { width: .8rem; height: .45rem; }
+.marcas-corte::before, .marcas-corte::after { content: ""; position: absolute; width: 14px; height: 14px; border: solid #8d877f; }
+.marcas-corte::before { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+.marcas-corte::after { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+@media (max-width: 860px) { .cat-portada .envase { grid-template-columns: 1fr; } .plancha-lineas { rotate: 0deg; } }
+@media (max-width: 460px) { .plancha-lineas ul { gap: 1rem .6rem; } .linea-sticker .nombre { font-size: .72rem; } }
+
+/* ---------- barra de filtros ---------- */
+.filtros { position: sticky; top: var(--alto-cab); z-index: 20; background: rgba(13,12,11,.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(242,238,232,.08); }
+.filtros .envase { display: flex; align-items: center; gap: 1rem; padding: .8rem 0; }
+.chips-linea { display: flex; gap: .45rem; overflow-x: auto; scrollbar-width: none; flex: 1; padding: 4px; }
+.chip-linea { flex: none; display: inline-flex; align-items: center; gap: .45rem; padding: .5rem .9rem; border-radius: 999px; font-size: .85rem; font-weight: 500; color: #cfc8bf; box-shadow: inset 0 0 0 1px rgba(242,238,232,.18); transition: background .25s, color .25s, box-shadow .25s; }
+.chip-linea:hover { color: var(--hueso); box-shadow: inset 0 0 0 1px rgba(242,238,232,.5); }
+.chip-linea[aria-pressed="true"] { background: var(--hueso); color: var(--negro); box-shadow: 0 0 0 3px var(--negro), 0 0 0 4px rgba(242,238,232,.25); }
+.chip-linea .n { font-family: var(--mono); font-size: .7rem; opacity: .6; }
+.buscar { position: relative; flex: 0 1 17rem; }
+.buscar input { width: 100%; font: inherit; font-size: .9rem; color: var(--hueso); background: var(--negro-2); border: 0; border-radius: 999px; padding: .6rem 1rem .6rem 2.4rem; box-shadow: inset 0 0 0 1px rgba(242,238,232,.14); }
+.buscar input:focus { outline: 2px solid var(--naranja); }
+.buscar svg { position: absolute; left: .9rem; top: 50%; translate: 0 -50%; width: 1rem; height: 1rem; color: var(--gris); }
+@media (max-width: 760px) { .filtros .envase { flex-direction: column; align-items: stretch; gap: .6rem; } .buscar { flex-basis: auto; } }
+
+/* ---------- grilla de fichas troqueladas ---------- */
+.cat-grilla { padding: 3rem 0 6rem; }
+.resultado { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.4rem; }
+.resultado strong { font-weight: 500; color: var(--hueso); }
+.fichas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr)); gap: 1.2rem; list-style: none; padding: 0; }
+.ficha { position: relative; background: var(--negro-2); border-radius: 18px; display: flex; flex-direction: column; box-shadow: inset 0 0 0 1px rgba(242,238,232,.06); transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s; }
+.ficha:hover { transform: translateY(-6px) rotate(-.4deg); box-shadow: inset 0 0 0 1px rgba(242,238,232,.12), 0 30px 40px -25px #000; }
+/* la esquina que se despega al pasar el mouse */
+.ficha::after { content: ""; position: absolute; top: 0; right: 0; width: 0; height: 0; border-radius: 0 18px 0 0; background: linear-gradient(225deg, var(--negro) 50%, #e6e0d6 50%, #f2eee8 70%); box-shadow: -6px 6px 10px -4px rgba(0,0,0,.5); transition: width .45s cubic-bezier(.2,.8,.2,1), height .45s cubic-bezier(.2,.8,.2,1); }
+.ficha:hover::after { width: 2.6rem; height: 2.6rem; }
+.ficha[hidden] { display: none; }
+.foto { position: relative; aspect-ratio: 4/3; margin: .6rem .6rem 0; border-radius: 12px; background: radial-gradient(70% 70% at var(--luz-x, 50%) 40%, #2e2a26, #181614 72%); display: grid; place-items: center; overflow: hidden; }
+.foto > svg { width: 52%; height: 64%; overflow: visible; filter: drop-shadow(0 16px 16px rgba(0,0,0,.5)); transform: rotate(var(--giro, 0deg)) scale(var(--esc, 1)); transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+.ficha:hover .foto > svg { transform: rotate(calc(var(--giro, 0deg) - 3deg)) scale(calc(var(--esc, 1) * 1.07)); }
+/* marcas de corte del placeholder */
+.foto::before { content: ""; position: absolute; inset: 10px; pointer-events: none;
+    background:
+        linear-gradient(#5a544d, #5a544d) left top / 12px 1px, linear-gradient(#5a544d, #5a544d) left top / 1px 12px,
+        linear-gradient(#5a544d, #5a544d) right top / 12px 1px, linear-gradient(#5a544d, #5a544d) right top / 1px 12px,
+        linear-gradient(#5a544d, #5a544d) left bottom / 12px 1px, linear-gradient(#5a544d, #5a544d) left bottom / 1px 12px,
+        linear-gradient(#5a544d, #5a544d) right bottom / 12px 1px, linear-gradient(#5a544d, #5a544d) right bottom / 1px 12px;
+    background-repeat: no-repeat; }
+.foto .pendiente { position: absolute; left: .9rem; bottom: .8rem; font-family: var(--mono); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: #9c958c; display: flex; align-items: center; gap: .4rem; }
+.foto .pendiente::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--naranja); }
+.foto .combo { position: absolute; right: .8rem; top: .8rem; rotate: 4deg; }
+.ficha-cuerpo { padding: 1.1rem 1.2rem 1.2rem; display: grid; gap: .6rem; flex: 1; align-content: start; }
+.ficha .linea-nombre { color: var(--naranja); }
+.ficha h3 { font-size: 1.3rem; letter-spacing: -.03em; line-height: 1.1; }
+.ficha p { color: #bdb5ab; font-size: .92rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+.tags span { font-family: var(--mono); font-size: .66rem; letter-spacing: .04em; text-transform: uppercase; color: #cfc8bf; padding: .2rem .55rem; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(242,238,232,.16); }
+.ficha .acciones { display: flex; gap: .5rem; margin-top: auto; padding-top: .7rem; }
+.ficha .acciones .boton { padding: .6rem 1rem; font-size: .84rem; }
+.sumar.en-consulta { background: var(--hueso); }
+@media (max-width: 560px) {
+    .fichas { grid-template-columns: 1fr 1fr; gap: .7rem; }
+    .ficha p, .ficha .tags { display: none; }
+    .ficha h3 { font-size: 1rem; }
+    .ficha-cuerpo { padding: .8rem; gap: .4rem; }
+    .ficha .linea-nombre { font-size: .6rem; }
+    .ficha .acciones { flex-direction: column; }
+    .ficha .acciones .boton { justify-content: center; padding: .55rem .7rem; font-size: .8rem; }
+    .foto { margin: .4rem .4rem 0; }
+    .foto .pendiente { font-size: .56rem; left: .6rem; bottom: .5rem; }
+}
+.vacio { text-align: center; padding: 4rem 1rem; color: #bdb5ab; }
+.vacio[hidden] { display: none; }
+
+/* ---------- llamado final ---------- */
+.cat-llamado { padding: 6rem 0 8rem; }
+.cat-llamado .envase { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: end; }
+.cat-llamado h2 { font-size: clamp(2.4rem, 5vw, 4.4rem); max-width: 14ch; margin-top: 1.2rem; }
+.cat-llamado p { color: #bdb5ab; max-width: 38ch; margin-bottom: 1.4rem; }
+@media (max-width: 760px) { .cat-llamado .envase { grid-template-columns: 1fr; } }
+
+/* ---------- bandeja «Mi consulta» y paneles ---------- */
+.bandeja-boton { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 61; display: inline-flex; align-items: center; gap: .6rem; padding: .85rem 1.2rem .85rem .9rem; border-radius: 999px; background: var(--hueso); color: var(--negro); font-weight: 600; box-shadow: 0 16px 30px -12px rgba(0,0,0,.8); }
+.bandeja-boton .cuenta { min-width: 1.6rem; height: 1.6rem; padding: 0 .4rem; border-radius: 999px; background: var(--naranja); display: grid; place-items: center; font-family: var(--mono); font-size: .8rem; }
+.bandeja-boton svg { width: 1.3rem; height: 1.3rem; }
+.wa-flotante { bottom: 5.4rem; }
+.velo { position: fixed; inset: 0; z-index: 70; background: rgba(13,12,11,.6); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .35s; }
+.velo.abierto { opacity: 1; pointer-events: auto; }
+.panel { position: fixed; top: 0; right: 0; bottom: 0; z-index: 71; width: min(30rem, 100%); background: var(--negro-2); box-shadow: -30px 0 60px -20px #000; transform: translateX(105%); transition: transform .55s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column; visibility: hidden; }
+.panel.abierto { transform: none; visibility: visible; }
+.panel-cab { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.2rem 1.4rem; border-bottom: 1px solid rgba(242,238,232,.08); }
+.panel-cab button { width: 2.4rem; height: 2.4rem; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(242,238,232,.2); display: grid; place-items: center; font-size: 1.2rem; }
+.panel-cuerpo { padding: 1.4rem; overflow-y: auto; flex: 1; display: grid; gap: 1.2rem; align-content: start; }
+.panel-pie { padding: 1.2rem 1.4rem; border-top: 1px solid rgba(242,238,232,.08); display: grid; gap: .7rem; }
+.panel .boton-wa { background: var(--wa); color: #06321a; justify-content: center; }
+/* ficha de detalle */
+.detalle .foto { margin: 0; aspect-ratio: 16/11; }
+.detalle h2 { font-size: 2rem; letter-spacing: -.04em; line-height: 1; }
+.detalle dl { display: grid; grid-template-columns: 7rem 1fr; gap: .5rem 1rem; font-size: .92rem; }
+.detalle dt { font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); padding-top: .2rem; }
+/* lista de la consulta */
+.items { list-style: none; padding: 0; display: grid; gap: .6rem; }
+.item { display: grid; grid-template-columns: 3rem 1fr auto; gap: .8rem; align-items: center; padding: .6rem; border-radius: 12px; background: var(--negro); }
+.item .mini { width: 3rem; height: 3rem; border-radius: 8px; background: #221f1c; display: grid; place-items: center; }
+.item .mini svg { width: 80%; height: 80%; }
+.item strong { display: block; font-weight: 500; font-size: .92rem; line-height: 1.2; }
+.item input { width: 100%; margin-top: .3rem; font: inherit; font-size: .82rem; color: var(--hueso); background: transparent; border: 0; border-bottom: 1px dashed rgba(242,238,232,.25); padding: .2rem 0; }
+.item input:focus { outline: none; border-bottom-color: var(--naranja); }
+.item .quitar { width: 2rem; height: 2rem; border-radius: 50%; color: var(--gris); font-size: 1.1rem; }
+.item .quitar:hover { color: var(--hueso); background: rgba(242,238,232,.08); }
+.panel label span { display: block; font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gris); margin-bottom: .4rem; }
+.panel input.campo, .panel textarea { width: 100%; font: inherit; font-size: .92rem; color: var(--hueso); background: var(--negro); border: 0; border-radius: 10px; padding: .7rem .9rem; box-shadow: inset 0 0 0 1px rgba(242,238,232,.12); }
+.panel input.campo:focus, .panel textarea:focus { outline: 2px solid var(--naranja); }
+.vista-consulta { font-family: var(--mono); font-size: .76rem; white-space: pre-line; color: #bdb5ab; border-top: 1px dashed rgba(242,238,232,.2); padding-top: 1rem; }
+.consulta-vacia { color: #bdb5ab; text-align: center; padding: 2rem 0; display: grid; gap: 1rem; justify-items: center; }
+.consulta-vacia[hidden] { display: none; }
+/* el sticker que vuela hasta la bandeja */
+.volador { position: fixed; z-index: 80; width: 3.2rem; height: 3.2rem; pointer-events: none; left: 0; top: 0; }
+.volador svg { width: 100%; height: 100%; filter: drop-shadow(0 12px 12px rgba(0,0,0,.5)); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+        <g id="libro-logo"><path d="M-22 -14 L-2 -8 V18 L-22 12 Z" fill="#ff9d4d"/><path d="M2 -8 L22 -14 V12 L2 18 Z" fill="#ff7300"/></g>
+        <g id="sticker">
+            <circle r="46" fill="#fff"/>
+            <circle r="40" fill="#1a1714"/>
+            <circle r="40" fill="none" stroke="#ff7300" stroke-width="1.5" stroke-dasharray="1.5 3"/>
+            <use href="#libro-logo" transform="translate(0 -6) scale(.9)"/>
+            <text y="26" text-anchor="middle" font-family="Geist, sans-serif" font-weight="600" font-size="8.5" letter-spacing="1.6" fill="#f2eee8">TU MARCA</text>
+        </g>
+    </defs>
+</svg>
+
+<header class="cabecera">
+    <div class="envase">
+        <a href="estudio.html" class="marca" aria-label="Vitagraf, inicio"><img src="../assets/img/logo.webp" alt="Vitagraf"></a>
+        <nav aria-label="Principal">
+            <a href="estudio.html">Inicio</a>
+            <a href="catalogo.html" aria-current="page">Catálogo</a>
+            <a href="estudio.html#materiales">Materiales</a>
+            <a href="estudio.html#historia">Historia</a>
+            <a href="estudio.html#contacto">Contacto</a>
+        </nav>
+        <button class="boton boton-naranja" type="button" data-abrir-consulta>Mi consulta</button>
+    </div>
+</header>
+
+<main>
+    <section class="cat-portada">
+        <div class="decor" data-decor="portada" aria-hidden="true"></div>
+        <div class="envase">
+            <div class="portada-texto">
+                <span class="sticker"><b>V</b>Catálogo · Vitagraf</span>
+                <h1>Elegí qué imprimimos.</h1>
+                <p>Todo lo que hacemos en el taller, ordenado por línea. Sumá lo que necesitás a tu consulta y te respondemos con precio y tiempos por WhatsApp.</p>
+                <div class="cifras"><div><strong data-total>0</strong><span class="mono">Productos</span></div><div><strong>6</strong><span class="mono">Líneas</span></div><div><strong>1</strong><span class="mono">Taller</span></div></div>
+            </div>
+            <div class="plancha-lineas marcas-corte">
+                <div class="cab"><span class="mono">Plancha 02 · Líneas de producto</span><span class="mono">Tocá un sticker</span></div>
+                <ul data-plancha></ul>
+                <span class="cmyk" aria-hidden="true"><i style="background: #00a0dc"></i><i style="background: #e4007c"></i><i style="background: #ffd400"></i><i style="background: #1a1714"></i></span>
+            </div>
+        </div>
+    </section>
+
+    <div class="filtros" id="productos">
+        <div class="envase">
+            <div class="chips-linea" role="group" aria-label="Filtrar por línea" data-chips></div>
+            <label class="buscar"><span class="sr">Buscar producto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" placeholder="Buscar: etiquetas, bolsas, lona…" data-buscar></label>
+        </div>
+    </div>
+
+    <section class="cat-grilla">
+        <div class="decor" data-decor="grilla" aria-hidden="true"></div>
+        <div class="envase">
+            <div class="resultado"><span class="mono" data-resultado aria-live="polite"></span><span class="mono">Fotos ilustrativas · próximamente</span></div>
+            <ul class="fichas" data-fichas></ul>
+            <div class="vacio" data-vacio hidden><p>No encontramos ese producto en el catálogo, pero seguro lo podemos hacer.</p><a class="boton boton-naranja" data-wa="¡Hola Vitagraf! Vengo del catálogo web y no encontré lo que busco. Quería consultar por: " style="margin-top: 1.2rem">Preguntanos por WhatsApp</a></div>
+        </div>
+    </section>
+
+    <section class="cat-llamado">
+        <div class="decor" data-decor="llamado" aria-hidden="true"></div>
+        <div class="envase">
+            <div><span class="sticker"><b>?</b>A medida</span><h2>¿No está lo que buscás?</h2></div>
+            <div><p>El catálogo muestra lo que más hacemos, pero en el taller resolvemos mucho más. Contanos tu idea y te asesoramos.</p><a class="boton boton-naranja" data-wa="¡Hola Vitagraf! Vengo del catálogo web y quería consultar por un trabajo a medida.">Consultar por WhatsApp</a></div>
+        </div>
+    </section>
+</main>
+
+<footer class="pie"><div class="envase"><span>© Vitagraf · Imprenta desde 1924 · Calle 22 Nº 261, Mercedes, Bs. As.</span><span>@vitagraf.imprenta</span></div></footer>
+
+<a class="wa-flotante" data-wa="" aria-label="Escribinos por WhatsApp"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z"/></svg></a>
+<button class="bandeja-boton" type="button" data-abrir-consulta aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12h-13z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>Mi consulta <span class="cuenta" data-cuenta>0</span></button>
+
+<div class="velo" data-velo></div>
+
+<!-- ficha de detalle -->
+<aside class="panel detalle" role="dialog" aria-modal="true" aria-labelledby="detalle-titulo" data-panel="detalle">
+    <div class="panel-cab"><span class="mono" data-detalle-linea></span><button type="button" data-cerrar aria-label="Cerrar ficha">×</button></div>
+    <div class="panel-cuerpo">
+        <div class="foto" data-detalle-foto></div>
+        <h2 id="detalle-titulo" data-detalle-nombre></h2>
+        <p style="color: #bdb5ab" data-detalle-texto></p>
+        <dl>
+            <dt>Materiales</dt><dd data-detalle-materiales></dd>
+            <dt>Ideal para</dt><dd data-detalle-usos></dd>
+            <dt>Precio</dt><dd>Según cantidad, medida y terminación. Te lo pasamos por WhatsApp.</dd>
+        </dl>
+    </div>
+    <div class="panel-pie">
+        <button class="boton boton-naranja" type="button" data-detalle-sumar style="justify-content: center">Sumar a mi consulta</button>
+        <a class="boton boton-linea" data-detalle-wa target="_blank" rel="noopener" style="justify-content: center">Consultar solo este producto</a>
+    </div>
+</aside>
+
+<!-- bandeja de la consulta -->
+<aside class="panel consulta-panel" role="dialog" aria-modal="true" aria-labelledby="consulta-titulo" data-panel="consulta">
+    <div class="panel-cab"><h2 id="consulta-titulo" style="font-size: 1.4rem; letter-spacing: -.03em">Mi consulta</h2><button type="button" data-cerrar aria-label="Cerrar consulta">×</button></div>
+    <div class="panel-cuerpo">
+        <ul class="items" data-items></ul>
+        <div class="consulta-vacia" data-consulta-vacia><p>Todavía no sumaste productos.</p><button class="boton boton-linea" type="button" data-cerrar>Ver el catálogo</button></div>
+        <label><span>Tu nombre o empresa</span><input class="campo" data-nombre autocomplete="organization"></label>
+        <label><span>Algo más (fecha, medidas, diseño)</span><textarea rows="2" data-nota></textarea></label>
+        <div class="vista-consulta" data-vista-consulta aria-live="polite"></div>
+    </div>
+    <div class="panel-pie">
+        <a class="boton boton-wa" data-enviar target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        <span class="mono" style="text-align: center">Respondemos de lunes a viernes de 8 a 17 hs</span>
+    </div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="comun.js"></script>
+<script src="estudio-base.js"></script>
+<script>
+(() => {
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+    const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const anima = ! VITA.quieto && !! window.gsap;
+    if (window.Flip) gsap.registerPlugin(Flip);
+
+    /*
+     * Productos del catálogo. Salen de lo que Vitagraf publica en su sitio y
+     * en su Instagram; sin precios ni medidas inventadas. Las fotos todavía
+     * no están: cada ficha muestra el objeto de su línea como placeholder.
+     */
+    const PRODUCTOS = [
+        ['local', 'Carteles en lona', 'Para frentes, obras y eventos al aire libre.', ['Lona'], ['Fachadas', 'Eventos', 'Obras']],
+        ['local', 'Carteles en PVC', 'Rígidos y prolijos, para exterior e interior.', ['PVC'], ['Señalética', 'Interiores', 'Frentes']],
+        ['local', 'Letras corpóreas', 'Tu logo en volumen, recortado en polyfan.', ['Polyfan'], ['Recepciones', 'Frentes']],
+        ['local', 'Ploteo de vidrieras', 'Vinilo para vidrieras y exteriores que se ven desde la vereda.', ['Vinilo'], ['Vidrieras', 'Promociones']],
+        ['local', 'Ploteo de muebles y exhibidores', 'Heladeras, freezers, mostradores y exhibidores con tu marca.', ['Vinilo'], ['Puntos de venta', 'Exhibidores']],
+        ['local', 'Flybanners', 'Banderas portátiles para la entrada del local o un evento.', [], ['Eventos', 'Ferias', 'Entradas']],
+        ['etiquetas', 'Etiquetas adhesivas', 'En planchas o rollos, troqueladas a la medida de tu envase.', ['Vinilo blanco'], ['Frascos', 'Envases', 'Productos']],
+        ['etiquetas', 'Etiquetas colgantes', 'Para ropa, bolsas y botellas.', ['Cartulina'], ['Indumentaria', 'Regalería', 'Bebidas']],
+        ['etiquetas', 'Stickers DTF', 'Brillo, relieve, resistentes al agua y sin bordes blancos.', ['DTF'], ['Productos', 'Merchandising']],
+        ['etiquetas', 'Calcos chicos', 'Calcos súper chicos, en tiempo récord.', ['Vinilo'], ['Packaging', 'Promociones']],
+        ['packaging', 'Bolsas impresas', 'En papel blanco, Kraft o cartulina, con tu logo.', ['Papel blanco', 'Papel kraft', 'Cartulina'], ['Comercios', 'Indumentaria', 'Regalos']],
+        ['packaging', 'Cajas para comida', 'Para pizzas, empanadas y hamburguesas, con tu logo y tus colores.', [], ['Pizzerías', 'Hamburgueserías', 'Delivery']],
+        ['packaging', 'Cierres de bolsa adhesivos', 'El detalle que cierra el empaque con tu marca.', ['Vinilo'], ['Bolsas', 'Packaging']],
+        ['packaging', 'Kit emprendedor', 'Bolsas lisas, sello con tu logo, tarjetas personales, cierres adhesivos y una plancha de calcos.', [], ['Emprendimientos', 'Primeras ventas'], true],
+        ['papeleria', 'Tarjetas personales', 'La primera impresión que entregás en mano.', ['Cartulina'], ['Equipos comerciales', 'Profesionales']],
+        ['papeleria', 'Carpetas de presentación', 'Para que tus propuestas no lleguen en hojas sueltas.', ['Cartulina'], ['Propuestas', 'Reuniones']],
+        ['papeleria', 'Sellos con tu logo', 'Para sellar bolsas, cajas y papelería.', [], ['Packaging', 'Oficina']],
+        ['papeleria', 'Calendarios', 'Tu marca a la vista todo el año.', [], ['Clientes', 'Fin de año']],
+        ['papeleria', 'Volantes en offset', 'Tiradas grandes, para difundir en la calle o en el local.', [], ['Promociones', 'Lanzamientos']],
+        ['eventos', 'Gráfica para stands', 'Que tu stand sea el que todos recuerden.', ['Lona', 'PVC', 'Vinilo'], ['Ferias', 'Exposiciones']],
+        ['eventos', 'Ploteo de vehículos', 'Tu diseño, en movimiento por la ciudad.', ['Vinilo'], ['Flotas', 'Utilitarios']],
+        ['eventos', 'Tazas y vasos', 'Tu marca en la oficina y en las manos de tus clientes.', [], ['Regalos empresariales', 'Equipos']],
+        ['editorial', 'Libros de cuentos y novelas', 'Producción editorial completa, de la prueba al encuadernado.', [], ['Autores', 'Editoriales']],
+        ['editorial', 'Cómics y artbooks', 'Color fiel para obras ilustradas.', [], ['Ilustradores', 'Editoriales']],
+        ['editorial', 'Anuarios', 'Escolares y de empresas, con todas sus fotos y páginas.', [], ['Escuelas', 'Empresas']],
+    ].map(([linea, nombre, texto, materiales, usos, combo], i) => ({ id: 'p' + i, linea, nombre, texto, materiales, usos, combo: !! combo }));
+    // una pose distinta para cada placeholder de la misma línea (fija, no al azar)
+    const pose = (p) => { const n = +p.id.slice(1); return '--giro:' + [-7, 5, -2, 8, -5, 3][n % 6] + 'deg;--esc:' + [1, .86, 1.08, .92, 1.02, .9][(n * 5) % 6] + ';--luz-x:' + [35, 62, 48, 70, 30, 55][(n * 7) % 6] + '%'; };
+    const LINEA = Object.fromEntries(VITA.servicios.map((s) => [s.clave, s]));
+    const cuantos = (clave) => PRODUCTOS.filter((p) => p.linea === clave).length;
+    $('[data-total]').textContent = PRODUCTOS.length;
+
+    /* ---------- plancha, chips y fichas ---------- */
+    $('[data-plancha]').innerHTML = VITA.servicios.map((s) => '<li><button type="button" class="linea-sticker" data-linea="' + s.clave + '" aria-label="Ver ' + esc(s.titulo) + '"><span class="hueco" aria-hidden="true"></span><span class="disco-linea" aria-hidden="true">' + ESTUDIO.objeto(s.clave) + '</span><span class="nombre">' + esc(s.titulo) + '</span><span class="cant">' + cuantos(s.clave) + ' productos</span></button></li>').join('');
+    $('[data-chips]').innerHTML = '<button type="button" class="chip-linea" data-filtro="todas" aria-pressed="true">Todas <span class="n">' + PRODUCTOS.length + '</span></button>'
+        + VITA.servicios.map((s) => '<button type="button" class="chip-linea" data-filtro="' + s.clave + '" aria-pressed="false">' + esc(s.titulo) + ' <span class="n">' + cuantos(s.clave) + '</span></button>').join('');
+    $('[data-fichas]').innerHTML = PRODUCTOS.map((p) => '<li class="ficha" data-id="' + p.id + '" data-linea="' + p.linea + '">'
+        + '<div class="foto" style="' + pose(p) + '">' + ESTUDIO.objeto(p.linea) + '<span class="pendiente">Foto próximamente</span>' + (p.combo ? '<span class="sticker combo"><b>★</b>Combo</span>' : '') + '</div>'
+        + '<div class="ficha-cuerpo"><span class="mono linea-nombre">' + esc(LINEA[p.linea].titulo) + '</span><h3>' + esc(p.nombre) + '</h3><p>' + esc(p.texto) + '</p>'
+        + (p.materiales.length ? '<div class="tags">' + p.materiales.map((m) => '<span>' + esc(m) + '</span>').join('') + '</div>' : '')
+        + '<div class="acciones"><button type="button" class="boton boton-naranja sumar" data-sumar="' + p.id + '">+ Sumar</button><button type="button" class="boton boton-linea" data-ver="' + p.id + '">Ver ficha</button></div></div></li>').join('');
+
+    /* ---------- filtro y búsqueda, con reacomodo animado ---------- */
+    let filtro = 'todas', texto = '';
+    const normal = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    function aplicar() {
+        const fichas = $$('.ficha');
+        const estado = anima && window.Flip ? Flip.getState(fichas) : null;
+        let visibles = 0;
+        fichas.forEach((f) => {
+            const p = PRODUCTOS.find((x) => x.id === f.dataset.id);
+            const ok = (filtro === 'todas' || p.linea === filtro) && (! texto || normal(p.nombre + ' ' + p.texto + ' ' + p.materiales.join(' ') + ' ' + LINEA[p.linea].titulo).includes(texto));
+            f.hidden = ! ok;
+            if (ok) visibles++;
+        });
+        $$('[data-filtro]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filtro === filtro)));
+        $('[data-resultado]').innerHTML = '<strong>' + visibles + '</strong> ' + (visibles === 1 ? 'producto' : 'productos') + (filtro !== 'todas' ? ' · ' + esc(LINEA[filtro].titulo) : '');
+        $('[data-vacio]').hidden = visibles > 0;
+        if (estado) {
+            Flip.from(estado, {
+                duration: 0.65, ease: 'power3.inOut', absolute: true, scale: true, nested: true,
+                onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.85, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.03 }),
+                onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.85, duration: 0.35, ease: 'power2.in' }),
+                onComplete: () => ScrollTrigger.refresh(),
+            });
+        }
+    }
+    const irAProductos = () => (VITA.lenis ? VITA.lenis.scrollTo('#productos', { offset: -70, duration: 1.2 }) : $('#productos').scrollIntoView({ behavior: 'smooth' }));
+    $('[data-chips]').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-filtro]');
+        if (! b) return;
+        filtro = b.dataset.filtro;
+        aplicar();
+    });
+    let pausa = 0;
+    $('[data-buscar]').addEventListener('input', (e) => {
+        clearTimeout(pausa);
+        pausa = setTimeout(() => { texto = normal(e.target.value.trim()); aplicar(); }, 180);
+    });
+
+    // tocar un sticker de la plancha lo despega y filtra por su línea
+    $('[data-plancha]').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-linea]');
+        if (! b) return;
+        filtro = b.dataset.linea;
+        const disco = $('.disco-linea', b);
+        if (anima) {
+            gsap.timeline()
+                .to(disco, { rotateX: 35, rotateY: -30, rotate: -14, z: 60, y: -14, duration: 0.45, ease: 'sine.inOut' })
+                .to(disco, { rotateX: 0, rotateY: 0, rotate: 0, z: 0, y: 0, duration: 0.6, ease: 'back.out(1.6)', clearProps: 'transform' }, '+=0.15');
+            setTimeout(() => { aplicar(); irAProductos(); }, 380);
+        } else {
+            aplicar();
+            irAProductos();
+        }
+    });
+    aplicar();
+
+    /* ---------- paneles: ficha de detalle y consulta ---------- */
+    const velo = $('[data-velo]');
+    let abierto = null, volverA = null;
+    function abrir(nombre) {
+        cerrar(true);
+        abierto = $('[data-panel="' + nombre + '"]');
+        volverA = document.activeElement;
+        abierto.classList.add('abierto');
+        velo.classList.add('abierto');
+        VITA.lenis?.stop();
+        document.documentElement.style.overflow = 'hidden';
+        setTimeout(() => $('[data-cerrar]', abierto)?.focus(), 60);
+    }
+    function cerrar(sinFoco) {
+        if (! abierto) return;
+        abierto.classList.remove('abierto');
+        velo.classList.remove('abierto');
+        abierto = null;
+        VITA.lenis?.start();
+        document.documentElement.style.overflow = '';
+        if (! sinFoco) volverA?.focus();
+    }
+    velo.addEventListener('click', () => cerrar());
+    $$('[data-cerrar]').forEach((b) => b.addEventListener('click', () => cerrar()));
+    addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrar(); });
+
+    let enDetalle = null;
+    function verFicha(id) {
+        const p = PRODUCTOS.find((x) => x.id === id);
+        enDetalle = p;
+        $('[data-detalle-linea]').textContent = LINEA[p.linea].titulo;
+        $('[data-detalle-foto]').innerHTML = ESTUDIO.objeto(p.linea) + '<span class="pendiente">Foto próximamente</span>';
+        $('[data-detalle-nombre]').textContent = p.nombre;
+        $('[data-detalle-texto]').textContent = p.texto;
+        $('[data-detalle-materiales]').textContent = p.materiales.length ? p.materiales.join(' · ') : 'Te asesoramos según el uso';
+        $('[data-detalle-usos]').textContent = p.usos.join(' · ');
+        $('[data-detalle-wa]').href = VITA.wa('¡Hola Vitagraf! Vengo del catálogo web y quería consultar por ' + p.nombre.toLowerCase() + '.');
+        actualizarBotonDetalle();
+        abrir('detalle');
+    }
+
+    /* ---------- la consulta: se guarda en este navegador ---------- */
+    let consulta = [];
+    try { consulta = JSON.parse(localStorage.getItem('vitagraf-consulta') || '[]').filter((c) => PRODUCTOS.some((p) => p.id === c.id)); } catch { consulta = []; }
+    const guardar = () => { try { localStorage.setItem('vitagraf-consulta', JSON.stringify(consulta)); } catch {} };
+    const esta = (id) => consulta.some((c) => c.id === id);
+
+    function mensaje() {
+        const l = ['¡Hola Vitagraf! Vengo del catálogo web y quería cotizar:'];
+        consulta.forEach((c) => {
+            const p = PRODUCTOS.find((x) => x.id === c.id);
+            l.push('• ' + p.nombre + (c.cantidad ? ' — ' + c.cantidad : ''));
+        });
+        const nota = $('[data-nota]').value.trim(), nombre = $('[data-nombre]').value.trim();
+        if (nota) l.push(nota);
+        if (nombre) l.push('Soy ' + nombre + '.');
+        return l.join('\n');
+    }
+    function pintarConsulta() {
+        $('[data-cuenta]').textContent = consulta.length;
+        $('[data-consulta-vacia]').hidden = consulta.length > 0;
+        $('[data-items]').innerHTML = consulta.map((c) => {
+            const p = PRODUCTOS.find((x) => x.id === c.id);
+            return '<li class="item" data-item="' + c.id + '"><span class="mini">' + ESTUDIO.objeto(p.linea) + '</span><div><strong>' + esc(p.nombre) + '</strong><input placeholder="Cantidad aproximada" value="' + esc(c.cantidad || '') + '" data-cantidad="' + c.id + '" aria-label="Cantidad de ' + esc(p.nombre) + '"></div><button type="button" class="quitar" data-quitar="' + c.id + '" aria-label="Quitar ' + esc(p.nombre) + '">×</button></li>';
+        }).join('');
+        $$('[data-sumar]').forEach((b) => {
+            const si = esta(b.dataset.sumar);
+            b.classList.toggle('en-consulta', si);
+            b.textContent = si ? '✓ Sumado' : '+ Sumar';
+        });
+        refrescarVista();
+        actualizarBotonDetalle();
+    }
+    function refrescarVista() {
+        $('[data-vista-consulta]').textContent = consulta.length ? mensaje() : '';
+        const enviar = $('[data-enviar]');
+        enviar.href = VITA.wa(consulta.length ? mensaje() : '');
+        enviar.textContent = consulta.length ? 'Enviar por WhatsApp' : 'Consultar por WhatsApp';
+    }
+    function actualizarBotonDetalle() {
+        if (! enDetalle) return;
+        $('[data-detalle-sumar]').textContent = esta(enDetalle.id) ? '✓ Ya está en tu consulta' : 'Sumar a mi consulta';
+    }
+
+    // el sticker vuela en arco desde el botón hasta la bandeja
+    function volar(desde) {
+        if (! anima) return;
+        const a = desde.getBoundingClientRect(), b = $('.bandeja-boton').getBoundingClientRect();
+        const v = document.createElement('div');
+        v.className = 'volador';
+        v.innerHTML = '<svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg>';
+        document.body.append(v);
+        const x0 = a.left + a.width / 2 - 26, y0 = a.top + a.height / 2 - 26;
+        const x1 = b.left + 18 - 26, y1 = b.top + b.height / 2 - 26;
+        gsap.set(v, { x: x0, y: y0, scale: 0.4, rotate: -30 });
+        gsap.timeline({ onComplete: () => v.remove() })
+            .to(v, { scale: 1, rotate: 0, duration: 0.25, ease: 'back.out(2)' })
+            .to(v, { x: x1, duration: 0.85, ease: 'power1.inOut' }, 0.15)
+            .to(v, { y: Math.min(y0, y1) - 140, duration: 0.4, ease: 'power2.out' }, 0.15)
+            .to(v, { y: y1, duration: 0.45, ease: 'power2.in' }, 0.55)
+            .to(v, { scale: 0.3, opacity: 0, rotate: 40, duration: 0.25, ease: 'power2.in' }, 0.85)
+            .to('.bandeja-boton', { scale: 1.1, duration: 0.14, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 0.95);
+    }
+    function alternar(id, boton) {
+        if (esta(id)) consulta = consulta.filter((c) => c.id !== id);
+        else { consulta.push({ id, cantidad: '' }); volar(boton); }
+        guardar();
+        setTimeout(pintarConsulta, anima && esta(id) ? 900 : 0);
+    }
+
+    $('[data-fichas]').addEventListener('click', (e) => {
+        const s = e.target.closest('[data-sumar]'), v = e.target.closest('[data-ver]');
+        if (s) alternar(s.dataset.sumar, s);
+        if (v) verFicha(v.dataset.ver);
+    });
+    $('[data-detalle-sumar]').addEventListener('click', (e) => { if (enDetalle && ! esta(enDetalle.id)) alternar(enDetalle.id, e.currentTarget); });
+    $('[data-items]').addEventListener('click', (e) => {
+        const q = e.target.closest('[data-quitar]');
+        if (! q) return;
+        const li = q.closest('.item');
+        const fuera = () => { consulta = consulta.filter((c) => c.id !== q.dataset.quitar); guardar(); pintarConsulta(); };
+        anima ? gsap.to(li, { x: 40, opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0, duration: 0.35, ease: 'power2.in', onComplete: fuera }) : fuera();
+    });
+    $('[data-items]').addEventListener('input', (e) => {
+        const c = consulta.find((x) => x.id === e.target.dataset.cantidad);
+        if (c) { c.cantidad = e.target.value; guardar(); refrescarVista(); }
+    });
+    $$('[data-nombre], [data-nota]').forEach((el) => el.addEventListener('input', refrescarVista));
+    $$('[data-abrir-consulta]').forEach((b) => b.addEventListener('click', () => abrir('consulta')));
+    pintarConsulta();
+
+    /* ---------- decoración y movimiento ---------- */
+    ESTUDIO.decorar({
+        portada: [['cubo', 6, 14, 2.4, 0.2, 'naranja'], ['esfera', 44, 10, 1.1, 0.8, 'hueso', false], ['disco', 50, 88, 2.6, 0.15, 'hueso', false], ['cubo', 95, 12, 1.5, 0.5, 'kraft', false], ['registro', 92, 88, 2.2, 0.5, 'hueso', false], ['esfera', 40, 92, 1.6, 0.3, 'naranja']],
+        grilla: [['esfera', 97, 6, 1.6, 0.3, 'naranja', false], ['cubo', 1.5, 24, 1.8, 0.25, 'kraft', false], ['registro', 97, 40, 1.8, 0.5, 'hueso', false], ['disco', 1, 62, 2.2, 0.2, 'hueso', false], ['cubo', 97.5, 80, 1.4, 0.6, 'naranja', false], ['esfera', 1.5, 92, 1.1, 0.7, 'hueso', false]],
+        llamado: [['cubo', 84, 10, 2.6, 0.2, 'naranja'], ['esfera', 92, 60, 1.6, 0.4, 'hueso', false], ['disco', 70, 72, 2.2, 0.3, 'hueso', false]],
+    });
+    ESTUDIO.gotas('.cat-llamado h2');
+    if (! anima) return;
+    ESTUDIO.medidasVivas();
+
+    // entrada (solo si la página carga arriba): el título sube y los stickers se estampan en la plancha
+    ScrollTrigger.addEventListener('refresh', function entrada() {
+        ScrollTrigger.removeEventListener('refresh', entrada);
+        if (scrollY > 20) return;
+        gsap.from('.portada-texto > *', { y: 30, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity' });
+        gsap.from('.plancha-lineas', { y: 80, rotate: 8, opacity: 0, duration: 1.3, ease: 'expo.out', clearProps: 'transform,opacity' });
+        gsap.from('.disco-linea', { scale: 1.5, opacity: 0, rotate: -25, duration: 0.7, ease: 'back.out(1.8)', stagger: 0.09, delay: 0.5, clearProps: 'transform,opacity' });
+        const n = { v: 0 };
+        gsap.to(n, { v: PRODUCTOS.length, duration: 1.6, delay: 0.4, ease: 'power2.out', onUpdate: () => { $('[data-total]').textContent = Math.round(n.v); } });
+    });
+
+    // las fichas entran de a tandas al bajar
+    ScrollTrigger.batch('.ficha', {
+        start: 'top 92%', once: true,
+        onEnter: (lote) => gsap.fromTo(lote, { y: 50, opacity: 0, rotate: () => gsap.utils.random(-2, 2) }, { y: 0, opacity: 1, rotate: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, overwrite: true }),
+    });
+})();
+</script>
+</body>
+</html>
