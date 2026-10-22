@@ -227,6 +227,32 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
 
 .quieto .escena { height: auto; }
 .quieto .escena-fija { position: relative; height: 100svh; }
+
+/* ---------- decoración: cubos, esferas, stickers y marcas de registro ---------- */
+.decor { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.seccion > .envase, .catalogo > .envase, .catalogo > .riel-cont { position: relative; z-index: 1; }
+.deco { position: absolute; left: var(--x); top: var(--y); width: var(--t); height: var(--t); perspective: 700px; }
+.deco.lejos { filter: blur(2px); opacity: .55; }
+.deco-in { width: 100%; height: 100%; transform-style: preserve-3d; }
+/* cubo: una cajita de troquel, con la línea punteada en las aristas */
+.cubo { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.cubo i { position: absolute; inset: 0; background: var(--c); outline: 1px dashed rgba(13,12,11,.4); outline-offset: -3px; }
+.cubo i::after { content: ""; position: absolute; inset: 0; background: var(--luz, transparent); }
+.cubo i:nth-child(1) { transform: translateZ(calc(var(--t) / 2)); }
+.cubo i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.25); }
+.cubo i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.18); }
+.cubo i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.32); }
+.cubo i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(255,255,255,.18); }
+.cubo i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--t) / 2)); --luz: rgba(0,0,0,.4); }
+/* esfera mate, con su sombra abajo */
+.esfera { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 32% 28%, var(--c1), var(--c2) 48%, var(--c3) 100%); box-shadow: 0 calc(var(--t) * .45) calc(var(--t) * .4) calc(var(--t) * -.25) rgba(0,0,0,.55); }
+/* mini sticker que gira en el aire */
+.disco { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.disco svg { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; }
+.disco svg + svg { transform: rotateY(180deg); }
+/* marca de registro de imprenta */
+.registro-deco svg { width: 100%; height: 100%; overflow: visible; }
+@media (max-width: 760px) { .deco.no-movil { display: none; } .deco { scale: .65; } }
 </style>
 </head>
 <body>
@@ -262,6 +288,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
 <main>
     <section class="escena" aria-label="De la plancha al producto">
         <div class="escena-fija">
+            <div class="decor" data-decor="portada" aria-hidden="true"></div>
             <div class="progreso" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
             <div class="mesa" aria-hidden="true">
                 <div class="sombra-mesa"></div>
@@ -352,6 +379,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     </section>
 
     <section class="catalogo" id="catalogo">
+        <div class="decor" data-decor="catalogo" aria-hidden="true"></div>
         <div class="envase catalogo-cab">
             <div><span class="sticker"><b>01</b>Productos</span><h2>Seis líneas de trabajo. Una imprenta.</h2></div>
             <p>Elegí la pieza que necesitás y consultá directo. Si no está en la lista, preguntanos.</p>
@@ -377,6 +405,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     </section>
 
     <section class="seccion" id="materiales">
+        <div class="decor" data-decor="materiales" aria-hidden="true"></div>
         <div class="envase">
             <div class="encabezado">
                 <span class="sticker"><b>02</b>Materiales</span>
@@ -397,6 +426,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     </section>
 
     <section class="seccion" style="padding-top: 0">
+        <div class="decor" data-decor="proceso" aria-hidden="true"></div>
         <div class="envase">
             <div class="encabezado">
                 <span class="sticker"><b>03</b>Proceso</span>
@@ -407,7 +437,8 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     </section>
 
     <section class="historia" id="historia" aria-labelledby="titulo-historia">
-        <div class="hist-riel">
+        <div class="hist-riel" style="position: relative">
+            <div class="decor" data-decor="historia" aria-hidden="true"></div>
             <div class="hist-panel hist-intro">
                 <span class="sticker"><b>04</b>Historia</span>
                 <h2 id="titulo-historia">Nuestra historia</h2>
@@ -445,6 +476,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     </section>
 
     <section class="seccion clientes">
+        <div class="decor" data-decor="clientes" aria-hidden="true"></div>
         <div class="envase">
             <div class="encabezado"><span class="sticker"><b>05</b>Clientes</span><h2>Confían en nosotros.</h2></div>
             <ul class="logos" data-clientes><template><li><img src="../assets/clientes/{{logo}}.webp" alt="{{nombre}}" loading="lazy"></li></template></ul>
@@ -452,6 +484,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     </section>
 
     <section class="seccion contacto" id="contacto">
+        <div class="decor" data-decor="contacto" aria-hidden="true"></div>
         <div class="envase">
             <div class="encabezado"><span class="sticker" style="box-shadow: 0 0 0 3px var(--hueso), 0 0 0 4px rgba(13,12,11,.15)"><b>06</b>Cotizar</span><h2>Contanos tu proyecto.</h2><p>Elegí qué necesitás y te llega la consulta armada a nuestro WhatsApp.</p></div>
             <div class="contacto-grilla">
@@ -518,8 +551,83 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
         if (o) $('.pieza-escena', p).prepend(o.cloneNode(true));
     });
 
+    /*
+     * Decoración. Cada pieza: tipo, posición (x, y en % de su zona), tamaño en
+     * rem, profundidad (0 cerca, 1 lejos: la lejana se mueve menos y va
+     * desenfocada), color y si se muestra en el celular.
+     */
+    const COLORES = {
+        naranja: ['#ff7300', '#ffb070', '#ff7300', '#8a3c00'],
+        kraft: ['#c8a273', '#e6c9a0', '#c8a273', '#6e5536'],
+        hueso: ['#f2eee8', '#ffffff', '#e6e0d6', '#8d877f'],
+        grafito: ['#2a2724', '#5a544d', '#2a2724', '#0d0c0b'],
+    };
+    const DECOR = {
+        portada: [
+            ['cubo', 7, 16, 2.6, 0.2, 'naranja'], ['esfera', 27, 11, 1.3, 0.8, 'hueso', false], ['disco', 17, 30, 3, 0.1, 'hueso', false],
+            ['cubo', 38, 7, 1.1, 0.9, 'kraft', false], ['cubo', 94, 20, 1.7, 0.4, 'kraft'], ['esfera', 95, 60, 2.2, 0.15, 'naranja'],
+            ['registro', 89, 86, 2.4, 0.5, 'hueso', false], ['esfera', 44, 90, 0.9, 0.85, 'grafito', false],
+        ],
+        catalogo: [['cubo', 58, 12, 1.6, 0.3, 'naranja', false], ['esfera', 66, 20, 0.9, 0.7, 'hueso', false], ['registro', 50, 7, 1.6, 0.6, 'hueso', false]],
+        materiales: [['esfera', 91, 10, 2.4, 0.2, 'naranja'], ['cubo', 84, 24, 1.3, 0.6, 'hueso', false], ['disco', 3, 80, 2.4, 0.3, 'hueso', false], ['esfera', 70, 6, 0.9, 0.9, 'kraft', false]],
+        proceso: [['cubo', 89, 14, 2.2, 0.25, 'kraft'], ['registro', 78, 8, 1.8, 0.6, 'hueso', false], ['esfera', 95, 70, 1.1, 0.7, 'naranja', false]],
+        historia: [
+            ['cubo', 14, 13, 1.8, 0.3, 'naranja'], ['esfera', 24, 84, 1.4, 0.6, 'hueso'], ['registro', 36, 10, 2, 0.5, 'hueso'],
+            ['disco', 47, 82, 2.6, 0.2, 'hueso'], ['cubo', 60, 12, 1.2, 0.8, 'kraft'], ['esfera', 72, 86, 2.2, 0.25, 'naranja'],
+            ['cubo', 84, 14, 2.4, 0.15, 'kraft'], ['esfera', 93, 80, 1, 0.8, 'hueso'],
+        ],
+        clientes: [['disco', 88, 8, 3, 0.2, 'hueso'], ['esfera', 80, 16, 1.2, 0.6, 'naranja', false], ['cubo', 70, 6, 1.4, 0.7, 'naranja', false]],
+        contacto: [['cubo', 82, 9, 2.6, 0.2, 'naranja'], ['esfera', 91, 20, 1.5, 0.5, 'grafito', false], ['registro', 72, 5, 2, 0.6, 'grafito', false]],
+    };
+    const stickerSvg = '<svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg>';
+    const registroSvg = (c) => '<svg viewBox="-50 -50 100 100" fill="none" stroke="' + c + '" stroke-width="2"><circle r="26"/><circle r="12"/><path d="M-46 0H46M0 -46V46"/></svg>';
+    const piezas = [];
+    $$('[data-decor]').forEach((cont) => {
+        (DECOR[cont.dataset.decor] || []).forEach(([tipo, x, y, t, prof, color, movil = true]) => {
+            const [c, c1, c2, c3] = COLORES[color];
+            const el = document.createElement('div');
+            el.className = 'deco' + (prof >= 0.75 ? ' lejos' : '') + (movil ? '' : ' no-movil') + (tipo === 'registro' ? ' registro-deco' : '');
+            el.style.cssText = '--x:' + x + '%;--y:' + y + '%;--t:' + t + 'rem;--c:' + c + ';--c1:' + c1 + ';--c2:' + c2 + ';--c3:' + c3;
+            const adentro = tipo === 'cubo' ? '<div class="cubo"><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+                : tipo === 'esfera' ? '<div class="esfera"></div>'
+                : tipo === 'disco' ? '<div class="disco">' + stickerSvg + stickerSvg + '</div>'
+                : registroSvg(color === 'grafito' ? 'rgba(13,12,11,.35)' : 'rgba(242,238,232,.3)');
+            el.innerHTML = '<div class="deco-in">' + adentro + '</div>';
+            cont.append(el);
+            piezas.push({ el, tipo, prof, cont });
+        });
+    });
+    // pose de reposo, que también vale para el modo quieto
+    piezas.forEach(({ el, tipo }) => {
+        const n = el.querySelector('.cubo, .disco');
+        if (n) n.style.transform = tipo === 'cubo' ? 'rotateX(-24deg) rotateY(38deg)' : 'rotateY(-25deg)';
+    });
+
     if (VITA.quieto || ! window.gsap) return;
     document.documentElement.classList.add('js-escena');
+
+    // cada pieza flota y gira a su ritmo; las lejanas, más lento
+    piezas.forEach(({ el, tipo, prof }, i) => {
+        const lento = 1 + prof * 1.5;
+        gsap.to(el.querySelector('.deco-in'), { y: gsap.utils.random(-26, -14), x: gsap.utils.random(-8, 8), duration: gsap.utils.random(3.2, 4.8) * lento, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.17 });
+        if (tipo === 'cubo') gsap.to(el.querySelector('.cubo'), { rotateY: '+=360', rotateX: '+=180', duration: gsap.utils.random(16, 24) * lento, ease: 'none', repeat: -1 });
+        if (tipo === 'disco') gsap.to(el.querySelector('.disco'), { rotateY: '+=360', duration: gsap.utils.random(7, 10) * lento, ease: 'none', repeat: -1 });
+        if (tipo === 'registro') gsap.to(el.querySelector('svg'), { rotate: 360, duration: 40 * lento, ease: 'none', repeat: -1 });
+    });
+
+    // con el scroll cada pieza viaja según su profundidad: las cercanas se mueven más
+    piezas.filter((p) => p.cont.dataset.decor !== 'historia').forEach(({ el, prof, cont }) => {
+        gsap.fromTo(el, { yPercent: (1 - prof) * 160 }, { yPercent: -(1 - prof) * 260, ease: 'none', scrollTrigger: { trigger: cont.closest('section'), start: 'top bottom', end: 'bottom top', scrub: 1.2 } });
+    });
+
+    // y siguen un poco al mouse, como si se moviera la cámara
+    if (matchMedia('(pointer: fine)').matches) {
+        const seguir = piezas.map(({ el, prof }) => ({ x: gsap.quickTo(el, 'x', { duration: 1.4, ease: 'power3.out' }), y: gsap.quickTo(el, 'y', { duration: 1.4, ease: 'power3.out' }), k: (1 - prof) * 28 + 4 }));
+        addEventListener('pointermove', (e) => {
+            const dx = e.clientX / innerWidth - 0.5, dy = e.clientY / innerHeight - 0.5;
+            seguir.forEach((p) => { p.x(-dx * p.k); p.y(-dy * p.k); });
+        }, { passive: true });
+    }
 
     /*
      * Geometría de la escena, calculada con las cajas sin transformar (la
@@ -648,6 +756,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
             },
         });
         $$('.hist-foto img').forEach((img) => gsap.fromTo(img, { scale: 1.25, xPercent: -4 }, { scale: 1, xPercent: 4, ease: 'none', scrollTrigger: { trigger: img.closest('.hist-panel'), containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } }));
+        piezas.filter((p) => p.cont.dataset.decor === 'historia').forEach(({ el, prof }) => gsap.fromTo(el, { xPercent: (1 - prof) * 300 }, { xPercent: -(1 - prof) * 300, ease: 'none', scrollTrigger: { trigger: el, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } }));
         $$('.hist-capitulo > div').forEach((t) => gsap.fromTo(t, { x: 80, opacity: 0.2 }, { x: 0, opacity: 1, ease: 'sine.out', scrollTrigger: { trigger: t, containerAnimation: tw, start: 'left 95%', end: 'left 55%', scrub: true } }));
     });
 
