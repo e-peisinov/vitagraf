@@ -75,6 +75,10 @@ h1, h2, h3 { font-weight: 600; letter-spacing: -.045em; line-height: .95; }
 
 /* la plancha y su espejo: misma caja y mismo origen, así el sticker suelto
    escala exactamente igual que la plancha mientras la cámara se acerca */
+/* envoltorio de la entrada: ocupa toda la mesa, así plancha y espejo
+   conservan sus coordenadas; la escena del scroll nunca lo toca */
+.entrada { inset: 0; transform-style: preserve-3d; }
+.entrada > * { position: absolute; }
 .plancha, .espejo { inset: 6% 16%; transform-origin: 34.5% 35%; }
 .plancha svg { width: 100%; height: 100%; filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)); }
 .espejo { pointer-events: none; z-index: 3; transform-style: preserve-3d; perspective: 900px; }
@@ -236,13 +240,13 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
 .fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .consulta input, .consulta select, .consulta textarea { width: 100%; font: inherit; padding: .85rem 1rem; border-radius: 12px; border: 0; background: #fff; box-shadow: inset 0 0 0 1px rgba(13,12,11,.12); }
 .consulta input:focus, .consulta select:focus, .consulta textarea:focus { outline: 2px solid var(--naranja); }
-.ticket { background: #fff; border-radius: 18px; padding: 1.4rem; display: grid; gap: 1rem; position: sticky; top: 6rem; box-shadow: 0 30px 50px -35px rgba(0,0,0,.5); }
+.ticket { background: #fff; border-radius: 18px; padding: 1.4rem; display: grid; gap: 1rem; position: relative; box-shadow: 0 30px 50px -35px rgba(0,0,0,.5); }
 .ticket .vista { font-family: var(--mono); font-size: .8rem; white-space: pre-line; color: #3c3732; min-height: 7rem; border-top: 1px dashed rgba(13,12,11,.25); border-bottom: 1px dashed rgba(13,12,11,.25); padding: 1rem 0; }
 .ticket .boton-wa { background: var(--wa); color: #06321a; justify-content: center; }
 .datos { display: grid; margin-top: .4rem; }
 .datos a, .datos div { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 0; font-size: .9rem; border-bottom: 1px solid rgba(13,12,11,.08); }
 .datos span { color: #5a534c; }
-@media (max-width: 860px) { .contacto-grilla, .fila2 { grid-template-columns: 1fr; } .ticket { position: static; } }
+@media (max-width: 860px) { .contacto-grilla, .fila2 { grid-template-columns: 1fr; } }
 .pie { background: var(--hueso); color: #5a534c; padding: 2rem 0 6rem; font-size: .85rem; }
 .pie .envase { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-top: 1px solid rgba(13,12,11,.1); padding-top: 1.6rem; }
 .wa-flotante { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 60; width: 3.6rem; height: 3.6rem; border-radius: 50%; background: var(--wa); color: #06321a; display: grid; place-items: center; box-shadow: 0 12px 24px -10px rgba(0,0,0,.7); }
@@ -316,6 +320,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
             <div class="mesa" aria-hidden="true">
                 <div class="sombra-mesa"></div>
                 <!-- plancha de 3 × 4 stickers con marcas de corte (viewBox 300 × 400) -->
+                <div class="entrada">
                 <div class="plancha">
                     <svg viewBox="0 0 300 400">
                         <rect x="0" y="0" width="300" height="400" rx="4" fill="#f2eee8"/>
@@ -334,6 +339,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
                 </div>
                 <!-- el sticker que se despega vive en una copia invisible de la plancha -->
                 <div class="espejo"><div class="suelto"><svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg></div></div>
+                </div>
 
                 <!-- frasco de vidrio (viewBox 200 × 330) -->
                 <div class="frasco">
@@ -690,6 +696,22 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     ScrollTrigger.addEventListener('refreshInit', geometria);
 
     /*
+     * Todo lo que depende de medidas (escena, fijados, hilos) se recalcula
+     * cuando terminan de cargar las fuentes y cada vez que cambia el alto de
+     * la página: si no, al recargar a mitad del scroll quedan posiciones
+     * calculadas con la tipografía de reemplazo.
+     */
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    let altoPrevio = 0, pendiente = 0;
+    new ResizeObserver(() => {
+        const alto = document.body.scrollHeight;
+        if (Math.abs(alto - altoPrevio) < 2) return;
+        altoPrevio = alto;
+        clearTimeout(pendiente);
+        pendiente = setTimeout(() => ScrollTrigger.refresh(), 200);
+    }).observe(document.body);
+
+    /*
      * Recortes del troquel: salen de la caja mientras se pliega y quedan
      * flotando alrededor. [forma, x final, y final (% de la mesa desde el
      * centro), tamaño en % de la mesa, giro final]
@@ -731,8 +753,19 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
         lineas.forEach((l, j) => gsap.to(l, { opacity: j === i ? 1 : 0, duration: 0.4, overwrite: true }));
         actual = i;
     };
-    gsap.from('.titular.primero > *', { y: 30, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out' });
-    gsap.from('.plancha, .espejo', { y: 120, rotateX: 40, opacity: 0, duration: 1.4, ease: 'expo.out' });
+    /*
+     * Entrada de la portada. Solo se reproduce si la página carga arriba de
+     * todo: si se recarga a mitad del scroll, el navegador restaura la
+     * posición y la escena tiene que quedar tal cual está en ese punto. Se
+     * anima un envoltorio que la escena del scroll no toca, para que nunca
+     * compitan por las mismas propiedades.
+     */
+    ScrollTrigger.addEventListener('refresh', function entrada() {
+        ScrollTrigger.removeEventListener('refresh', entrada);
+        if (scrollY > 20) return;
+        gsap.from('.titular.primero > *', { y: 30, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out', clearProps: 'transform,opacity' });
+        gsap.from('.entrada', { y: 120, rotateX: 40, opacity: 0, duration: 1.4, ease: 'expo.out', clearProps: 'transform,opacity' });
+    });
 
     const Z = () => (innerWidth < 761 ? 1.5 : 2.5);
     // tiempo en que empieza cada titular dentro de la línea de tiempo
@@ -884,7 +917,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
                     + ' S' + xb + ' ' + (yh + 10 + o) + ' ' + xb + ' ' + (yh + 70 + o);
                 if (opciones.destino) {
                     const b = opciones.destino.getBoundingClientRect();
-                    const dx = b.left + b.width / 2 - 12 + o * 1.4, dy = b.top + scrollY - base;
+                    const dx = b.left + b.width * 0.5 - 12 + o * 1.4, dy = b.top + scrollY - base + 2;
                     d += ' C' + xb + ' ' + (dy - 160) + ' ' + dx + ' ' + (dy - 140) + ' ' + dx + ' ' + (dy - 4);
                 } else {
                     d += ' C' + xb + ' ' + (yh + (H - yh) * 0.5) + ' ' + (xb + (opciones.empieza === 'der' ? 14 : -14)) + ' ' + (H * 0.9) + ' ' + xb + ' ' + H;
@@ -905,7 +938,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     mm.add('(min-width: 761px)', () => {
         const mat = $('#materiales'), proc = mat.nextElementSibling, cli = $('.clientes'), con = $('#contacto');
         tendido(mat, proc, () => mat.getBoundingClientRect().bottom + scrollY - 70, { empieza: 'der' });
-        tendido(cli, con, () => cli.getBoundingClientRect().bottom + scrollY - 60, { empieza: 'izq', destino: $('.ticket .boton-wa'), tintaK: '#0d0c0b' });
+        tendido(cli, con, () => cli.getBoundingClientRect().bottom + scrollY - 60, { empieza: 'izq', destino: $('.ticket'), tintaK: '#0d0c0b' });
     });
 
     // muestrario y proceso
