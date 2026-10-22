@@ -130,9 +130,32 @@ h1, h2, h3 { font-weight: 600; letter-spacing: -.045em; line-height: .95; }
 .pieza li::before { content: "+"; color: var(--naranja); }
 .pieza .acciones { display: flex; gap: .5rem; margin-top: auto; padding-top: .5rem; flex-wrap: wrap; }
 .pieza .acciones .boton { padding: .6rem 1rem; font-size: .82rem; }
-.catalogo-pie { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 0 0; }
-.catalogo-pie .barra { flex: 1; height: 2px; background: var(--gris-2); position: relative; overflow: hidden; }
-.catalogo-pie .barra i { position: absolute; inset: 0; background: var(--naranja); transform: scaleX(0); transform-origin: left; }
+/* el avance del catálogo es un rollo de etiquetas que se desenrolla */
+.catalogo-pie { display: flex; align-items: center; gap: .9rem; padding: 1rem 0 0; }
+.rollo { width: 3.4rem; height: 3.4rem; flex: none; position: relative; }
+.rollo svg { width: 100%; height: 100%; display: block; }
+.tira { flex: 1; height: 1.9rem; position: relative; overflow: hidden; margin-left: -1.4rem; }
+.tira-in { position: absolute; inset: 0; transform: translateX(-100%); background: #e9e4dc url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='30'><rect x='5' y='3' width='54' height='24' rx='5' fill='%23ff7300'/><path d='M14 11 L22 13 V22 L14 20 Z' fill='%23ffb070'/><path d='M24 13 L32 11 V20 L24 22 Z' fill='%230d0c0b'/><rect x='37' y='12' width='16' height='2.4' rx='1.2' fill='%230d0c0b'/><rect x='37' y='17' width='11' height='2.4' rx='1.2' fill='%230d0c0b' opacity='.6'/></svg>") right center / 64px 30px repeat-x; box-shadow: inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 4px rgba(0,0,0,.18); border-radius: 0 3px 3px 0; }
+.catalogo-pie .mono:last-child { flex: none; }
+
+/* hilos de tinta CMYK que unen secciones */
+.hilos { position: absolute; left: 0; top: 0; width: 100%; pointer-events: none; z-index: 2; overflow: visible; }
+.hilos path { fill: none; stroke-width: 1.6; stroke-linecap: round; }
+
+/* recortes que sobran del troquel */
+.recortes { inset: 0; pointer-events: none; }
+.recorte { position: absolute; left: 50%; top: 50%; width: var(--t); height: var(--t); margin: calc(var(--t) / -2) 0 0 calc(var(--t) / -2); opacity: 0; }
+.recorte svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 10px rgba(0,0,0,.5)); }
+
+/* gota de tinta detrás de los títulos */
+.con-gota { position: relative; isolation: isolate; }
+.gota-lugar { position: absolute; left: -.35em; top: 50%; width: clamp(6rem, 11vw, 10rem); aspect-ratio: 1; translate: -18% -50%; z-index: -1; pointer-events: none; }
+.gota-lugar .mancha, .gota-lugar .onda, .gota-lugar .gota { position: absolute; }
+.gota-lugar .mancha { inset: 0; opacity: 0; }
+.gota-lugar .mancha svg { width: 100%; height: 100%; overflow: visible; }
+.gota-lugar .onda { inset: 8%; border-radius: 50%; border: 1.5px solid var(--naranja); opacity: 0; }
+.gota-lugar .gota { left: 50%; top: 50%; width: .9rem; height: 1.25rem; margin: -.62rem 0 0 -.45rem; background: var(--naranja); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; opacity: 0; }
+.quieto .gota-lugar .mancha { opacity: .2; }
 @media (min-width: 761px) { .catalogo { height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-top: var(--alto-cab); } }
 @media (max-width: 760px) { .catalogo { padding: 6rem 0 4rem; } .riel-cont { overflow-x: auto; scroll-snap-type: x mandatory; } .pieza { width: 80vw; scroll-snap-align: center; } .catalogo-pie { display: none; } }
 
@@ -342,6 +365,9 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
                     </div>
                 </div>
 
+                <!-- recortes que sobran al troquelar la caja -->
+                <div class="recortes"></div>
+
                 <!-- bolsa kraft -->
                 <div class="bolsa">
                     <svg viewBox="0 0 200 300">
@@ -401,7 +427,11 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
                 </template>
             </div>
         </div>
-        <div class="envase catalogo-pie" aria-hidden="true"><span class="mono">01</span><span class="barra"><i></i></span><span class="mono">06</span></div>
+        <div class="envase catalogo-pie" aria-hidden="true">
+            <span class="rollo"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#e9e4dc"/><g class="espiral" fill="none" stroke="#bdb6ab" stroke-width=".8"><circle cx="30" cy="30" r="24"/><circle cx="30" cy="30" r="20"/><circle cx="30" cy="30" r="16"/></g><circle cx="30" cy="30" r="12" fill="#2a2724"/><circle cx="30" cy="30" r="8" fill="#0d0c0b"/><path class="marca-giro" d="M30 2 V8" stroke="#ff7300" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <span class="tira"><span class="tira-in"></span></span>
+            <span class="mono">06</span>
+        </div>
     </section>
 
     <section class="seccion" id="materiales">
@@ -659,6 +689,37 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     geometria();
     ScrollTrigger.addEventListener('refreshInit', geometria);
 
+    /*
+     * Recortes del troquel: salen de la caja mientras se pliega y quedan
+     * flotando alrededor. [forma, x final, y final (% de la mesa desde el
+     * centro), tamaño en % de la mesa, giro final]
+     */
+    const FORMAS = {
+        solapa: '<svg viewBox="0 0 40 40"><path d="M4 30 L10 10 H30 L36 30 Z" fill="#c8a273"/><path d="M4 30 H36" stroke="#6e5536" stroke-width="1" stroke-dasharray="2 2"/></svg>',
+        circulo: '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#ff7300"/><circle cx="20" cy="20" r="15" fill="none" stroke="#8a3c00" stroke-width="1" stroke-dasharray="2 2"/></svg>',
+        triangulo: '<svg viewBox="0 0 40 40"><path d="M6 32 L20 6 L34 32 Z" fill="#d9b689"/></svg>',
+        tira: '<svg viewBox="0 0 40 40"><rect x="4" y="15" width="32" height="10" rx="1" fill="#c8a273"/><path d="M12 15 V25 M28 15 V25" stroke="#6e5536" stroke-width="1" stroke-dasharray="2 2"/></svg>',
+        media: '<svg viewBox="0 0 40 40"><path d="M6 24 A14 14 0 0 1 34 24 Z" fill="#f2eee8"/></svg>',
+        calado: '<svg viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" rx="3" fill="#ff9d4d"/><circle cx="20" cy="20" r="7" fill="#161412"/></svg>',
+    };
+    const RECORTES = [
+        ['solapa', -9, -34, 7, -40], ['circulo', 14, -38, 4.5, 30], ['triangulo', 22, -22, 4, 70], ['tira', -20, -20, 6, 25],
+        ['media', -6, 34, 5, -20], ['calado', 18, 30, 5, 45], ['circulo', -17, 24, 3.2, -60], ['solapa', 8, 40, 5.5, 160],
+    ];
+    RECORTES.forEach(([forma, , , t]) => {
+        const d = document.createElement('div');
+        d.className = 'recorte';
+        d.style.setProperty('--t', t + '%');
+        d.innerHTML = FORMAS[forma];
+        $('.recortes').append(d);
+    });
+
+    // gota de tinta detrás de los títulos de sección
+    $$('.encabezado h2, .catalogo-cab h2, .hist-intro h2').forEach((h) => {
+        h.classList.add('con-gota');
+        h.insertAdjacentHTML('afterbegin', '<span class="gota-lugar" aria-hidden="true"><span class="mancha"><svg viewBox="-60 -60 120 120"><g fill="#ff7300"><circle r="42"/><circle cx="46" cy="-18" r="6"/><circle cx="-40" cy="30" r="5"/><circle cx="20" cy="50" r="3.5"/><circle cx="-48" cy="-22" r="3"/><circle cx="54" cy="12" r="2.5"/></g></svg></span><span class="onda"></span><span class="gota"></span></span>');
+    });
+
     const titulares = $$('.titular');
     const lineas = $$('.ficha-tecnica .linea');
     const barras = $$('.progreso i');
@@ -711,7 +772,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
 
     // acto 3 — el frasco se corre y el troquel se pliega en caja
       .to('.frasco', { left: '2%', scale: 0.82, duration: 1, ease: 'power2.inOut' }, 4.0)
-      .fromTo('.caja-lugar', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'sine.inOut' }, 4.2)
+      .fromTo('.caja-lugar', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'sine.inOut' }, 4.5)
       .set('.caja', { scale: 0.75 }, 0)
       .fromTo('.cara.arriba', { rotateX: 0 }, { rotateX: 90, duration: 0.7, ease: 'power2.inOut' }, 4.6)
       .fromTo('.cara.abajo', { rotateX: 0 }, { rotateX: -90, duration: 0.7, ease: 'power2.inOut' }, 4.65)
@@ -724,6 +785,14 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
       .fromTo('.bolsa', { opacity: 0, xPercent: 40 }, { opacity: 1, xPercent: 0, duration: 1, ease: 'power2.out' }, 6.0)
       .to('.caja-lugar', { xPercent: 4, yPercent: 6, duration: 1, ease: 'power2.inOut' }, 6.0)
       .to('.mesa', { scale: 0.92, duration: 1, ease: 'power2.inOut' }, 6.0)
+      .add(() => {}, 6.0);
+    $$('.recorte').forEach((el, i) => {
+        const [, x, y, , giro] = RECORTES[i];
+        tl.fromTo(el, { xPercent: 0, yPercent: 0, x: 0, y: 0, scale: 0.2, rotate: 0, opacity: 0 },
+            { x: () => $('.mesa').offsetWidth * x / 100, y: () => $('.mesa').offsetWidth * y / 100, scale: 1, rotate: giro, opacity: 1, duration: 1, ease: 'power3.out' }, 4.7 + i * 0.06)
+          .to(el, { y: () => $('.mesa').offsetWidth * (y + 6) / 100, rotate: giro + (i % 2 ? 35 : -35), duration: 1.6, ease: 'sine.inOut' }, 6.0);
+    });
+    tl
       .to({}, { duration: 0.8 });
 
     const mm = gsap.matchMedia();
@@ -736,7 +805,8 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
         // una pausa corta al llegar, para leer las primeras fichas, y otra al final
         tlc.to({}, { duration: 0.12 })
            .to(riel, { x: () => -distancia(), ease: 'none', duration: 1 })
-           .to('.catalogo-pie .barra i', { scaleX: 1, ease: 'none', duration: 1 }, 0.12)
+           .to('.tira-in', { xPercent: 100, ease: 'none', duration: 1 }, 0.12)
+           .to('.rollo svg', { rotate: 900, scale: 0.86, ease: 'none', duration: 1 }, 0.12)
            .to({}, { duration: 0.12 });
     });
 
@@ -767,6 +837,75 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
         tlLogos.fromTo($('img', li), { opacity: 0, scale: 1.35, rotate: -8, filter: 'grayscale(1) invert(1) brightness(1.3) blur(6px)' },
             { opacity: 0.7, scale: 1, rotate: 0, filter: 'grayscale(1) invert(1) brightness(1.3) blur(0px)', duration: 0.5, ease: 'power2.out' }, i * 0.18)
                .fromTo(li, { '--hueco': 1 }, { '--hueco': 0, duration: 0.4, ease: 'sine.inOut' }, i * 0.18 + 0.1);
+    });
+
+    // gota de tinta: cae, golpea y se abre en una mancha suave detrás del título
+    $$('.gota-lugar').forEach((g) => {
+        const t = gsap.timeline({ scrollTrigger: { trigger: g.parentElement, start: 'top 82%', once: true } });
+        t.fromTo($('.gota', g), { y: -170, opacity: 0, scaleY: 1.3 }, { y: 0, opacity: 1, scaleY: 1, duration: 0.6, ease: 'power2.in' })
+         .to($('.gota', g), { scaleY: 0.25, scaleX: 1.8, opacity: 0, duration: 0.25, ease: 'power2.out' })
+         .fromTo($('.mancha', g), { scale: 0.15, opacity: 0, rotate: gsap.utils.random(-40, 40) }, { scale: 1, opacity: 0.2, rotate: '+=12', duration: 1.3, ease: 'expo.out' }, '<')
+         .fromTo($('.onda', g), { scale: 0.2, opacity: 0.7 }, { scale: 1.7, opacity: 0, duration: 1.4, ease: 'power2.out' }, '<');
+    });
+
+    /*
+     * Hilos de tinta CMYK: cuatro líneas paralelas que bajan por el margen,
+     * cruzan la página en el hueco entre dos secciones y siguen del otro
+     * lado. Se dibujan con el scroll. Las coordenadas se calculan con las
+     * cajas reales, así que se rehacen en cada refresh.
+     */
+    const TINTAS = ['#00a0dc', '#e4007c', '#ffd400', '#f2eee8'];
+    function tendido(desde, hasta, hueco, opciones) {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.classList.add('hilos');
+        svg.setAttribute('aria-hidden', 'true');
+        desde.append(svg);
+        const paths = TINTAS.map((c, i) => {
+            const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            p.setAttribute('stroke', opciones.tintaK && i === 3 ? opciones.tintaK : c);
+            svg.append(p);
+            return p;
+        });
+        const dibujar = () => {
+            const base = desde.getBoundingClientRect().top + scrollY;
+            const W = desde.offsetWidth;
+            const H = hasta.getBoundingClientRect().bottom + scrollY - base;
+            const yh = hueco() - base;
+            svg.setAttribute('width', W);
+            svg.setAttribute('height', H);
+            svg.style.height = H + 'px';
+            const margen = Math.max(18, (W - Math.min(W - 40, 1312)) / 4);
+            paths.forEach((p, i) => {
+                const o = i * 6;
+                const xa = opciones.empieza === 'der' ? W - margen - o : margen + o;
+                const xb = opciones.empieza === 'der' ? margen + o : W - margen - o;
+                let d = 'M' + xa + ' 0 C' + xa + ' ' + yh * 0.35 + ' ' + (xa + (opciones.empieza === 'der' ? -14 : 14)) + ' ' + yh * 0.6 + ' ' + xa + ' ' + (yh - 70 + o)
+                    + ' C' + xa + ' ' + (yh - 10 + o) + ' ' + (xa + (xb - xa) * 0.2) + ' ' + (yh + o) + ' ' + (W / 2) + ' ' + (yh + o)
+                    + ' S' + xb + ' ' + (yh + 10 + o) + ' ' + xb + ' ' + (yh + 70 + o);
+                if (opciones.destino) {
+                    const b = opciones.destino.getBoundingClientRect();
+                    const dx = b.left + b.width / 2 - 12 + o * 1.4, dy = b.top + scrollY - base;
+                    d += ' C' + xb + ' ' + (dy - 160) + ' ' + dx + ' ' + (dy - 140) + ' ' + dx + ' ' + (dy - 4);
+                } else {
+                    d += ' C' + xb + ' ' + (yh + (H - yh) * 0.5) + ' ' + (xb + (opciones.empieza === 'der' ? 14 : -14)) + ' ' + (H * 0.9) + ' ' + xb + ' ' + H;
+                }
+                p.setAttribute('d', d);
+                const largo = p.getTotalLength();
+                p.style.strokeDasharray = largo;
+                p.dataset.largo = largo;
+            });
+        };
+        dibujar();
+        ScrollTrigger.addEventListener('refreshInit', dibujar);
+        paths.forEach((p, i) => gsap.fromTo(p, { strokeDashoffset: () => +p.dataset.largo }, {
+            strokeDashoffset: 0, ease: 'none',
+            scrollTrigger: { trigger: desde, start: 'top 75%', endTrigger: hasta, end: opciones.destino ? 'top 10%' : 'bottom 85%', scrub: 1.4 + i * 0.25, invalidateOnRefresh: true },
+        }));
+    }
+    mm.add('(min-width: 761px)', () => {
+        const mat = $('#materiales'), proc = mat.nextElementSibling, cli = $('.clientes'), con = $('#contacto');
+        tendido(mat, proc, () => mat.getBoundingClientRect().bottom + scrollY - 70, { empieza: 'der' });
+        tendido(cli, con, () => cli.getBoundingClientRect().bottom + scrollY - 60, { empieza: 'izq', destino: $('.ticket .boton-wa'), tintaK: '#0d0c0b' });
     });
 
     // muestrario y proceso
