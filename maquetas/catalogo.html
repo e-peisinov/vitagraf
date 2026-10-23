@@ -61,11 +61,14 @@ section > .envase { position: relative; z-index: 1; }
 .resultado { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.4rem; }
 .resultado strong { font-weight: 500; color: var(--hueso); }
 .fichas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr)); gap: 1.2rem; list-style: none; padding: 0; }
-.ficha { position: relative; background: var(--negro-2); border-radius: 18px; display: flex; flex-direction: column; box-shadow: inset 0 0 0 1px rgba(242,238,232,.06); transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s; }
-.ficha:hover { transform: translateY(-6px) rotate(-.4deg); box-shadow: inset 0 0 0 1px rgba(242,238,232,.12), 0 30px 40px -25px #000; }
+/* la ficha es solo la caja de la grilla (el filtro la mueve con Flip);
+   todo lo visual y el movimiento propio van en .ficha-in, así nunca compiten */
+.ficha { display: flex; }
+.ficha-in { position: relative; flex: 1; background: var(--negro-2); border-radius: 18px; display: flex; flex-direction: column; box-shadow: inset 0 0 0 1px rgba(242,238,232,.06); transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s; }
+.ficha:hover .ficha-in { transform: translateY(-6px) rotate(-.4deg); box-shadow: inset 0 0 0 1px rgba(242,238,232,.12), 0 30px 40px -25px #000; }
 /* la esquina que se despega al pasar el mouse */
-.ficha::after { content: ""; position: absolute; top: 0; right: 0; width: 0; height: 0; border-radius: 0 18px 0 0; background: linear-gradient(225deg, var(--negro) 50%, #e6e0d6 50%, #f2eee8 70%); box-shadow: -6px 6px 10px -4px rgba(0,0,0,.5); transition: width .45s cubic-bezier(.2,.8,.2,1), height .45s cubic-bezier(.2,.8,.2,1); }
-.ficha:hover::after { width: 2.6rem; height: 2.6rem; }
+.ficha-in::after { content: ""; position: absolute; top: 0; right: 0; width: 0; height: 0; border-radius: 0 18px 0 0; background: linear-gradient(225deg, var(--negro) 50%, #e6e0d6 50%, #f2eee8 70%); box-shadow: -6px 6px 10px -4px rgba(0,0,0,.5); transition: width .45s cubic-bezier(.2,.8,.2,1), height .45s cubic-bezier(.2,.8,.2,1); }
+.ficha:hover .ficha-in::after { width: 2.6rem; height: 2.6rem; }
 .ficha[hidden] { display: none; }
 .foto { position: relative; aspect-ratio: 4/3; margin: .6rem .6rem 0; border-radius: 12px; background: radial-gradient(70% 70% at var(--luz-x, 50%) 40%, #2e2a26, #181614 72%); display: grid; place-items: center; overflow: hidden; }
 .foto > svg { width: 52%; height: 64%; overflow: visible; filter: drop-shadow(0 16px 16px rgba(0,0,0,.5)); transform: rotate(var(--giro, 0deg)) scale(var(--esc, 1)); transition: transform .7s cubic-bezier(.2,.8,.2,1); }
@@ -81,7 +84,8 @@ section > .envase { position: relative; z-index: 1; }
 .foto .pendiente { position: absolute; left: .9rem; bottom: .8rem; font-family: var(--mono); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; color: #9c958c; display: flex; align-items: center; gap: .4rem; }
 .foto .pendiente::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--naranja); }
 .foto .combo { position: absolute; right: .8rem; top: .8rem; rotate: 4deg; }
-.ficha-cuerpo { padding: 1.1rem 1.2rem 1.2rem; display: grid; gap: .6rem; flex: 1; align-content: start; }
+.ficha-cuerpo { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
+.ficha-cuerpo .tags { align-self: flex-start; }
 .ficha .linea-nombre { color: var(--naranja); }
 .ficha h3 { font-size: 1.3rem; letter-spacing: -.03em; line-height: 1.1; }
 .ficha p { color: #bdb5ab; font-size: .92rem; }
@@ -322,17 +326,20 @@ section > .envase { position: relative; z-index: 1; }
     $('[data-plancha]').innerHTML = VITA.servicios.map((s) => '<li><button type="button" class="linea-sticker" data-linea="' + s.clave + '" aria-label="Ver ' + esc(s.titulo) + '"><span class="hueco" aria-hidden="true"></span><span class="disco-linea" aria-hidden="true">' + ESTUDIO.objeto(s.clave) + '</span><span class="nombre">' + esc(s.titulo) + '</span><span class="cant">' + cuantos(s.clave) + ' productos</span></button></li>').join('');
     $('[data-chips]').innerHTML = '<button type="button" class="chip-linea" data-filtro="todas" aria-pressed="true">Todas <span class="n">' + PRODUCTOS.length + '</span></button>'
         + VITA.servicios.map((s) => '<button type="button" class="chip-linea" data-filtro="' + s.clave + '" aria-pressed="false">' + esc(s.titulo) + ' <span class="n">' + cuantos(s.clave) + '</span></button>').join('');
-    $('[data-fichas]').innerHTML = PRODUCTOS.map((p) => '<li class="ficha" data-id="' + p.id + '" data-linea="' + p.linea + '">'
+    $('[data-fichas]').innerHTML = PRODUCTOS.map((p) => '<li class="ficha" data-id="' + p.id + '" data-linea="' + p.linea + '"><div class="ficha-in">'
         + '<div class="foto" style="' + pose(p) + '">' + ESTUDIO.objeto(p.linea) + '<span class="pendiente">Foto próximamente</span>' + (p.combo ? '<span class="sticker combo"><b>★</b>Combo</span>' : '') + '</div>'
         + '<div class="ficha-cuerpo"><span class="mono linea-nombre">' + esc(LINEA[p.linea].titulo) + '</span><h3>' + esc(p.nombre) + '</h3><p>' + esc(p.texto) + '</p>'
         + (p.materiales.length ? '<div class="tags">' + p.materiales.map((m) => '<span>' + esc(m) + '</span>').join('') + '</div>' : '')
-        + '<div class="acciones"><button type="button" class="boton boton-naranja sumar" data-sumar="' + p.id + '">+ Sumar</button><button type="button" class="boton boton-linea" data-ver="' + p.id + '">Ver ficha</button></div></div></li>').join('');
+        + '<div class="acciones"><button type="button" class="boton boton-naranja sumar" data-sumar="' + p.id + '">+ Sumar</button><button type="button" class="boton boton-linea" data-ver="' + p.id + '">Ver ficha</button></div></div></div></li>').join('');
 
     /* ---------- filtro y búsqueda, con reacomodo animado ---------- */
     let filtro = 'todas', texto = '';
     const normal = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    let flipActual = null;
     function aplicar() {
         const fichas = $$('.ficha');
+        // si el reacomodo anterior sigue en curso, se completa antes de medir
+        if (flipActual) { flipActual.progress(1).kill(); flipActual = null; }
         const estado = anima && window.Flip ? Flip.getState(fichas) : null;
         let visibles = 0;
         fichas.forEach((f) => {
@@ -345,11 +352,17 @@ section > .envase { position: relative; z-index: 1; }
         $('[data-resultado]').innerHTML = '<strong>' + visibles + '</strong> ' + (visibles === 1 ? 'producto' : 'productos') + (filtro !== 'todas' ? ' · ' + esc(LINEA[filtro].titulo) : '');
         $('[data-vacio]').hidden = visibles > 0;
         if (estado) {
-            Flip.from(estado, {
-                duration: 0.65, ease: 'power3.inOut', absolute: true, scale: true, nested: true,
-                onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.85, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.03 }),
-                onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.85, duration: 0.35, ease: 'power2.in' }),
-                onComplete: () => ScrollTrigger.refresh(),
+            const adentro = (els) => els.map((el) => el.firstElementChild);
+            flipActual = Flip.from(estado, {
+                duration: 0.65, ease: 'power3.inOut', absolute: true,
+                onEnter: (els) => gsap.fromTo(adentro(els), { opacity: 0, scale: 0.85, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.03, overwrite: true, clearProps: 'transform' }),
+                onLeave: (els) => gsap.to(adentro(els), { opacity: 0, scale: 0.85, duration: 0.3, ease: 'power2.in', overwrite: true }),
+                onComplete: () => {
+                    flipActual = null;
+                    // las que salieron quedan listas para volver a entrar
+                    gsap.set($$('.ficha[hidden] > .ficha-in'), { clearProps: 'opacity,transform' });
+                    ScrollTrigger.refresh();
+                },
             });
         }
     }
@@ -539,7 +552,7 @@ section > .envase { position: relative; z-index: 1; }
     // las fichas entran de a tandas al bajar
     ScrollTrigger.batch('.ficha', {
         start: 'top 92%', once: true,
-        onEnter: (lote) => gsap.fromTo(lote, { y: 50, opacity: 0, rotate: () => gsap.utils.random(-2, 2) }, { y: 0, opacity: 1, rotate: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, overwrite: true }),
+        onEnter: (lote) => gsap.fromTo(lote.map((f) => f.firstElementChild), { y: 50, opacity: 0, rotate: () => gsap.utils.random(-2, 2) }, { y: 0, opacity: 1, rotate: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, clearProps: 'transform' }),
     });
 })();
 </script>
