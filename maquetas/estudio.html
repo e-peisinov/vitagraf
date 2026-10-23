@@ -260,8 +260,6 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
                         <rect x="22" y="384" width="10" height="6" fill="#00a0dc"/><rect x="32" y="384" width="10" height="6" fill="#e4007c"/><rect x="42" y="384" width="10" height="6" fill="#ffd400"/><rect x="52" y="384" width="10" height="6" fill="#1a1714"/>
                     </svg>
                 </div>
-                <!-- el sticker que se despega vive en una copia invisible de la plancha -->
-                <div class="espejo"><div class="suelto"><svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg></div></div>
                 </div>
 
                 <!-- frasco de vidrio (viewBox 200 × 330) -->
@@ -280,6 +278,15 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
                         <use class="etq-sticker" href="#sticker" transform="translate(100 192) scale(.62)" opacity="0"/>
                         <text class="etq-texto" x="100" y="256" text-anchor="middle" font-family="Geist, sans-serif" font-weight="600" font-size="10" letter-spacing="2" fill="#1a1714" opacity="0">MIEL · 500 G</text>
                     </svg>
+                </div>
+
+                <!--
+                    el sticker que se despega vive en una copia invisible de la
+                    plancha, en una capa por encima del frasco: así nunca queda
+                    tapado y se lo ve pegarse sobre el envase
+                -->
+                <div class="entrada entrada-sticker">
+                    <div class="espejo"><div class="suelto"><svg viewBox="-48 -48 96 96"><use href="#sticker"/></svg></div></div>
                 </div>
 
                 <!-- caja: el troquel plano se pliega -->
@@ -630,15 +637,18 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     // acto 2 — entra el frasco y el sticker viaja hasta su lugar
       .fromTo('.frasco', { opacity: 0, yPercent: 25 }, { opacity: 1, yPercent: 0, duration: 1, ease: 'power2.out' }, 2.1)
       .to('.sombra-mesa', { opacity: 1, duration: 0.8, ease: 'sine.inOut' }, 2.1)
-      .to('.suelto', { x: () => G.dx, y: () => G.dy, scale: () => G.s, rotateY: 0, rotateX: 0, z: 0, duration: 1.4, ease: 'power2.inOut' }, 2.0)
-    // al apoyarse, la etiqueta envuelve el frasco desde el centro y la sombra se achica
-      .fromTo('.etq-fondo', { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'sine.inOut' }, 3.05)
-      .to('.suelto', { '--l': 0, duration: 0.45, ease: 'sine.inOut' }, 3.0)
-      .to('.frasco', { scale: 1.025, duration: 0.15, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 3.35)
-    // con los dos stickers superpuestos, se pasa del suelto al del frasco
-      .to('.etq-sticker', { opacity: 1, duration: 0.12 }, 3.42)
-      .to('.suelto', { opacity: 0, duration: 0.12 }, 3.46)
-      .to('.etq-texto', { opacity: 1, duration: 0.4, ease: 'sine.inOut' }, 3.5)
+    // viaja hasta quedar flotando justo encima de su lugar, un poco más grande y todavía inclinado
+      .to('.suelto', { x: () => G.dx, y: () => G.dy, scale: () => G.s * 1.14, rotateY: -12, rotateX: 10, z: 70, duration: 1.15, ease: 'power2.inOut' }, 2.0)
+    // se aprieta contra el envase: baja, se aplana y la sombra desaparece
+      .to('.suelto', { scale: () => G.s, rotateY: 0, rotateX: 0, z: 0, '--l': 0, duration: 0.32, ease: 'power2.in' }, 3.15)
+    // apoyado, la etiqueta blanca se extiende por debajo desde el centro
+      .fromTo('.etq-fondo', { scaleX: 0 }, { scaleX: 1, duration: 0.42, ease: 'power2.out' }, 3.4)
+    // con los dos stickers exactamente superpuestos, se pasa del suelto al del frasco
+      .to('.etq-sticker', { opacity: 1, duration: 0.08 }, 3.5)
+      .to('.suelto', { opacity: 0, duration: 0.08 }, 3.54)
+    // y recién ahí el frasco acusa el golpe
+      .to('.frasco', { scale: 1.025, duration: 0.14, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 3.62)
+      .to('.etq-texto', { opacity: 1, duration: 0.35, ease: 'sine.inOut' }, 3.66)
 
     // acto 3 — el frasco se corre y el troquel se pliega en caja
       .to('.frasco', { left: '2%', scale: 0.82, duration: 1, ease: 'power2.inOut' }, 4.0)
