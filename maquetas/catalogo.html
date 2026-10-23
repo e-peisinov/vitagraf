@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="estudio-base.css">
+<link rel="stylesheet" href="estudio-base.css?v=2">
 <style>
 section { position: relative; }
 section > .envase { position: relative; z-index: 1; }
@@ -44,17 +44,22 @@ section > .envase { position: relative; z-index: 1; }
 
 /* ---------- barra de filtros ---------- */
 .filtros { position: sticky; top: var(--alto-cab); z-index: 20; background: rgba(13,12,11,.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(242,238,232,.08); }
-.filtros .envase { display: flex; align-items: center; gap: 1rem; padding: .8rem 0; }
-.chips-linea { display: flex; gap: .45rem; overflow-x: auto; scrollbar-width: none; flex: 1; padding: 4px; }
+.filtros .envase { position: relative; padding: .8rem 0; }
+.chips-linea { display: flex; gap: .45rem; overflow-x: auto; scrollbar-width: none; padding: 4px; scroll-behavior: smooth; }
+.chips-linea::-webkit-scrollbar { display: none; }
+/* si los filtros no entran, el borde se desvanece y aparecen flechas */
+.filtros.desborda .chips-linea { -webkit-mask: linear-gradient(90deg, transparent 0, #000 var(--ini, 0px), #000 calc(100% - var(--fin, 0px)), transparent 100%); mask: linear-gradient(90deg, transparent 0, #000 var(--ini, 0px), #000 calc(100% - var(--fin, 0px)), transparent 100%); }
+.filtros.desborda:not(.al-inicio) .chips-linea { --ini: 3.2rem; }
+.filtros.desborda:not(.al-final) .chips-linea { --fin: 3.2rem; }
+.flecha-filtros { position: absolute; top: 50%; translate: 0 -50%; z-index: 2; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--hueso); color: var(--negro); display: none; place-items: center; box-shadow: 0 6px 14px -6px #000; transition: opacity .25s; }
+.flecha-filtros svg { width: 1rem; height: 1rem; }
+.flecha-filtros.izq { left: -.4rem; } .flecha-filtros.der { right: -.4rem; }
+.filtros.desborda .flecha-filtros { display: grid; }
+.filtros.al-inicio .flecha-filtros.izq, .filtros.al-final .flecha-filtros.der { opacity: 0; pointer-events: none; }
 .chip-linea { flex: none; display: inline-flex; align-items: center; gap: .45rem; padding: .5rem .9rem; border-radius: 999px; font-size: .85rem; font-weight: 500; color: #cfc8bf; box-shadow: inset 0 0 0 1px rgba(242,238,232,.18); transition: background .25s, color .25s, box-shadow .25s; }
 .chip-linea:hover { color: var(--hueso); box-shadow: inset 0 0 0 1px rgba(242,238,232,.5); }
 .chip-linea[aria-pressed="true"] { background: var(--hueso); color: var(--negro); box-shadow: 0 0 0 3px var(--negro), 0 0 0 4px rgba(242,238,232,.25); }
 .chip-linea .n { font-family: var(--mono); font-size: .7rem; opacity: .6; }
-.buscar { position: relative; flex: 0 1 17rem; }
-.buscar input { width: 100%; font: inherit; font-size: .9rem; color: var(--hueso); background: var(--negro-2); border: 0; border-radius: 999px; padding: .6rem 1rem .6rem 2.4rem; box-shadow: inset 0 0 0 1px rgba(242,238,232,.14); }
-.buscar input:focus { outline: 2px solid var(--naranja); }
-.buscar svg { position: absolute; left: .9rem; top: 50%; translate: 0 -50%; width: 1rem; height: 1rem; color: var(--gris); }
-@media (max-width: 760px) { .filtros .envase { flex-direction: column; align-items: stretch; gap: .6rem; } .buscar { flex-basis: auto; } }
 
 /* ---------- grilla de fichas troqueladas ---------- */
 .cat-grilla { padding: 3rem 0 6rem; }
@@ -205,8 +210,9 @@ section > .envase { position: relative; z-index: 1; }
 
     <div class="filtros" id="productos">
         <div class="envase">
+            <button type="button" class="flecha-filtros izq" data-mover="-1" aria-label="Ver filtros anteriores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
             <div class="chips-linea" role="group" aria-label="Filtrar por línea" data-chips></div>
-            <label class="buscar"><span class="sr">Buscar producto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" placeholder="Buscar: etiquetas, bolsas, lona…" data-buscar></label>
+            <button type="button" class="flecha-filtros der" data-mover="1" aria-label="Ver más filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
         </div>
     </div>
 
@@ -274,8 +280,8 @@ section > .envase { position: relative; z-index: 1; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="comun.js"></script>
-<script src="estudio-base.js"></script>
+<script src="comun.js?v=2"></script>
+<script src="estudio-base.js?v=2"></script>
 <script>
 (() => {
     const $ = (s, c = document) => c.querySelector(s);
@@ -322,10 +328,13 @@ section > .envase { position: relative; z-index: 1; }
     const cuantos = (clave) => PRODUCTOS.filter((p) => p.linea === clave).length;
     $('[data-total]').textContent = PRODUCTOS.length;
 
+    // nombres cortos para que todos los filtros entren en una línea
+    const CORTO = { local: 'Cartelería', etiquetas: 'Etiquetas y stickers', packaging: 'Bolsas y packaging', papeleria: 'Papelería', eventos: 'Stands y merchandising', editorial: 'Libros y anuarios' };
+
     /* ---------- plancha, chips y fichas ---------- */
     $('[data-plancha]').innerHTML = VITA.servicios.map((s) => '<li><button type="button" class="linea-sticker" data-linea="' + s.clave + '" aria-label="Ver ' + esc(s.titulo) + '"><span class="hueco" aria-hidden="true"></span><span class="disco-linea" aria-hidden="true">' + ESTUDIO.objeto(s.clave) + '</span><span class="nombre">' + esc(s.titulo) + '</span><span class="cant">' + cuantos(s.clave) + ' productos</span></button></li>').join('');
     $('[data-chips]').innerHTML = '<button type="button" class="chip-linea" data-filtro="todas" aria-pressed="true">Todas <span class="n">' + PRODUCTOS.length + '</span></button>'
-        + VITA.servicios.map((s) => '<button type="button" class="chip-linea" data-filtro="' + s.clave + '" aria-pressed="false">' + esc(s.titulo) + ' <span class="n">' + cuantos(s.clave) + '</span></button>').join('');
+        + VITA.servicios.map((s) => '<button type="button" class="chip-linea" data-filtro="' + s.clave + '" aria-pressed="false" title="' + esc(s.titulo) + '">' + esc(CORTO[s.clave]) + ' <span class="n">' + cuantos(s.clave) + '</span></button>').join('');
     $('[data-fichas]').innerHTML = PRODUCTOS.map((p) => '<li class="ficha" data-id="' + p.id + '" data-linea="' + p.linea + '"><div class="ficha-in">'
         + '<div class="foto" style="' + pose(p) + '">' + ESTUDIO.objeto(p.linea) + '<span class="pendiente">Foto próximamente</span>' + (p.combo ? '<span class="sticker combo"><b>★</b>Combo</span>' : '') + '</div>'
         + '<div class="ficha-cuerpo"><span class="mono linea-nombre">' + esc(LINEA[p.linea].titulo) + '</span><h3>' + esc(p.nombre) + '</h3><p>' + esc(p.texto) + '</p>'
@@ -387,12 +396,30 @@ section > .envase { position: relative; z-index: 1; }
         if (! b) return;
         filtro = b.dataset.filtro;
         aplicar();
+        mostrarElegido();
     });
-    let pausa = 0;
-    $('[data-buscar]').addEventListener('input', (e) => {
-        clearTimeout(pausa);
-        pausa = setTimeout(() => { texto = normal(e.target.value.trim()); aplicar(); }, 180);
-    });
+
+    /*
+     * Si los filtros no entran en el ancho, la barra lo muestra: bordes que
+     * se desvanecen y flechas para recorrerlos. El filtro elegido siempre
+     * queda a la vista.
+     */
+    const barra = $('.filtros'), fila = $('[data-chips]');
+    function marcarDesborde() {
+        const sobra = fila.scrollWidth - fila.clientWidth;
+        barra.classList.toggle('desborda', sobra > 2);
+        barra.classList.toggle('al-inicio', fila.scrollLeft < 4);
+        barra.classList.toggle('al-final', fila.scrollLeft > sobra - 4);
+    }
+    fila.addEventListener('scroll', marcarDesborde, { passive: true });
+    addEventListener('resize', marcarDesborde);
+    document.fonts?.ready.then(marcarDesborde);
+    $$('[data-mover]').forEach((b) => b.addEventListener('click', () => fila.scrollBy({ left: +b.dataset.mover * fila.clientWidth * 0.7 })));
+    const mostrarElegido = () => {
+        const b = $('[aria-pressed="true"]', fila);
+        if (b) fila.scrollTo({ left: b.offsetLeft - (fila.clientWidth - b.offsetWidth) / 2 });
+    };
+    marcarDesborde();
 
     // tocar un sticker de la plancha lo despega y filtra por su línea
     $('[data-plancha]').addEventListener('click', (e) => {
@@ -404,9 +431,10 @@ section > .envase { position: relative; z-index: 1; }
             gsap.timeline()
                 .to(disco, { rotateX: 35, rotateY: -30, rotate: -14, z: 60, y: -14, duration: 0.45, ease: 'sine.inOut' })
                 .to(disco, { rotateX: 0, rotateY: 0, rotate: 0, z: 0, y: 0, duration: 0.6, ease: 'back.out(1.6)', clearProps: 'transform' }, '+=0.15');
-            setTimeout(() => { aplicar(); irAProductos(); }, 380);
+            setTimeout(() => { aplicar(); mostrarElegido(); irAProductos(); }, 380);
         } else {
             aplicar();
+            mostrarElegido();
             irAProductos();
         }
     });
