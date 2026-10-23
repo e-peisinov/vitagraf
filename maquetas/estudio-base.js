@@ -50,6 +50,12 @@
         });
         if (! anima()) return piezas;
 
+        // en modo suave (reducir movimiento) las piezas apenas flotan: sin giros, parallax ni mouse
+        if (VITA.suave) {
+            piezas.forEach(({ el }, i) => gsap.to(el.querySelector('.deco-in'), { y: -6, duration: 5 + (i % 3), ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.2 }));
+            return piezas;
+        }
+
         // cada pieza flota y gira a su ritmo; las lejanas, más lento
         piezas.forEach(({ el, tipo, prof }, i) => {
             const lento = 1 + prof * 1.5;

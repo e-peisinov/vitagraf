@@ -187,14 +187,23 @@
         refrescar();
     });
 
-    /* ---------- scroll suave y modo quieto ---------- */
-    const QUIETO = matchMedia('(prefers-reduced-motion: reduce)').matches || new URLSearchParams(location.search).has('captura');
+    /*
+     * Movimiento. Con «reducir movimiento» activado el sitio sigue animado
+     * (las escenas cuentan el trabajo de la imprenta), pero en modo suave:
+     * sin scroll con inercia, con menos zoom de cámara y con la decoración
+     * casi quieta, que es lo que marea. Las páginas leen VITA.suave.
+     * El modo quieto (todo estático) queda solo para las capturas: ?captura.
+     */
+    const QUIETO = new URLSearchParams(location.search).has('captura');
+    const SUAVE = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (QUIETO) document.documentElement.classList.add('quieto');
+    if (SUAVE) document.documentElement.classList.add('suave');
     VITA.quieto = QUIETO;
+    VITA.suave = SUAVE;
 
     if (! QUIETO && window.gsap && window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
-        if (window.Lenis) {
+        if (window.Lenis && ! SUAVE) {
             const lenis = new Lenis({ lerp: 0.1 });
             lenis.on('scroll', ScrollTrigger.update);
             gsap.ticker.add((t) => lenis.raf(t * 1000));

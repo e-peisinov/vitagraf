@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="estudio-base.css?v=2">
+<link rel="stylesheet" href="estudio-base.css?v=3">
 <style>
 
 /* ---------- escena principal: de la plancha al producto ---------- */
@@ -157,11 +157,15 @@
 .hist-reloj .anio { font-family: var(--mono); font-size: .9rem; color: var(--hueso); font-variant-numeric: tabular-nums; min-width: 3.5rem; }
 .hist-reloj .barra { flex: 1; height: 2px; background: var(--gris-2); position: relative; overflow: hidden; }
 .hist-reloj .barra i { position: absolute; inset: 0; background: var(--naranja); transform: scaleX(0); transform-origin: left; }
-@media (max-width: 760px) {
-    .hist-riel { flex-direction: column; align-items: stretch; height: auto; width: auto; padding: 6rem 1.25rem 4rem; gap: 4rem; }
+/* en celular y tablet vertical la historia se apila; el recorrido horizontal queda para pantallas anchas */
+@media (max-width: 760px), (max-width: 1100px) and (orientation: portrait) {
+    .hist-riel { flex-direction: column; align-items: stretch; height: auto; width: auto; padding: 6rem max(1.25rem, (100vw - var(--ancho)) / 2) 4rem; gap: 4rem; }
     .hist-intro, .hist-capitulo, .hist-final { width: auto; }
     .hist-capitulo { grid-template-columns: 1fr; }
     .hist-reloj { display: none; }
+}
+@media (min-width: 561px) and (max-width: 1100px) and (orientation: portrait) {
+    .hist-capitulo { grid-template-columns: 1fr 1.1fr; }
 }
 
 /* ---------- clientes: las marcas se van pegando ---------- */
@@ -494,8 +498,8 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="comun.js?v=2"></script>
-<script src="estudio-base.js?v=2"></script>
+<script src="comun.js?v=3"></script>
+<script src="estudio-base.js?v=3"></script>
 <script>
 (() => {
     const $ = (s, c = document) => c.querySelector(s);
@@ -611,7 +615,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
         gsap.from('.entrada', { y: 120, rotateX: 40, opacity: 0, duration: 1.4, ease: 'expo.out', clearProps: 'transform,opacity' });
     });
 
-    const Z = () => (innerWidth < 761 ? 1.5 : 2.5);
+    const Z = () => (VITA.suave ? (innerWidth < 761 ? 1.25 : 1.6) : (innerWidth < 761 ? 1.5 : 2.5));
     // tiempo en que empieza cada titular dentro de la línea de tiempo
     const CORTES = [1.0, 2.7, 4.0, 6.0];
     const tl = gsap.timeline({
@@ -629,7 +633,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     // acto 1 — la cámara se acerca al primer sticker (plancha y espejo, juntos)
     tl.to('.plancha, .espejo', { scale: Z, duration: 1, ease: 'power2.inOut' }, 0)
     // el borde se levanta de a poco y el sticker se despega con su sombra
-      .to('.suelto', { rotateY: -32, rotateX: 14, z: 150, '--l': 1, duration: 1, ease: 'sine.inOut' }, 0.95)
+      .to('.suelto', { rotateY: VITA.suave ? -20 : -32, rotateX: VITA.suave ? 8 : 14, z: VITA.suave ? 60 : 150, '--l': 1, duration: 1, ease: 'sine.inOut' }, 0.95)
     // la plancha se aleja hacia abajo mientras el espejo vuelve a escala 1
       .to('.plancha', { scale: 1, yPercent: 40, opacity: 0, duration: 1.2, ease: 'power2.inOut' }, 1.8)
       .to('.espejo', { scale: 1, duration: 1.2, ease: 'power2.inOut' }, 1.8)
@@ -652,7 +656,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
 
     // acto 3 — el frasco se corre y el troquel se pliega en caja
       .to('.frasco', { left: '2%', scale: 0.82, duration: 1, ease: 'power2.inOut' }, 4.0)
-      .fromTo('.caja-lugar', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'sine.inOut' }, 4.5)
+      .fromTo('.caja-lugar', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'sine.inOut' }, 4.78)
       .set('.caja', { scale: 0.75 }, 0)
       .fromTo('.cara.arriba', { rotateX: 0 }, { rotateX: 90, duration: 0.7, ease: 'power2.inOut' }, 4.6)
       .fromTo('.cara.abajo', { rotateX: 0 }, { rotateX: -90, duration: 0.7, ease: 'power2.inOut' }, 4.65)
@@ -690,8 +694,8 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
            .to({}, { duration: 0.12 });
     });
 
-    // historia: recorrido horizontal con el año que corre de 1924 a hoy
-    mm.add('(min-width: 761px)', () => {
+    // historia: recorrido horizontal con el año que corre de 1924 a hoy (pantallas anchas y tablets apaisadas)
+    mm.add('(min-width: 1101px), (min-width: 761px) and (orientation: landscape)', () => {
         const riel = $('.hist-riel');
         const distancia = () => riel.scrollWidth - innerWidth;
         const anio = $('[data-anio]');
@@ -783,7 +787,7 @@ legend, .consulta label > span { font-family: var(--mono); font-size: .72rem; le
     });
 
     // muestrario y proceso
-    gsap.from('.muestra', { rotateX: -70, y: 40, opacity: 0, stagger: 0.06, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '.muestrario', start: 'top 80%', once: true } });
+    gsap.from('.muestra', { rotateX: 35, y: 40, opacity: 0, stagger: 0.06, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '.muestrario', start: 'top 80%', once: true } });
     gsap.from('.paso', { y: 30, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.pasos', start: 'top 80%', once: true } });
     $$('.encabezado .sticker, .catalogo-cab .sticker').forEach((s) => gsap.from(s, { scale: 0, rotate: -40, duration: 0.8, ease: 'back.out(2)', scrollTrigger: { trigger: s, start: 'top 88%', once: true } }));
 })();

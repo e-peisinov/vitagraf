@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="estudio-base.css?v=2">
+<link rel="stylesheet" href="estudio-base.css?v=3">
 <style>
 section { position: relative; }
 section > .envase { position: relative; z-index: 1; }
@@ -125,6 +125,8 @@ section > .envase { position: relative; z-index: 1; }
 .bandeja-boton .cuenta { min-width: 1.6rem; height: 1.6rem; padding: 0 .4rem; border-radius: 999px; background: var(--naranja); display: grid; place-items: center; font-family: var(--mono); font-size: .8rem; }
 .bandeja-boton svg { width: 1.3rem; height: 1.3rem; }
 .wa-flotante { bottom: 5.4rem; }
+/* en celular la bandeja ya consulta por WhatsApp: queda un solo botón flotante */
+@media (max-width: 760px) { .wa-flotante { display: none; } .bandeja-boton { right: 1rem; bottom: 1rem; } }
 .velo { position: fixed; inset: 0; z-index: 70; background: rgba(13,12,11,.6); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .35s; }
 .velo.abierto { opacity: 1; pointer-events: auto; }
 .panel { position: fixed; top: 0; right: 0; bottom: 0; z-index: 71; width: min(30rem, 100%); background: var(--negro-2); box-shadow: -30px 0 60px -20px #000; transform: translateX(105%); transition: transform .55s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column; visibility: hidden; }
@@ -280,8 +282,8 @@ section > .envase { position: relative; z-index: 1; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="comun.js?v=2"></script>
-<script src="estudio-base.js?v=2"></script>
+<script src="comun.js?v=3"></script>
+<script src="estudio-base.js?v=3"></script>
 <script>
 (() => {
     const $ = (s, c = document) => c.querySelector(s);
@@ -405,7 +407,7 @@ section > .envase { position: relative; z-index: 1; }
             },
         });
     }
-    const irAProductos = () => (VITA.lenis ? VITA.lenis.scrollTo('#productos', { offset: -70, duration: 1.2 }) : $('#productos').scrollIntoView({ behavior: 'smooth' }));
+    const irAProductos = () => (VITA.lenis ? VITA.lenis.scrollTo('#productos', { offset: -70, duration: 1.2 }) : $('#productos').scrollIntoView({ behavior: VITA.suave ? 'auto' : 'smooth' }));
     $('[data-chips]').addEventListener('click', (e) => {
         const b = e.target.closest('[data-filtro]');
         if (! b) return;
