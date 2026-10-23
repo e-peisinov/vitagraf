@@ -344,13 +344,30 @@ section > .envase { position: relative; z-index: 1; }
     /* ---------- filtro y búsqueda, con reacomodo animado ---------- */
     let filtro = 'todas', texto = '';
     const normal = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    let flipActual = null;
+    /*
+     * Filtro con reacomodo animado (Flip). Durante el reacomodo las fichas
+     * viajan con posición absoluta y no ocupan lugar: si la grilla no
+     * sostiene su alto, colapsa a 0 y la sección de abajo sube encima.
+     * Regla: la grilla toma el mayor de los dos altos mientras las fichas
+     * viajan, y lo suelta solo cuando Flip avisa que terminó (no por tiempo:
+     * en un navegador real Flip puede terminar un poco después de lo
+     * previsto). Si la grilla se achica, recién ahí se cierra suavemente.
+     */
+    const grilla = $('[data-fichas]');
+    let enCurso = null;
+    function terminarEnCurso() {
+        const e = enCurso;
+        if (! e) return;
+        enCurso = null;
+        e.flip?.progress(1).kill();
+        e.altura?.progress(1).kill();
+        gsap.set(grilla, { clearProps: 'height' });
+    }
     function aplicar() {
         const fichas = $$('.ficha');
         // si el reacomodo anterior sigue en curso, se completa antes de medir
-        if (flipActual) { flipActual.progress(1).kill(); flipActual = null; }
+        terminarEnCurso();
         const estado = anima && window.Flip ? Flip.getState(fichas) : null;
-        const grilla = $('[data-fichas]');
         const altoAntes = grilla.offsetHeight;
         let visibles = 0;
         fichas.forEach((f) => {
@@ -362,33 +379,31 @@ section > .envase { position: relative; z-index: 1; }
         $$('[data-filtro]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filtro === filtro)));
         $('[data-resultado]').innerHTML = '<strong>' + visibles + '</strong> ' + (visibles === 1 ? 'producto' : 'productos') + (filtro !== 'todas' ? ' · ' + esc(LINEA[filtro].titulo) : '');
         $('[data-vacio]').hidden = visibles > 0;
-        if (estado) {
-            const adentro = (els) => els.map((el) => el.firstElementChild);
-            /*
-             * Durante el reacomodo las fichas viajan con posición absoluta y
-             * no ocupan lugar: si la grilla no sostiene su alto, colapsa a 0 y
-             * la sección de abajo sube y queda encima. Regla: si la grilla
-             * crece, toma el alto nuevo de entrada; si se achica, sostiene el
-             * viejo mientras las fichas viajan y recién después se cierra.
-             */
-            const altoDespues = grilla.offsetHeight;
-            const crece = altoDespues >= altoAntes;
-            flipActual = gsap.timeline({
-                onComplete: () => {
-                    flipActual = null;
-                    // las que salieron quedan listas para volver a entrar
-                    gsap.set($$('.ficha[hidden] > .ficha-in'), { clearProps: 'opacity,transform' });
-                    ScrollTrigger.refresh();
-                },
-            });
-            if (crece) flipActual.set(grilla, { height: altoDespues }, 0).set(grilla, { clearProps: 'height' }, 0.65);
-            else flipActual.set(grilla, { height: altoAntes }, 0).to(grilla, { height: altoDespues, duration: 0.45, ease: 'power2.inOut', clearProps: 'height' }, 0.65);
-            flipActual.add(Flip.from(estado, {
-                duration: 0.65, ease: 'power3.inOut', absolute: true,
-                onEnter: (els) => gsap.fromTo(adentro(els), { opacity: 0, scale: 0.85, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.03, overwrite: true, clearProps: 'transform' }),
-                onLeave: (els) => gsap.to(adentro(els), { opacity: 0, scale: 0.85, duration: 0.3, ease: 'power2.in', overwrite: true }),
-            }), 0);
-        }
+        if (! estado) return;
+
+        const adentro = (els) => els.map((el) => el.firstElementChild);
+        const altoDespues = grilla.offsetHeight;
+        gsap.set(grilla, { height: Math.max(altoAntes, altoDespues) });
+        const este = { flip: null, altura: null };
+        enCurso = este;
+        este.flip = Flip.from(estado, {
+            duration: 0.65, ease: 'power3.inOut', absolute: true,
+            onEnter: (els) => gsap.fromTo(adentro(els), { opacity: 0, scale: 0.85, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.03, overwrite: true, clearProps: 'transform' }),
+            onLeave: (els) => gsap.to(adentro(els), { opacity: 0, scale: 0.85, duration: 0.3, ease: 'power2.in', overwrite: true }),
+            onComplete: () => {
+                // las que salieron quedan listas para volver a entrar
+                gsap.set($$('.ficha[hidden] > .ficha-in'), { clearProps: 'opacity,transform' });
+                // ya con las fichas en su lugar, la grilla va a su alto nuevo
+                este.altura = gsap.to(grilla, {
+                    height: altoDespues, duration: altoDespues < altoAntes ? 0.45 : 0, ease: 'power2.inOut',
+                    onComplete: () => {
+                        gsap.set(grilla, { clearProps: 'height' });
+                        if (enCurso === este) enCurso = null;
+                        ScrollTrigger.refresh();
+                    },
+                });
+            },
+        });
     }
     const irAProductos = () => (VITA.lenis ? VITA.lenis.scrollTo('#productos', { offset: -70, duration: 1.2 }) : $('#productos').scrollIntoView({ behavior: 'smooth' }));
     $('[data-chips]').addEventListener('click', (e) => {
